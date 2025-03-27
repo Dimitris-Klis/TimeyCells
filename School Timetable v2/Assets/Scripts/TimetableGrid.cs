@@ -12,9 +12,15 @@ public class TimetableGrid : MonoBehaviour
     public int Columns;
     [Space]
     public bool Center;
-    public bool delprev; // A temp variable meant for testing & debugging the column adding function.
     public TimetableChild TimetablePrefab;
-    public List<TimetableChild> Children = new();
+
+    [System.Serializable]
+    public class Column
+    {
+        public List<TimetableChild> Children = new List<TimetableChild>();
+    }
+    public List<Column> ColumnsList;
+    //public List<TimetableChild> Children = new();
 
     [ContextMenu("Set it up!!!")]
     public void Setup()
@@ -24,6 +30,7 @@ public class TimetableGrid : MonoBehaviour
         
         for (int x = 0; x < Columns; x++)
         {
+            ColumnsList.Add(new Column());
             for (int y = 0; y < Rows; y++)
             {
                 TimetableChild t = Instantiate(TimetablePrefab, this.transform);
@@ -44,7 +51,8 @@ public class TimetableGrid : MonoBehaviour
                 // The offset needed to center the UI (hopefully).
 
                 t.transform.localPosition = wantedpos + GetOffset();
-                Children.Add(t);
+                //Children.Add(t);
+                ColumnsList[x].Children.Add(t);
             }
         }
     }
@@ -93,57 +101,75 @@ public class TimetableGrid : MonoBehaviour
 
             t.rect.sizeDelta = wantedscale;
             t.transform.localPosition = wantedpos;
-            LongColTest = t;
-            Children.Add(t);
+            //Children.Add(t);
+            ColumnsList.Add(new());
+            ColumnsList[ColumnsList.Count - 1].Children.Add(t);
         }
         if(Center) ReAddOffsets();
     }
     public void RemoveAllOffsets()
     {
-        for (int i = 0; i < Children.Count; i++)
+        for (int i = 0; i < ColumnsList.Count; i++)
         {
-            Children[i].transform.localPosition -= GetOffset();
+            var children = ColumnsList[i].Children;
+            for (int j = 0; j < children.Count; j++)
+            {
+                children[j].transform.localPosition -= GetOffset();
+            }
         }
     }
     public void ReAddOffsets()
     {
-        for (int i = 0; i < Children.Count; i++)
+        for (int i = 0; i < ColumnsList.Count; i++)
         {
-            Children[i].transform.localPosition += GetOffset();
+            var children = ColumnsList[i].Children;
+            for (int j = 0; j < children.Count; j++)
+            {
+                children[j].transform.localPosition += GetOffset();
+            }
         }
     }
-    int prevcols;
-    TimetableChild LongColTest;
     [ContextMenu("Test Break!")]
     public void TestAddBreak() // temp
     {
-        if (delprev)
-        {
-            
-            if (LongColTest != null)
-            {
-                DestroyImmediate(LongColTest.gameObject);
-                Children.RemoveAt(Children.Count - 1);
-                LongColTest = null;
-            }
-            prevcols = Columns;
-        }
-        
-        
         AddColumn(true);
-        if (delprev)
-            Columns = prevcols;
     }
     public void ClearAll()
     {
-        if (Children.Count > 0)
+        if (ColumnsList.Count <= 0) return;
+        for (int i = 0; i < ColumnsList.Count; i++)
         {
-            for (int i = 0; i < Children.Count; i++)
+            var children = ColumnsList[i].Children;
+            for (int j = 0; j < children.Count; j++)
             {
-                DestroyImmediate(Children[i].gameObject);
+                if (children[j].gameObject != null)
+                    DestroyImmediate(children[j].gameObject);
             }
-            Children.Clear();
         }
+        ColumnsList.Clear();
+    }
+    public void RemoveColumn(int colIndex)
+    {
+        RemoveAllOffsets();
+        if (colIndex < 0 || colIndex >= ColumnsList.Count)
+        {
+            Debug.LogWarning("Remove Column says: Index out of Range!");
+            return;
+        }
+        var children = ColumnsList[colIndex].Children;
+        for (int i = 0; i < children.Count; i++)
+        {
+            DestroyImmediate(children[i].gameObject);
+        }
+        children.Clear();
+        ColumnsList.RemoveAt(colIndex);
+        Columns--;
+        ReAddOffsets();
+    }
+    [ContextMenu("Remove last col!")]
+    public void removelastcolumntest()
+    {
+        RemoveColumn(ColumnsList.Count - 1);
     }
 
     // TO DO: ADD REMOVE COLUMN FUNCTION. REDO THE CHILDREN SYSTEM AS FOLLOWS:
@@ -151,4 +177,6 @@ public class TimetableGrid : MonoBehaviour
     // List<Column> Columns;
 
     // * The reason for this change is so that we can make column removal easier.
+
+    //Another TO DO: STOP USING DESTROYIMMEDIATE WHEN DONE WITH UI TESTING
 }
