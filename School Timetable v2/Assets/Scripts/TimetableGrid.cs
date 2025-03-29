@@ -34,7 +34,7 @@ public class TimetableGrid : MonoBehaviour
             ColumnsList.Add(new Column());
 
             // ^1 is basically ColumnsList.Count - 1
-            UpdateColumnPosition(ColumnsList[^1], ColumnsList.Count - 1);
+            UpdateColumnTransform(ColumnsList[^1], ColumnsList.Count - 1);
         }
         AddAllOffsets();
     }
@@ -85,7 +85,7 @@ public class TimetableGrid : MonoBehaviour
             }
         }
     }
-    public void UpdateColumnPosition(Column column,int index)
+    public void UpdateColumnTransform(Column column,int index)
     {
         if(column.Children.Count == 0)
         {
@@ -150,7 +150,7 @@ public class TimetableGrid : MonoBehaviour
         t.rect.sizeDelta = wantedscale;
         t.transform.localPosition = wantedpos;
     }
-    public void UpdateColumnTransforms(int start)
+    public void UpdateAllTransforms(int start)
     {
         for (int i = start; i < ColumnsList.Count; i++)
         {
@@ -159,7 +159,7 @@ public class TimetableGrid : MonoBehaviour
                 UpdateBreakTransform(i);
                 continue;
             }
-            UpdateColumnPosition(ColumnsList[i], i);
+            UpdateColumnTransform(ColumnsList[i], i);
         }
     }
     
@@ -176,7 +176,7 @@ public class TimetableGrid : MonoBehaviour
         ColumnsList[columnIndex].isBreak = true;
         ColumnsList[columnIndex].Children.Add(t);
 
-        UpdateColumnTransforms(columnIndex);
+        UpdateAllTransforms(columnIndex);
 
         UpdateBreakTransform(columnIndex);
 
@@ -197,7 +197,7 @@ public class TimetableGrid : MonoBehaviour
         {
             ColumnsList[columnIndex].Children.Add(null);
         }
-        UpdateColumnTransforms(columnIndex);
+        UpdateAllTransforms(columnIndex);
 
         AddAllOffsets();
     }
@@ -218,9 +218,10 @@ public class TimetableGrid : MonoBehaviour
         children.Clear();
         ColumnsList.RemoveAt(colIndex);
         Columns--;
-        UpdateColumnTransforms(colIndex);
+        UpdateAllTransforms(colIndex);
         AddAllOffsets();
     }
+
     public void AddRow(int rowIndex)
     {
         RemoveAllOffsets();
@@ -230,7 +231,7 @@ public class TimetableGrid : MonoBehaviour
             if (ColumnsList[i].isBreak) continue;
             ColumnsList[i].Children.Insert(rowIndex, null);
         }
-        UpdateColumnTransforms(0);
+        UpdateAllTransforms(0);
         AddAllOffsets();
     }
     public void RemoveRow(int rowIndex)
@@ -243,7 +244,7 @@ public class TimetableGrid : MonoBehaviour
             DestroyImmediate(ColumnsList[i].Children[rowIndex].gameObject);
             ColumnsList[i].Children.RemoveAt(rowIndex);
         }
-        UpdateColumnTransforms(0);
+        UpdateAllTransforms(0);
         AddAllOffsets();
     }
     
