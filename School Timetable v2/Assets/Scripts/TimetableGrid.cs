@@ -11,8 +11,13 @@ public class TimetableGrid : MonoBehaviour
     public int Rows;
     public int Columns;
     [Space]
-    public bool Center;
+    public bool Center = true;
+    public bool FitContent = true;
     public TimetableChild TimetablePrefab;
+
+    Vector2 PivotFix = Vector2.up;
+
+    Vector2 originalPivot;
 
     [System.Serializable]
     public class Column
@@ -27,6 +32,11 @@ public class TimetableGrid : MonoBehaviour
     public void Setup()
     {
         if(rect == null) rect = GetComponent<RectTransform>();
+
+        FitToContent();
+        originalPivot = rect.pivot;
+        rect.pivot = PivotFix;
+
         ClearAll();
         
         for (int x = 0; x < Columns; x++)
@@ -37,6 +47,7 @@ public class TimetableGrid : MonoBehaviour
             UpdateColumnTransform(ColumnsList[^1], ColumnsList.Count - 1);
         }
         AddAllOffsets();
+        rect.pivot = new(0.5f, 0.5f);
     }
     public void ClearAll()
     {
@@ -52,6 +63,19 @@ public class TimetableGrid : MonoBehaviour
         }
         ColumnsList.Clear();
     }
+    void FitToContent() // Call this, AFTER changing row/column count.
+    {
+        if (!FitContent) return;
+        Vector2 wantedscale;
+
+        wantedscale.x = Columns * CellSize.x + (Columns - 1) * Spacing.x;
+        wantedscale.x += 70;
+
+        wantedscale.y = Rows * CellSize.y + (Columns - 1) * Spacing.y;
+        wantedscale.y += 50;
+
+        rect.sizeDelta = wantedscale;
+    }
     public Vector3 GetOffset()
     {
         if (!Center) return Vector3.zero;
@@ -61,6 +85,7 @@ public class TimetableGrid : MonoBehaviour
         offset.y = Mathf.Abs(rect.sizeDelta.y - (Rows * CellSize.y + (Rows - 1) * Spacing.y)) / -2;
         return offset;
     }
+    
     public void RemoveAllOffsets()
     {
         if (!Center) return;
@@ -152,7 +177,7 @@ public class TimetableGrid : MonoBehaviour
     }
     public void UpdateAllTransforms(int start)
     {
-        for (int i = start; i < ColumnsList.Count; i++)
+        for (int i = 0; i < ColumnsList.Count; i++)
         {
             if (ColumnsList[i].isBreak)
             {
@@ -165,9 +190,14 @@ public class TimetableGrid : MonoBehaviour
     
     public void AddBreak(int columnIndex)
     {
+        
+        originalPivot = rect.pivot;
+        rect.pivot = PivotFix;
+
         RemoveAllOffsets();
 
         Columns++;
+        FitToContent();
 
         TimetableChild t = Instantiate(TimetablePrefab, this.transform);
         
@@ -180,16 +210,21 @@ public class TimetableGrid : MonoBehaviour
 
         UpdateBreakTransform(columnIndex);
 
-
-
         AddAllOffsets();
+
+        rect.pivot = originalPivot;
     }
     public void AddColumn(int columnIndex)
     {
+        
+        originalPivot = rect.pivot;
+        rect.pivot = PivotFix;
+
         RemoveAllOffsets();
 
         Columns++;
-        
+        FitToContent();
+
         ColumnsList.Insert(columnIndex, new());
         ColumnsList[columnIndex].isBreak = false;
         
@@ -200,9 +235,15 @@ public class TimetableGrid : MonoBehaviour
         UpdateAllTransforms(columnIndex);
 
         AddAllOffsets();
+
+        rect.pivot = originalPivot;
     }
     public void RemoveColumn(int colIndex)
     {
+        
+        originalPivot = rect.pivot;
+        rect.pivot = PivotFix;
+
         RemoveAllOffsets();
         if (colIndex < 0 || colIndex >= ColumnsList.Count)
         {
@@ -217,15 +258,27 @@ public class TimetableGrid : MonoBehaviour
         }
         children.Clear();
         ColumnsList.RemoveAt(colIndex);
+
         Columns--;
+        FitToContent();
+
         UpdateAllTransforms(colIndex);
         AddAllOffsets();
+
+        rect.pivot = originalPivot;
     }
 
     public void AddRow(int rowIndex)
     {
+        
+        originalPivot = rect.pivot;
+        rect.pivot = PivotFix;
+
         RemoveAllOffsets();
+
         Rows++;
+        FitToContent();
+
         for (int i = 0; i < ColumnsList.Count; i++)
         {
             if (ColumnsList[i].isBreak) continue;
@@ -233,11 +286,19 @@ public class TimetableGrid : MonoBehaviour
         }
         UpdateAllTransforms(0);
         AddAllOffsets();
+
+        rect.pivot = originalPivot;
     }
     public void RemoveRow(int rowIndex)
     {
+        originalPivot = rect.pivot;
+        rect.pivot = PivotFix;
+
         RemoveAllOffsets();
+        
         Rows--;
+        FitToContent();
+
         for (int i = 0; i < ColumnsList.Count; i++)
         {
             if (ColumnsList[i].isBreak) continue;
@@ -246,6 +307,8 @@ public class TimetableGrid : MonoBehaviour
         }
         UpdateAllTransforms(0);
         AddAllOffsets();
+
+        rect.pivot = originalPivot;
     }
     
     
