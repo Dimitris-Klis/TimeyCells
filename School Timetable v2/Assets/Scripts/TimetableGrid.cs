@@ -38,6 +38,20 @@ public class TimetableGrid : MonoBehaviour
         }
         AddAllOffsets();
     }
+    public void ClearAll()
+    {
+        if (ColumnsList.Count <= 0) return;
+        for (int i = 0; i < ColumnsList.Count; i++)
+        {
+            var children = ColumnsList[i].Children;
+            for (int j = 0; j < children.Count; j++)
+            {
+                if (children[j] != null)
+                    DestroyImmediate(children[j].gameObject);
+            }
+        }
+        ColumnsList.Clear();
+    }
     public Vector3 GetOffset()
     {
         if (!Center) return Vector3.zero;
@@ -234,48 +248,34 @@ public class TimetableGrid : MonoBehaviour
     }
     
     
-    [ContextMenu("Test Break!")]
+    [ContextMenu("Add Break!")]
     public void TestAddBreak() // temp
     {
         AddBreak(2);
     }
-    public void ClearAll()
+    [ContextMenu("Add Column!")]
+    public void TestAddCol() // temp
     {
-        if (ColumnsList.Count <= 0) return;
-        for (int i = 0; i < ColumnsList.Count; i++)
-        {
-            var children = ColumnsList[i].Children;
-            for (int j = 0; j < children.Count; j++)
-            {
-                if (children[j] != null)
-                    DestroyImmediate(children[j].gameObject);
-            }
-        }
-        ColumnsList.Clear();
+        AddColumn(2);
     }
-    
-    [ContextMenu("Remove last col!")]
+
+    [ContextMenu("Remove Column!")]
     public void removelastcolumntest()
     {
         RemoveColumn(2);
     }
-
     
     [ContextMenu("New Row!")]
     public void testrow()
     {
         AddRow(1);
     }
+
     [ContextMenu("Remove Row!")]
     public void testrow2()
     {
         RemoveRow(1);
     }
-    // TO DO: ADD REMOVE COLUMN FUNCTION. REDO THE CHILDREN SYSTEM AS FOLLOWS:
-    // Class Column{ List<Child> Cells }
-    // List<Column> Columns;
 
-    // * The reason for this change is so that we can make column removal easier.
-
-    //Another TO DO: STOP USING DESTROYIMMEDIATE WHEN DONE WITH UI TESTING
+    // TO DO: STOP USING DESTROYIMMEDIATE WHEN DONE WITH UI TESTING
 }
