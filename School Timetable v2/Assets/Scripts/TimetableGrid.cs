@@ -69,10 +69,10 @@ public class TimetableGrid : MonoBehaviour
         Vector2 wantedscale;
 
         wantedscale.x = Columns * CellSize.x + (Columns - 1) * Spacing.x;
-        wantedscale.x += 70;
+        wantedscale.x += 10;
 
         wantedscale.y = Rows * CellSize.y + (Columns - 1) * Spacing.y;
-        wantedscale.y += 50;
+        wantedscale.y += 8;
 
         rect.sizeDelta = wantedscale;
     }
