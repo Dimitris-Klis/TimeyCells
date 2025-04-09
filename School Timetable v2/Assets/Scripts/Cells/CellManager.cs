@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 using System.Linq;
-using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class CellManager : MonoBehaviour
 {
@@ -225,12 +225,20 @@ public class CellManager : MonoBehaviour
             c.FavouriteImage.gameObject.SetActive(false);
 
             // Edit Button Setup
-            c.SelfButton.onClick.RemoveAllListeners();
-            var index = EventTypes[i].ItemID;
             
-            c.SelfButton.onClick.AddListener(delegate { EventTypeCreator.OpenCreator(index); } );
+            Button _b = c.SelfButton;
+
+            _b.onClick.RemoveAllListeners();
+
+            int capturethisshit = EventTypes[i].ItemID;
+            _b.onClick.AddListener(() => EventTypeCreator.OpenCreator(capturethisshit));
         }
 
+    }
+    public void BindButtonToOpenCreator(Button b, int i, bool eventtype)
+    {
+        Button _b = b;
+        
     }
     public void UpdateEventPreviews()
     {
@@ -276,9 +284,15 @@ public class CellManager : MonoBehaviour
             c.FavouriteImage.gameObject.SetActive(Events[i].Favourite);
 
             // Edit Button Setup
-            c.SelfButton.onClick.RemoveAllListeners();
-            var index = Events[i].ItemID;
-            c.SelfButton.onClick.AddListener(() => EventCreator.OpenCreator(index));
+            Button _b = c.SelfButton;
+            var e = Events[i];
+            _b.onClick.RemoveAllListeners();
+
+            int capturedID = e.ItemID;
+            _b.onClick.AddListener(() => {
+                Debug.Log($"Button clicked for Event with ID: {capturedID}");
+                EventCreator.OpenCreator(capturedID);
+            });
         }
 
     }
