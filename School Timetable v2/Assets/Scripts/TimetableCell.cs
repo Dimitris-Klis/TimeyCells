@@ -1,9 +1,17 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class TimetableChild : MonoBehaviour
+public class TimetableCell : MonoBehaviour
 {
     public bool isbreak;
     public RectTransform rect;
+    [Space]
+    public Image BackgroundImage;
+    public TMP_Text EventNameText;
+    public TMP_Text Info1Text;
+    public TMP_Text Info2Text;
+    public Image FavouriteImage;
     [Space]
     public string EventName;
     public string Info1;

@@ -3,10 +3,14 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.InputSystem;
+using UnityEngine.Events;
 
 public class ColorEditor : MonoBehaviour
 {
-    [Header("Basic References")]
+    public CanvasGroup SelfGroup;
+    public UnityEvent OnColorChange;
+    [Header("Slider References")]
     public Slider HueSlider;
     public Slider SaturationSlider;
     public Slider ValueSlider;
@@ -28,6 +32,23 @@ public class ColorEditor : MonoBehaviour
     public Color FinalColor;
     public Image ColorPreview;
 
+    private void Start()
+    {
+        Close();
+    }
+
+    public void Open(Color color)
+    {
+        SelfGroup.interactable = SelfGroup.blocksRaycasts = true;
+        SelfGroup.alpha = 1;
+        FinalColor = color;
+        UpdateSliders();
+    }
+    public void Close()
+    {
+        SelfGroup.interactable = SelfGroup.blocksRaycasts = false;
+        SelfGroup.alpha = 0;
+    }
 
 
     public void UpdateColor()
@@ -56,6 +77,7 @@ public class ColorEditor : MonoBehaviour
         ColorPreview.color = FinalColor;
 
         HexCodeField.text = ColorUtility.ToHtmlStringRGBA(FinalColor);
+        OnColorChange.Invoke();
     }
     public void UpdateSliders()
     {

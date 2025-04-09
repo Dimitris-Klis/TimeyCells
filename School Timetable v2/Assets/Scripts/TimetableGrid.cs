@@ -13,7 +13,7 @@ public class TimetableGrid : MonoBehaviour
     [Space]
     public bool Center = true;
     public bool FitContent = true;
-    public TimetableChild TimetablePrefab;
+    public TimetableCell TimetablePrefab;
 
     Vector2 PivotFix = Vector2.up;
 
@@ -23,7 +23,7 @@ public class TimetableGrid : MonoBehaviour
     public class Column
     {
         public bool isBreak;
-        public List<TimetableChild> Children = new List<TimetableChild>();
+        public List<TimetableCell> Children = new List<TimetableCell>();
     }
     public List<Column> ColumnsList;
     //public List<TimetableChild> Children = new();
@@ -149,7 +149,7 @@ public class TimetableGrid : MonoBehaviour
     public void UpdateBreakTransform(int index)
     {
         if (!ColumnsList[index].isBreak) return;
-        TimetableChild t = ColumnsList[index].Children[0];
+        TimetableCell t = ColumnsList[index].Children[0];
 
         t.transform.localPosition = Vector3.zero;
         t.rect.sizeDelta = CellSize;
@@ -199,7 +199,7 @@ public class TimetableGrid : MonoBehaviour
         Columns++;
         FitToContent();
 
-        TimetableChild t = Instantiate(TimetablePrefab, this.transform);
+        TimetableCell t = Instantiate(TimetablePrefab, this.transform);
         
 
         ColumnsList.Insert(columnIndex, new());
