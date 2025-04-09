@@ -13,9 +13,13 @@ public class TimetableCell : MonoBehaviour
     public TMP_Text Info2Text;
     public Image FavouriteImage;
     [Space]
-    public string EventName;
-    public string Info1;
-    public string Info2;
+    public Button SelfButton;
+
+    //[Space(30)]
+    //public string EventName;
+    //public string Info1;
+    //public string Info2;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
