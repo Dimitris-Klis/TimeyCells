@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using TMPro;
-using System.Linq;
 using UnityEngine.UI;
 
 public class CellManager : MonoBehaviour
@@ -95,7 +94,11 @@ public class CellManager : MonoBehaviour
         else
         {
             // Get largest ID
-            int maxVal = EventTypes.Max(p1 => p1.ItemID);
+            int maxVal = int.MinValue;
+            for (int i = 0; i < EventTypes.Count; i++)
+            {
+                if (EventTypes[i].ItemID > maxVal) maxVal = EventTypes[i].ItemID;
+            }
             item.ItemID = maxVal + 1;
         }
 
@@ -109,11 +112,15 @@ public class CellManager : MonoBehaviour
         Events.Add(new());
         EventItem item = Events[^1];
 
-        if (EventTypes.Count == 1) item.ItemID = 0;
+        if (Events.Count == 1) item.ItemID = 0;
         else
         {
             // Get largest ID
-            int maxVal = Events.Max(p1 => p1.ItemID);
+            int maxVal = int.MinValue;
+            for(int i =0; i< Events.Count; i++)
+            {
+                if (Events[i].ItemID > maxVal) maxVal = Events[i].ItemID;
+            }
             item.ItemID = maxVal + 1;
         }
 
@@ -225,36 +232,26 @@ public class CellManager : MonoBehaviour
             c.FavouriteImage.gameObject.SetActive(false);
 
             // Edit Button Setup
-            
-            Button _b = c.SelfButton;
-
-            _b.onClick.RemoveAllListeners();
-
-            int capturethisshit = EventTypes[i].ItemID;
-            _b.onClick.AddListener(() => EventTypeCreator.OpenCreator(capturethisshit));
+            SetButton(c.SelfButton, EventTypes[i].ItemID, true);
         }
 
     }
-    public void BindButtonToOpenCreator(Button b, int i, bool eventtype)
-    {
-        Button _b = b;
-        
-    }
     public void UpdateEventPreviews()
     {
-        int amntToInstantiate = Events.Count - EventPreviews.Count;
+        int modAmount = Events.Count - EventPreviews.Count;
 
         // Add missing or remove extra previews.
-        if (amntToInstantiate > 0)
+        if (modAmount > 0)
         {
-            for (int i = 0; i < amntToInstantiate; i++)
+            for (int i = 0; i < modAmount; i++)
             {
                 TimetableCell c = Instantiate(CellPrefab, EventsParent);
+
                 c.transform.localScale = Vector3.one * 1.5f;
                 EventPreviews.Add(c);
             }
         }
-        else if (amntToInstantiate < 0)
+        else if (modAmount < 0)
         {
             // Substitue while loop for a for loop to prevent crashing.
             for(int i = 0; i < Events.Count+10; i++)
@@ -265,7 +262,8 @@ public class CellManager : MonoBehaviour
             }
         }
 
-        for (int i = 0; i  < EventPreviews.Count; i ++)
+
+        for (int i = 0; i < EventPreviews.Count; i++)
         {
             var c = EventPreviews[i];
             
@@ -284,17 +282,25 @@ public class CellManager : MonoBehaviour
             c.FavouriteImage.gameObject.SetActive(Events[i].Favourite);
 
             // Edit Button Setup
-            Button _b = c.SelfButton;
-            var e = Events[i];
-            _b.onClick.RemoveAllListeners();
-
-            int capturedID = e.ItemID;
-            _b.onClick.AddListener(() => {
-                Debug.Log($"Button clicked for Event with ID: {capturedID}");
-                EventCreator.OpenCreator(capturedID);
-            });
+            SetButton(c.SelfButton, Events[i].ItemID, false);
         }
-
+    }
+    void SetButton(Button b, int id, bool EventType)
+    {
+        b.onClick.RemoveAllListeners();
+        if(!EventType)
+            b.onClick.AddListener(
+            delegate { 
+                //Debug.Log($"Opening {id}");
+                EventCreator.OpenCreator(id); 
+            });
+        else 
+            b.onClick.AddListener(
+            delegate 
+            { 
+                //Debug.Log($"Opening {id}");
+                EventTypeCreator.OpenCreator(id); 
+            });
     }
 
 }

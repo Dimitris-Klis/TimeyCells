@@ -15,7 +15,7 @@ public class HexCodeValidator : TMP_InputValidator
 
         if ((validLetter || canHashtag) && pos <= 8)
         {
-            text += ch;
+            text = text.Insert(pos, ch.ToString());
             pos += 1;
             return ch;
         }
