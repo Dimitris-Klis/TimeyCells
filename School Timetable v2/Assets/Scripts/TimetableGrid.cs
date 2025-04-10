@@ -13,6 +13,7 @@ public class TimetableGrid : MonoBehaviour
     [Space]
     public bool Center = true;
     public bool FitContent = true;
+    public float Padding = 5;
     public TimetableCell TimetablePrefab;
 
     Vector2 PivotFix = Vector2.up;
@@ -69,10 +70,10 @@ public class TimetableGrid : MonoBehaviour
         Vector2 wantedscale;
 
         wantedscale.x = Columns * CellSize.x + (Columns - 1) * Spacing.x;
-        wantedscale.x += 10;
+        wantedscale.x += Padding;
 
         wantedscale.y = Rows * CellSize.y + (Columns - 1) * Spacing.y;
-        wantedscale.y += 8;
+        wantedscale.y += Padding*.75f;
 
         rect.sizeDelta = wantedscale;
     }
