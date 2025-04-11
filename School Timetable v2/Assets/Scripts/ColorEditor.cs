@@ -76,7 +76,7 @@ public class ColorEditor : MonoBehaviour
         // Setting the Color Preview Color.
         ColorPreview.color = FinalColor;
 
-        HexCodeField.text = ColorUtility.ToHtmlStringRGBA(FinalColor);
+        HexCodeField.text = ColorUtility.ToHtmlStringRGBA(FinalColor) + TMP_Specials.clear;
         OnColorChange.Invoke();
     }
     public void UpdateSliders()
@@ -92,10 +92,11 @@ public class ColorEditor : MonoBehaviour
 
     public void SetColor(string hexCode)
     {
-        if (!hexCode.Contains("#"))
-        {
-            hexCode = hexCode.Insert(0, "#");
-        }
+        hexCode = hexCode.Replace(TMP_Specials.clear, "");
+        hexCode = hexCode.Replace("#", "");
+        
+        hexCode = hexCode.Insert(0, "#");
+        //Debug.Log(hexCode);
 
         Color c = FinalColor;
         ColorUtility.TryParseHtmlString(hexCode, out c);

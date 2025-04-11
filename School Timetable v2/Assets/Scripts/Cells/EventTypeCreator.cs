@@ -159,7 +159,7 @@ public class EventTypeCreator : MonoBehaviour
             CellManager.Instance.CreateNewEventType(out EventTypeItem a);
             a.BackgroundColor = ChangeBackgroundColor.color;
             a.TextColor = ChangeTextColor.color;
-            a.TypeName = EventTypeNameInput.text;
+            a.TypeName = EventTypeNameInput.text.Replace(TMP_Specials.clear,"");
         }
         else
         {
@@ -167,7 +167,7 @@ public class EventTypeCreator : MonoBehaviour
             EventTypeItem a = CellManager.Instance.GetEventType(IDToModify);
             a.BackgroundColor = ChangeBackgroundColor.color;
             a.TextColor = ChangeTextColor.color;
-            a.TypeName = EventTypeNameInput.text;
+            a.TypeName = EventTypeNameInput.text.Replace(TMP_Specials.clear,"");
 
             CellManager.Instance.UpdateEventPreviews();
         }

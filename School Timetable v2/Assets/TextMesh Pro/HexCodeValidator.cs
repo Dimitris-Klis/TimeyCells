@@ -5,7 +5,7 @@ using TMPro;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "InputValidator - HexCodeValidator.asset", menuName = "TextMeshPro/Input Validators/HexCode", order = 100)]
-public class HexCodeValidator : TMP_InputValidator
+public class HexCodeValidator : u200bValidator
 {
     // Custom text input validation function
     public override char Validate(ref string text, ref int pos, char ch)
@@ -15,18 +15,12 @@ public class HexCodeValidator : TMP_InputValidator
 
         if ((validLetter || canHashtag) && pos <= 8)
         {
-            text = text.Insert(pos, ch.ToString());
-            pos += 1;
+            //text = text.Insert(pos, ch.ToString());
+            //pos += 1;
+
+            HideCharacter(ref text, ref pos, ch);
             return ch;
         }
         return (char)0;
-    }
-    bool ContainsHashtag(string text)
-    {
-        for (int i = 0; i < text.Length; i++)
-        {
-            if (text[i] == '#') return true;
-        }
-        return false;
     }
 }
