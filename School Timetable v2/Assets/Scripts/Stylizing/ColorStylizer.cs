@@ -9,9 +9,11 @@ using UnityEditor.Build.Content;
 public class ColorStylizer : MonoBehaviour
 {
     public int wantedIndex;
+    
     [Space]
-    public TMP_Dropdown PresetDropdown;
+    public PaletteDropdown paletteDropdown;
     public List<ColorStylePreset> ColorStyles;
+
     [Space]
     public Camera Camera;
     public Image[] Backgrounds;
@@ -20,6 +22,8 @@ public class ColorStylizer : MonoBehaviour
 
     private void Start()
     {
+        UpdateDropdown();
+        GetElements();
         ChangePreset(wantedIndex);
     }
 
@@ -70,7 +74,7 @@ public class ColorStylizer : MonoBehaviour
     }
     void UpdateDropdown()
     {
-        
+        paletteDropdown.Setup(ColorStyles.ToArray());
     }
     public void ChangePreset(int index)
     {

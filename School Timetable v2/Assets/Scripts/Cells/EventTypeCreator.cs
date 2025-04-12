@@ -28,12 +28,7 @@ public class EventTypeCreator : MonoBehaviour
     [Space(30)]
 
     [Header("Color Editor")]
-    public ColorEditor editor;
-    public enum EditingModes { Default,ChangingText, ChangingBG}
-    public EditingModes EditingMode;
-    [Space]
-    public TMP_Text ColorEditorTitle;
-    public Color PrevColor;
+    public ColorEditor coloreditor;
 
     private void Start()
     {
@@ -42,6 +37,9 @@ public class EventTypeCreator : MonoBehaviour
 
     public void OpenCreator(int ID)
     {
+        coloreditor.OnClose.RemoveAllListeners();
+        coloreditor.OnClose.AddListener(delegate { ReEnableColorButtons(); });
+
         DeleteButton.interactable = ID > 0; // Prevent the user from deleting the new or the default event type.
         EventTypeNameInput.interactable = ID != 0; // Prevent the user from changing the default event name.
 
@@ -111,45 +109,24 @@ public class EventTypeCreator : MonoBehaviour
 
     public void ActivateColorEditor(bool ChangeBackground) // If it's not background, it's text.
     {
-        EditingMode = ChangeBackground ? EditingModes.ChangingBG : EditingModes.ChangingText;
-        if (ChangeBackground) PrevColor = ChangeBackgroundColor.color;
-        else PrevColor = ChangeTextColor.color;
-        ColorEditorTitle.text = ChangeBackground ? "Edit Background Color" : "Edit Text Color";
         ChangeTextButton.interactable = ChangeBackgroundButton.interactable = false;
-        editor.Open(PrevColor);
-    }
-    public void ChangeColor()
-    {
-        if (EditingMode == EditingModes.ChangingBG)
+        if (ChangeBackground)
         {
-            ChangeBackgroundColor.color = PreviewCell.BackgroundImage.color = editor.FinalColor;
+            Color currentColor = ChangeBackgroundColor.color;
+            coloreditor.Open("Edit Background Color", currentColor, ChangeBackgroundColor, PreviewCell.BackgroundImage);
         }
-        else if (EditingMode == EditingModes.ChangingText)
+        else
         {
-            ChangeTextColor.color = PreviewCell.EventNameText.color = PreviewCell.Info1Text.color = PreviewCell.Info2Text.color = editor.FinalColor;
+            Color currentColor = ChangeTextColor.color;
+            coloreditor.Open("", currentColor, PreviewCell.EventNameText, PreviewCell.Info1Text, PreviewCell.Info2Text);
+            coloreditor.Open("Edit Text Color", currentColor, ChangeTextColor);
         }
     }
 
-    public void ApplyColors()
+    public void ReEnableColorButtons()
     {
-        EditingMode = EditingModes.Default;
         ChangeTextButton.interactable = ChangeBackgroundButton.interactable = true;
     }
-    public void RestorePrevColor()
-    {
-        if (EditingMode == EditingModes.ChangingBG)
-        {
-            ChangeBackgroundColor.color = PreviewCell.BackgroundImage.color = PrevColor;
-        }
-        else if (EditingMode == EditingModes.ChangingText)
-        {
-            ChangeTextColor.color = PreviewCell.EventNameText.color = PreviewCell.Info1Text.color = PreviewCell.Info2Text.color = PrevColor;
-        }
-
-        EditingMode = EditingModes.Default;
-        ChangeTextButton.interactable = ChangeBackgroundButton.interactable = true;
-    }
-
 
     public void Save()
     {
@@ -188,11 +165,7 @@ public class EventTypeCreator : MonoBehaviour
     }
     public void Cancel()
     {
-        if (EditingMode != EditingModes.Default)
-        {
-            editor.Close();
-            RestorePrevColor();
-        }
+        coloreditor.Close();
         CloseCreator();
     }
 }
