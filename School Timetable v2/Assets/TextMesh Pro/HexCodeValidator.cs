@@ -13,11 +13,12 @@ public class HexCodeValidator : u200bValidator
         bool validLetter = (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F');
         bool canHashtag = ch == '#' && pos == 0;
 
+        if (ch == '>' && text[8] =='c') text = text.Remove(8);
+
         if ((validLetter || canHashtag) && pos <= 8)
         {
             //text = text.Insert(pos, ch.ToString());
             //pos += 1;
-
             HideCharacter(ref text, ref pos, ch);
             return ch;
         }

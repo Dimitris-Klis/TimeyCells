@@ -3154,7 +3154,7 @@ PrefabInstance:
     - target: {fileID: 6799973699374911685, guid: 60c2f47415a653244ae540dbb47e653c, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2452289959491163767}
+      objectReference: {fileID: 3394080543455903166}
     - target: {fileID: 6799973699374911685, guid: 60c2f47415a653244ae540dbb47e653c, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -3165,7 +3165,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6799973699374911685, guid: 60c2f47415a653244ae540dbb47e653c, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: ColorEditor, Assembly-CSharp
+      value: ColorEditorFixed, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6799973699374911685, guid: 60c2f47415a653244ae540dbb47e653c, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName

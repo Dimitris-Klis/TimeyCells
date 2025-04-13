@@ -162,7 +162,7 @@ public class ColorEditor : MonoBehaviour
         HueSlider.value = H;
         SaturationSlider.value = S;
         ValueSlider.value = V;
-        Debug.Log(FinalColor);
+        //Debug.Log(FinalColor);
         AlphaSlider.value = FinalColor.a;
         Debug.Log($"AlphaSlider: {AlphaSlider.value}, FinalColor Alpha: {FinalColor.a}");
         //UpdateColor();

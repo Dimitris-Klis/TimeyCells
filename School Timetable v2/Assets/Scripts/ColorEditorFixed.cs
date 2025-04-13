@@ -219,9 +219,9 @@ public class ColorEditorFixed : MonoBehaviour
         hexCode = hexCode.Insert(0, "#");
         //Debug.Log(hexCode);
 
-        Color c = PreviousColor;
+        Color c = CurrentColor;
         ColorUtility.TryParseHtmlString(hexCode, out c);
-        PreviousColor = c;
+        CurrentColor = c;
         UpdateSliders();
     }
 }
