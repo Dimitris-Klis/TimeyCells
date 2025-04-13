@@ -26,6 +26,26 @@ public class ColorStylizer : MonoBehaviour
         GetElements();
         ChangePreset(wantedIndex);
     }
+    public int GetIndex(ColorStylePreset preset)
+    {
+        for (int i = 0; i < ColorStyles.Count; i++)
+        {
+            if (ColorStyles[i] == preset) return i;
+        }
+        return -1;
+    }
+
+    public void DeleteStyle(int index)
+    {
+        ColorStyles.RemoveAt(index);
+        if (wantedIndex > index) wantedIndex--;
+        if (wantedIndex >= ColorStyles.Count)
+        {
+            wantedIndex = 0;
+        }
+        ChangePreset(wantedIndex);
+        UpdateDropdown();
+    }
 
     [ContextMenu("Change Preset to wantedIndex")]
     public void test()
@@ -72,9 +92,10 @@ public class ColorStylizer : MonoBehaviour
             o.SetActive(false);
         }
     }
-    void UpdateDropdown()
+    public void UpdateDropdown()
     {
         paletteDropdown.Setup(ColorStyles.ToArray());
+        paletteDropdown.value = wantedIndex;
     }
     public void ChangePreset(int index)
     {

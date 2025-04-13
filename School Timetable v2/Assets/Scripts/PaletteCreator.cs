@@ -6,6 +6,13 @@ using TMPro;
 
 public class PaletteCreator : MonoBehaviour
 {
+    public static PaletteCreator Instance;
+    private void Awake()
+    {
+        Instance = this;
+    }
+    public ColorStylizer Stylizer;
+    public PaletteEditor PaletteEditor;
     public int IDToModify;
     public ColorStylePreset DefaultPreset;
     public CanvasGroup SelfGroup;
@@ -42,12 +49,19 @@ public class PaletteCreator : MonoBehaviour
         SelfGroup.interactable = SelfGroup.blocksRaycasts = true;
         SelfGroup.alpha = 1;
         IDToModify = ID;
-
+        DeleteButton.interactable = ID >= 0;
         if(ID < 0)
         {
+            PaletteNameInput.text = "Palette Name";
             PrimaryColorImage.color = PalettePreview.PrimaryColorImage.color = DefaultPreset.PrimaryColor;
             SecondaryColorImage.color = PalettePreview.SecondaryColorImage.color = DefaultPreset.SecondaryColor;
             BackgroundColorImage.color = PalettePreview.BackgroundColorImage.color = DefaultPreset.BackgroundColor;
+        }
+        else
+        {
+            PrimaryColorImage.color = PalettePreview.PrimaryColorImage.color = Stylizer.ColorStyles[ID].PrimaryColor;
+            SecondaryColorImage.color = PalettePreview.SecondaryColorImage.color = Stylizer.ColorStyles[ID].SecondaryColor;
+            BackgroundColorImage.color = PalettePreview.BackgroundColorImage.color = Stylizer.ColorStyles[ID].BackgroundColor;
         }
 
         //coloreditor.OnClose.RemoveAllListeners();
@@ -84,5 +98,39 @@ public class PaletteCreator : MonoBehaviour
                 Debug.Log("Index out of range!");
                 break;
         }
+    }
+    public void ChangePaletteName(string name)
+    {
+        PalettePreview.PaletteNameText.text = name;
+    }
+    public void DeleteColor() 
+    {
+        Stylizer.DeleteStyle(IDToModify);
+        Close();
+        PaletteEditor.AddCustomPalettes();
+    }
+    public void Save()
+    {
+        if(IDToModify >= 0)
+        {
+            Stylizer.ColorStyles[IDToModify].PaletteName = PaletteNameInput.text;
+            Stylizer.ColorStyles[IDToModify].PrimaryColor = PrimaryColorImage.color;
+            Stylizer.ColorStyles[IDToModify].SecondaryColor = SecondaryColorImage.color;
+            Stylizer.ColorStyles[IDToModify].BackgroundColor = BackgroundColorImage.color;
+        }
+        else
+        {
+            ColorStylePreset p = new();
+            p.IsCustomPreset = true;
+            p.PaletteName = PaletteNameInput.text;
+            p.PrimaryColor = PrimaryColorImage.color;
+            p.SecondaryColor = SecondaryColorImage.color;
+            p.BackgroundColor = BackgroundColorImage.color;
+            Stylizer.ColorStyles.Add(p);
+        }
+        Stylizer.GetElements();
+        Stylizer.UpdateDropdown();
+        PaletteEditor.AddCustomPalettes();
+        Close();
     }
 }
