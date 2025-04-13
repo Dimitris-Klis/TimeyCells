@@ -20,15 +20,10 @@ public class EventTypeCreator : MonoBehaviour
     public Image ChangeTextColor;
     public Image ChangeBackgroundColor;
     [Space]
-    public Button ChangeTextButton;
-    public Button ChangeBackgroundButton;
+    //public Button ChangeTextButton;
+    //public Button ChangeBackgroundButton;
     [Space]
     public Button DeleteButton;
-
-    [Space(30)]
-
-    [Header("Color Editor")]
-    public ColorEditor coloreditor;
 
     private void Start()
     {
@@ -37,8 +32,8 @@ public class EventTypeCreator : MonoBehaviour
 
     public void OpenCreator(int ID)
     {
-        coloreditor.OnClose.RemoveAllListeners();
-        coloreditor.OnClose.AddListener(delegate { ReEnableColorButtons(); });
+        //coloreditor.OnClose.RemoveAllListeners();
+        //coloreditor.OnClose.AddListener(delegate { ReEnableColorButtons(); });
 
         DeleteButton.interactable = ID > 0; // Prevent the user from deleting the new or the default event type.
         EventTypeNameInput.interactable = ID != 0; // Prevent the user from changing the default event name.
@@ -109,24 +104,24 @@ public class EventTypeCreator : MonoBehaviour
 
     public void ActivateColorEditor(bool ChangeBackground) // If it's not background, it's text.
     {
-        ChangeTextButton.interactable = ChangeBackgroundButton.interactable = false;
+        //ChangeTextButton.interactable = ChangeBackgroundButton.interactable = false;
         if (ChangeBackground)
         {
             Color currentColor = ChangeBackgroundColor.color;
-            coloreditor.Open("Edit Background Color", currentColor, ChangeBackgroundColor, PreviewCell.BackgroundImage);
+            ColorEditorFixed.instance.Open("Edit Background Color", currentColor, ChangeBackgroundColor, PreviewCell.BackgroundImage);
         }
         else
         {
             Color currentColor = ChangeTextColor.color;
-            coloreditor.Open("", currentColor, PreviewCell.EventNameText, PreviewCell.Info1Text, PreviewCell.Info2Text);
-            coloreditor.Open("Edit Text Color", currentColor, ChangeTextColor);
+            ColorEditorFixed.instance.Open("Edit Text Color", currentColor, PreviewCell.EventNameText, PreviewCell.Info1Text, PreviewCell.Info2Text);
+            ColorEditorFixed.instance.AssignNewImages(ChangeTextColor);
         }
     }
 
-    public void ReEnableColorButtons()
-    {
-        ChangeTextButton.interactable = ChangeBackgroundButton.interactable = true;
-    }
+    //public void ReEnableColorButtons()
+    //{
+    //    ChangeTextButton.interactable = ChangeBackgroundButton.interactable = true;
+    //}
 
     public void Save()
     {
@@ -165,7 +160,6 @@ public class EventTypeCreator : MonoBehaviour
     }
     public void Cancel()
     {
-        coloreditor.Close();
         CloseCreator();
     }
 }
