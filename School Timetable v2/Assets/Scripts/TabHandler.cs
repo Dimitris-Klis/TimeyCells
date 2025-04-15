@@ -25,5 +25,12 @@ public class TabHandler : MonoBehaviour
     private void Start()
     {
         SelectTab(0);
+        for (int i = 0; i < tabs.Length; i++)
+        {
+            tabs[i].TabButton.onClick.RemoveAllListeners();
+
+            int tab = i;
+            tabs[i].TabButton.onClick.AddListener(delegate { SelectTab(tab); });
+        }
     }
 }

@@ -41,8 +41,11 @@ public class FreezeGrid : MonoBehaviour
             Child.sizeDelta = WantedChildSizeDelta;
 
             Child.localScale = WantedScale;
-            rect.sizeDelta = new Vector2(originalDelta.x, originalDelta.y * WantedScale.y);
-            TimetableViewportRect.sizeDelta = new Vector2(originalViewportDelta.x, originalViewportDelta.y - (originalDelta.y * (WantedScale.y - 1)));
+            rect.sizeDelta = new Vector2(TimetableViewportRect.sizeDelta.x, originalDelta.y * WantedScale.y);
+
+            rect.position = new(TimetableViewportRect.position.x, rect.position.y, rect.position.z);
+
+            TimetableViewportRect.sizeDelta = new Vector2(TimetableViewportRect.sizeDelta.x, originalViewportDelta.y - (originalDelta.y * (WantedScale.y - 1)));
         }
         else
         {
@@ -55,8 +58,11 @@ public class FreezeGrid : MonoBehaviour
             Child.sizeDelta = WantedChildSizeDelta;
 
             Child.localScale = WantedScale;
-            rect.sizeDelta = new Vector2(originalDelta.x * WantedScale.x, originalDelta.y);
-            TimetableViewportRect.sizeDelta = new Vector2(originalViewportDelta.x - (originalDelta.x * (WantedScale.x - 1)), originalViewportDelta.y);
+            rect.sizeDelta = new Vector2(originalDelta.x * WantedScale.x, TimetableViewportRect.sizeDelta.y);
+
+            rect.position = new(rect.position.x, TimetableViewportRect.position.y, rect.position.z);
+
+            TimetableViewportRect.sizeDelta = new Vector2(originalViewportDelta.x - (originalDelta.x * (WantedScale.x - 1)), TimetableViewportRect.sizeDelta.y);
         }
         
     }

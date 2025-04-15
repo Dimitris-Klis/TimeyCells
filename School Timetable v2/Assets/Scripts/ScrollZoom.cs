@@ -5,7 +5,7 @@ using UnityEngine;
 public class ScrollZoom : MonoBehaviour
 {
     public Transform Table;
-    public int MinScale=1, MaxScale=3;
+    public float MinScale=1, MaxScale=3;
     public float ScrollSensitivity = .25f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
