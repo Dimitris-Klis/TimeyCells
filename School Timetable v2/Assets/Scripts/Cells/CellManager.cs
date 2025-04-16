@@ -67,13 +67,23 @@ public class CellManager : MonoBehaviour
         
         if (GetEventType(0) == null)
         {
-            // The Default Event
+            // The Default Event Type
             CreateNewEventType(out EventTypeItem defaultType);
             defaultType.TypeName = "Default";
             defaultType.BackgroundColor = Color.white;
             defaultType.TextColor = Color.black;
         }
+        if (GetEvent(0) == null)
+        {
+            // The Default Event -> None
+            CreateNewEvent(out EventItem defaultEvent);
+            defaultEvent.EventName = "";
+            defaultEvent.Info1 = "";
+            defaultEvent.Info2 = "";
+            defaultEvent.EventType = 0;
+        }
         UpdateEventTypePreviews();
+        UpdateEventPreviews();
     }
     public void ShowEditingOverlay()
     {

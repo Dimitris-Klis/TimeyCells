@@ -1,15 +1,23 @@
 using System.Collections.Generic;
 using System.Collections;
-using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine;
 using TMPro;
-using UnityEngine.Events;
 
 public class ColorEditor : MonoBehaviour
 {
-    public CanvasGroup SelfGroup;
-    public UnityEvent OnColorChange;
-    public UnityEvent OnClose;
+    public static ColorEditor instance;
+    private void Awake()
+    {
+        instance = this;
+    }
+    [Header("Properties")]
+    public string oldPrompt;
+    public Color CurrentColor, PreviousColor;
+
+    public Image[] imageRefs;
+    public TMP_Text[] textRefs;
+
     [Header("Slider References")]
     public Slider HueSlider;
     public Slider SaturationSlider;
@@ -18,7 +26,12 @@ public class ColorEditor : MonoBehaviour
     public Slider AlphaSlider;
     [Space]
     public TMP_InputField HexCodeField;
+    
     [Header("GFX References")]
+    public CanvasGroup SelfGroup;
+    [Space]
+    public Image ColorPreview;
+    [Space]
     public TMP_Text PromptText;
     [Space]
     public Image HueValImage; // The rainbow gradient
@@ -30,104 +43,80 @@ public class ColorEditor : MonoBehaviour
     public Image ValHueSatImage;
     [Space]
     public Image AlphaRGBImage;
-    [Space]
-    //public ref Color colorToChange;
-    public Color FinalColor;
-    public Color PrevColor;
-    public Image ColorPreview;
-
-    public Image[] imageRefs;
-    public TMP_Text[] textRefs;
-    private void Start()
-    {
-        Close();
-    }
 
     public void Open(string prompt, Color color, params Image[] images)
     {
-        PromptText.text = prompt;
-
-        SelfGroup.interactable = SelfGroup.blocksRaycasts = true;
-        SelfGroup.alpha = 1;
-
-        PrevColor = color;
-        FinalColor = color;
-
-        imageRefs = images;
-        //Debug.Log(FinalColor.a);
-        UpdateSliders();
-    }
-    public void Open(string prompt, Color color, params TMP_Text[] texts)
-    {
-        PromptText.text = prompt;
-
-        SelfGroup.interactable = SelfGroup.blocksRaycasts = true;
-        SelfGroup.alpha = 1;
-
-        FinalColor = PrevColor = color;
-
-        textRefs = texts;
-        //Debug.Log(FinalColor.a);
-        UpdateSliders();
-    }
-    public void Close()
-    {
-        SelfGroup.interactable = SelfGroup.blocksRaycasts = false;
-        SelfGroup.alpha = 0;
-
         imageRefs = null;
         textRefs = null;
 
-        OnClose.Invoke();
+        PromptText.text = prompt;
+
+        SelfGroup.interactable = SelfGroup.blocksRaycasts = true;
+        SelfGroup.alpha = 1;
+
+        if (prompt != oldPrompt)
+        {
+            PreviousColor = CurrentColor = color;
+            textRefs = null;
+            imageRefs = null;
+        }
+
+        imageRefs = images;
+
+        float H, S, V;
+        Color.RGBToHSV(color, out H, out S, out V);
+        HueSlider.value = H;
+        SaturationSlider.value = S;
+        ValueSlider.value = V;
+        AlphaSlider.value = color.a;
+
+        UpdateColor();
+    }
+    public void Open(string prompt, Color color, params TMP_Text[] texts)
+    {
+        imageRefs = null;
+        textRefs = null;
+
+        PromptText.text = prompt;
+
+        SelfGroup.interactable = SelfGroup.blocksRaycasts = true;
+        SelfGroup.alpha = 1;
+
+        if (prompt != oldPrompt)
+        {
+            PreviousColor = CurrentColor = color;
+            textRefs = null;
+            imageRefs = null;
+        }
+            
+
+        textRefs = texts;
+
+        oldPrompt = prompt;
+
+        float H, S, V;
+        Color.RGBToHSV(color, out H, out S, out V);
+        HueSlider.value = H;
+        SaturationSlider.value = S;
+        ValueSlider.value = V;
+        AlphaSlider.value = color.a;
+
+        UpdateColor();
     }
 
-    public void ApplyColor()
+    public void AssignNewImages(params Image[] images)
     {
-        if(imageRefs != null)
-        {
-            for (int i = 0; i < imageRefs.Length; i++)
-            {
-                imageRefs[i].color = FinalColor;
-            }
-        }
-        if(textRefs != null)
-        {
-            for (int i = 0; i < textRefs.Length; i++)
-            {
-                textRefs[i].color = FinalColor;
-            }
-        }
+        imageRefs = images;
     }
-    public void CancelColor()
+    public void AssignNewTexts(params TMP_Text[] texts)
     {
-        if (imageRefs != null)
-        {
-            for (int i = 0; i < imageRefs.Length; i++)
-            {
-                imageRefs[i].color = PrevColor;
-            }
-        }
-        if (textRefs != null)
-        {
-            for (int i = 0; i < textRefs.Length; i++)
-            {
-                textRefs[i].color = PrevColor;
-            }
-        }
-        FinalColor = PrevColor;
-        UpdateSliders();
-        Close();
+        textRefs = texts;
     }
-    public void EndEditing()
-    {
-        PrevColor = FinalColor;
-        UpdateSliders();
-        Close();
-    }
+
     public void UpdateColor()
     {
-        FinalColor = Color.HSVToRGB(HueSlider.value, SaturationSlider.value, ValueSlider.value);
-        FinalColor.a = AlphaSlider.value;
+        CurrentColor = Color.HSVToRGB(HueSlider.value, SaturationSlider.value, ValueSlider.value);
+        CurrentColor.a = AlphaSlider.value;
 
         // Setting the HUE Slider color
         HueValImage.color = Color.HSVToRGB(0, 0, ValueSlider.value);
@@ -141,44 +130,98 @@ public class ColorEditor : MonoBehaviour
         SatValImage.color = Color.HSVToRGB(1, 0, ValueSlider.value);
 
         // Setting the VAL Slider color
-        ValHueSatImage.color = Color.HSVToRGB(HueSlider.value,SaturationSlider.value, 1);
+        ValHueSatImage.color = Color.HSVToRGB(HueSlider.value, SaturationSlider.value, 1);
 
         // Setting the ALPHA Slider color.
-        AlphaRGBImage.color = new(FinalColor.r, FinalColor.g, FinalColor.b, 1);
+        AlphaRGBImage.color = new(CurrentColor.r, CurrentColor.g, CurrentColor.b, 1);
 
         // Setting the Color Preview Color.
-        ColorPreview.color = FinalColor;
+        ColorPreview.color = CurrentColor;
 
-        HexCodeField.text = ColorUtility.ToHtmlStringRGBA(FinalColor) + TMP_Specials.clear;
+        HexCodeField.text = ColorUtility.ToHtmlStringRGBA(CurrentColor) + TMP_Specials.clear;
 
-        ApplyColor();
+        UpdateRefs();
 
-        OnColorChange.Invoke();
+        //OnColorChange.Invoke();
+    }
+    public void UpdateRefs()
+    {
+        if (imageRefs != null)
+        {
+            for (int i = 0; i < imageRefs.Length; i++)
+            {
+                imageRefs[i].color = CurrentColor;
+            }
+        }
+        if (textRefs != null)
+        {
+            for (int i = 0; i < textRefs.Length; i++)
+            {
+                textRefs[i].color = CurrentColor;
+            }
+        }
+    }
+
+    public void ApplyColors()
+    {
+        oldPrompt = "";
+        UpdateRefs();
+        UpdateSliders();
+        HideColorEditor();
+    }
+    public void CancelColors()
+    {
+        if (imageRefs != null)
+        {
+            for (int i = 0; i < imageRefs.Length; i++)
+            {
+                imageRefs[i].color = PreviousColor;
+            }
+        }
+        if (textRefs != null)
+        {
+            for (int i = 0; i < textRefs.Length; i++)
+            {
+                textRefs[i].color = PreviousColor;
+            }
+        }
+        CurrentColor = PreviousColor;
+        UpdateSliders();
+        HideColorEditor();
+    }
+    public void HideColorEditor()
+    {
+        SelfGroup.interactable = SelfGroup.blocksRaycasts = false;
+        SelfGroup.alpha = 0;
+
+        imageRefs = null;
+        textRefs = null;
+
+        //OnClose.Invoke();
     }
     public void UpdateSliders()
     {
         float H, S, V;
-        Color.RGBToHSV(FinalColor, out H, out S, out V);
+        Color.RGBToHSV(CurrentColor, out H, out S, out V);
         HueSlider.value = H;
         SaturationSlider.value = S;
         ValueSlider.value = V;
-        //Debug.Log(FinalColor);
-        AlphaSlider.value = FinalColor.a;
-        Debug.Log($"AlphaSlider: {AlphaSlider.value}, FinalColor Alpha: {FinalColor.a}");
+        //Debug.Log(CurrentColor);
+        AlphaSlider.value = CurrentColor.a;
+        //Debug.Log($"AlphaSlider: {AlphaSlider.value}, CurrentColor Alpha: {CurrentColor.a}");
         //UpdateColor();
     }
-
     public void SetColor(string hexCode)
     {
         hexCode = hexCode.Replace(TMP_Specials.clear, "");
         hexCode = hexCode.Replace("#", "");
-        
+
         hexCode = hexCode.Insert(0, "#");
         //Debug.Log(hexCode);
 
-        Color c = FinalColor;
+        Color c = CurrentColor;
         ColorUtility.TryParseHtmlString(hexCode, out c);
-        FinalColor = c;
+        CurrentColor = c;
         UpdateSliders();
     }
 }

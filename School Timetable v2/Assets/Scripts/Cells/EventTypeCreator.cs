@@ -92,7 +92,7 @@ public class EventTypeCreator : MonoBehaviour
         SelfGroup.interactable = SelfGroup.blocksRaycasts = false;
         SelfGroup.alpha = 0;
 
-        ColorEditorFixed.instance.ApplyColors();
+        ColorEditor.instance.ApplyColors();
         CellManager.Instance.HideEditingOverlay();
     }
 
@@ -109,13 +109,13 @@ public class EventTypeCreator : MonoBehaviour
         if (ChangeBackground)
         {
             Color currentColor = ChangeBackgroundColor.color;
-            ColorEditorFixed.instance.Open("Edit Background Color", currentColor, ChangeBackgroundColor, PreviewCell.BackgroundImage);
+            ColorEditor.instance.Open("Edit Background Color", currentColor, ChangeBackgroundColor, PreviewCell.BackgroundImage);
         }
         else
         {
             Color currentColor = ChangeTextColor.color;
-            ColorEditorFixed.instance.Open("Edit Text Color", currentColor, PreviewCell.EventNameText, PreviewCell.Info1Text, PreviewCell.Info2Text);
-            ColorEditorFixed.instance.AssignNewImages(ChangeTextColor);
+            ColorEditor.instance.Open("Edit Text Color", currentColor, PreviewCell.EventNameText, PreviewCell.Info1Text, PreviewCell.Info2Text);
+            ColorEditor.instance.AssignNewImages(ChangeTextColor);
         }
     }
 

@@ -69,7 +69,7 @@ public class PaletteCreator : MonoBehaviour
     }
     public void Close()
     {
-        ColorEditorFixed.instance.ApplyColors();
+        ColorEditor.instance.ApplyColors();
         CellManager.Instance.HideEditingOverlay();
     }
     //public void ReEnableColorButtons()
@@ -85,15 +85,15 @@ public class PaletteCreator : MonoBehaviour
         {
             case 0:
                 currentColor = BackgroundColorImage.color;
-                ColorEditorFixed.instance.Open("Edit Background Color", currentColor, BackgroundColorImage, PalettePreview.BackgroundColorImage);
+                ColorEditor.instance.Open("Edit Background Color", currentColor, BackgroundColorImage, PalettePreview.BackgroundColorImage);
                 break;
             case 1:
                 currentColor = SecondaryColorImage.color;
-                ColorEditorFixed.instance.Open("Edit Secondary Color", currentColor, SecondaryColorImage, PalettePreview.SecondaryColorImage);
+                ColorEditor.instance.Open("Edit Secondary Color", currentColor, SecondaryColorImage, PalettePreview.SecondaryColorImage);
                 break;
             case 2:
                 currentColor = PrimaryColorImage.color;
-                ColorEditorFixed.instance.Open("Edit Primary Color", currentColor, PrimaryColorImage, PalettePreview.PrimaryColorImage);
+                ColorEditor.instance.Open("Edit Primary Color", currentColor, PrimaryColorImage, PalettePreview.PrimaryColorImage);
                 break;
             default:
                 Debug.Log("Index out of range!");
