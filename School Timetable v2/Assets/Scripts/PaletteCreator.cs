@@ -69,6 +69,7 @@ public class PaletteCreator : MonoBehaviour
     }
     public void Close()
     {
+        ColorEditorFixed.instance.ApplyColors();
         CellManager.Instance.HideEditingOverlay();
     }
     //public void ReEnableColorButtons()
@@ -128,6 +129,7 @@ public class PaletteCreator : MonoBehaviour
             p.BackgroundColor = BackgroundColorImage.color;
             Stylizer.ColorStyles.Add(p);
         }
+
         Stylizer.GetElements();
         Stylizer.UpdateDropdown();
         PaletteEditor.AddCustomPalettes();

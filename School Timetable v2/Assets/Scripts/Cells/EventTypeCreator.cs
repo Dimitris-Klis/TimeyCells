@@ -92,6 +92,7 @@ public class EventTypeCreator : MonoBehaviour
         SelfGroup.interactable = SelfGroup.blocksRaycasts = false;
         SelfGroup.alpha = 0;
 
+        ColorEditorFixed.instance.ApplyColors();
         CellManager.Instance.HideEditingOverlay();
     }
 
