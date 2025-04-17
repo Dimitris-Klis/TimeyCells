@@ -4,9 +4,9 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class CellManager : MonoBehaviour
+public class EventManager : MonoBehaviour
 {
-    public static CellManager Instance;
+    public static EventManager Instance;
     
     [Header("General")]
     
@@ -52,8 +52,10 @@ public class CellManager : MonoBehaviour
     [Space]
     
     public Transform EventsParent;
+    public Transform EventSelectorsParent;
     public List<TimetableCell> EventPreviews = new();
-    
+    public List<TimetableCell> EventSelectorPreviews = new();
+
     [Space]
     
     public Transform EventTypesParent;
@@ -84,6 +86,7 @@ public class CellManager : MonoBehaviour
         }
         UpdateEventTypePreviews();
         UpdateEventPreviews();
+        UpdateEventSelectors();
     }
     public void ShowEditingOverlay()
     {
@@ -245,6 +248,7 @@ public class CellManager : MonoBehaviour
             SetButton(c.SelfButton, EventTypes[i].ItemID, true);
         }
 
+        TimetableEditor.instance.Grid.UpdateAllCells();
     }
     public void UpdateEventPreviews()
     {
@@ -272,7 +276,7 @@ public class CellManager : MonoBehaviour
             }
         }
 
-
+        // Styling the event previews & setting up button functionality.
         for (int i = 0; i < EventPreviews.Count; i++)
         {
             var c = EventPreviews[i];
@@ -294,6 +298,11 @@ public class CellManager : MonoBehaviour
             // Edit Button Setup
             SetButton(c.SelfButton, Events[i].ItemID, false);
         }
+
+        EventPreviews[0].EventNameText.text = "None";
+        EventPreviews[0].SelfButton.interactable = false;
+
+        TimetableEditor.instance.Grid.UpdateAllCells();
     }
     void SetButton(Button b, int id, bool EventType)
     {
@@ -312,5 +321,57 @@ public class CellManager : MonoBehaviour
                 EventTypeCreator.OpenCreator(id); 
             });
     }
+    public void UpdateEventSelectors()
+    {
+        int modAmount = Events.Count - EventSelectorPreviews.Count;
 
+        // Add missing or remove extra previews.
+        if (modAmount > 0)
+        {
+            for (int i = 0; i < modAmount; i++)
+            {
+                TimetableCell c = Instantiate(CellPrefab, EventSelectorsParent);
+
+                c.transform.localScale = Vector3.one * 1.5f;
+                EventSelectorPreviews.Add(c);
+            }
+        }
+        else if (modAmount < 0)
+        {
+            // Substitue while loop for a for loop to prevent crashing.
+            for (int i = 0; i < Events.Count + 10; i++)
+            {
+                Destroy(EventSelectorPreviews[^1].gameObject);
+                EventSelectorPreviews.RemoveAt(EventSelectorPreviews.Count - 1);
+                if (EventSelectorPreviews.Count <= Events.Count) break;
+            }
+        }
+
+        // Styling the event previews & setting up button functionality.
+        for (int i = 0; i < EventSelectorPreviews.Count; i++)
+        {
+            var c = EventSelectorPreviews[i];
+
+            // Text Setup
+            c.EventNameText.text = Events[i].EventName;
+            c.Info1Text.text = Events[i].Info1;
+            c.Info2Text.text = Events[i].Info2;
+
+            // Color Setup
+            EventTypeItem t = GetEventType(Events[i].EventType);
+            if (t == null) t = GetEventType(0);
+            c.BackgroundImage.color = t.BackgroundColor;
+            c.EventNameText.color = c.Info1Text.color = c.Info2Text.color = t.TextColor;
+
+            // Fav Setup
+            c.FavouriteImage.gameObject.SetActive(Events[i].Favourite);
+
+            // Edit Button Setup
+            int id = Events[i].ItemID;
+            c.SelfButton.onClick.RemoveAllListeners();
+            c.SelfButton.onClick.AddListener(delegate { TimetableEditor.instance.SelectEvent(id); });
+        }
+
+        EventSelectorPreviews[0].EventNameText.text = "None";
+    }
 }

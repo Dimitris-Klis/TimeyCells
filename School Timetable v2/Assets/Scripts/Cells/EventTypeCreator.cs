@@ -39,7 +39,7 @@ public class EventTypeCreator : MonoBehaviour
         EventTypeNameInput.interactable = ID != 0; // Prevent the user from changing the default event name.
 
         string verb = ID >= 0 ? "Edit" : "Create new";
-        CellManager.Instance.TitleText.text = $"{verb} Event Type";
+        EventManager.Instance.TitleText.text = $"{verb} Event Type";
 
         IDToModify = ID;
 
@@ -49,7 +49,7 @@ public class EventTypeCreator : MonoBehaviour
         // Setting Defaults
         if(ID >= 0)
         {
-            EventTypeItem a = CellManager.Instance.GetEventType(ID);
+            EventTypeItem a = EventManager.Instance.GetEventType(ID);
 
             // Text String
             EventTypeNameInput.text = a.TypeName;
@@ -69,22 +69,22 @@ public class EventTypeCreator : MonoBehaviour
         else
         {
             // Text String
-            EventTypeNameInput.text = CellManager.Instance.DefaultNewEventType.TypeName;
+            EventTypeNameInput.text = EventManager.Instance.DefaultNewEventType.TypeName;
 
             // Background Color
             ChangeBackgroundColor.color = 
                 PreviewCell.BackgroundImage.color = 
-                CellManager.Instance.DefaultNewEventType.BackgroundColor;
+                EventManager.Instance.DefaultNewEventType.BackgroundColor;
 
             // Text Color
             ChangeTextColor.color = 
                 PreviewCell.EventNameText.color = 
                 PreviewCell.Info1Text.color = 
                 PreviewCell.Info2Text.color = 
-                CellManager.Instance.DefaultNewEventType.TextColor;
+                EventManager.Instance.DefaultNewEventType.TextColor;
         }
         
-        CellManager.Instance.ShowEditingOverlay();
+        EventManager.Instance.ShowEditingOverlay();
     }
 
     public void CloseCreator()
@@ -93,7 +93,7 @@ public class EventTypeCreator : MonoBehaviour
         SelfGroup.alpha = 0;
 
         ColorEditor.instance.ApplyColors();
-        CellManager.Instance.HideEditingOverlay();
+        EventManager.Instance.HideEditingOverlay();
     }
 
 
@@ -129,7 +129,7 @@ public class EventTypeCreator : MonoBehaviour
         if(IDToModify < 0)
         {
             // Create New
-            CellManager.Instance.CreateNewEventType(out EventTypeItem a);
+            EventManager.Instance.CreateNewEventType(out EventTypeItem a);
             a.BackgroundColor = ChangeBackgroundColor.color;
             a.TextColor = ChangeTextColor.color;
             a.TypeName = EventTypeNameInput.text.Replace(TMP_Specials.clear,"");
@@ -137,25 +137,29 @@ public class EventTypeCreator : MonoBehaviour
         else
         {
             // Edit Existing
-            EventTypeItem a = CellManager.Instance.GetEventType(IDToModify);
+            EventTypeItem a = EventManager.Instance.GetEventType(IDToModify);
             a.BackgroundColor = ChangeBackgroundColor.color;
             a.TextColor = ChangeTextColor.color;
             a.TypeName = EventTypeNameInput.text.Replace(TMP_Specials.clear,"");
 
-            CellManager.Instance.UpdateEventPreviews();
+            EventManager.Instance.UpdateEventPreviews();
+            EventManager.Instance.UpdateEventSelectors();
+            TimetableEditor.instance.UpdateSelectorPreview();
         }
 
-        CellManager.Instance.UpdateEventTypePreviews();
+        EventManager.Instance.UpdateEventTypePreviews();
         CloseCreator();
     }
     public void Delete()
     {
         if(IDToModify > 0)
         {
-            CellManager.Instance.DeleteEventType(IDToModify);
+            EventManager.Instance.DeleteEventType(IDToModify);
 
-            CellManager.Instance.UpdateEventTypePreviews();
-            CellManager.Instance.UpdateEventPreviews();
+            EventManager.Instance.UpdateEventTypePreviews();
+            EventManager.Instance.UpdateEventPreviews();
+            EventManager.Instance.UpdateEventSelectors();
+            TimetableEditor.instance.UpdateSelectorPreview();
             CloseCreator();
         }
     }

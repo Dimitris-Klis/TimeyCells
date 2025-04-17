@@ -206,8 +206,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3394080543455903166}
-        m_TargetAssemblyTypeName: ColorEditorFixed, Assembly-CSharp
+      - m_Target: {fileID: 2452289959491163767}
+        m_TargetAssemblyTypeName: ColorEditor, Assembly-CSharp
         m_MethodName: UpdateColor
         m_Mode: 1
         m_Arguments:
@@ -634,8 +634,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3394080543455903166}
-        m_TargetAssemblyTypeName: ColorEditorFixed, Assembly-CSharp
+      - m_Target: {fileID: 2452289959491163767}
+        m_TargetAssemblyTypeName: ColorEditor, Assembly-CSharp
         m_MethodName: UpdateColor
         m_Mode: 1
         m_Arguments:
@@ -928,8 +928,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3394080543455903166}
-        m_TargetAssemblyTypeName: ColorEditorFixed, Assembly-CSharp
+      - m_Target: {fileID: 2452289959491163767}
+        m_TargetAssemblyTypeName: ColorEditor, Assembly-CSharp
         m_MethodName: UpdateColor
         m_Mode: 1
         m_Arguments:
@@ -1905,8 +1905,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3394080543455903166}
-        m_TargetAssemblyTypeName: ColorEditorFixed, Assembly-CSharp
+      - m_Target: {fileID: 2452289959491163767}
+        m_TargetAssemblyTypeName: ColorEditor, Assembly-CSharp
         m_MethodName: UpdateColor
         m_Mode: 1
         m_Arguments:
@@ -2275,7 +2275,6 @@ GameObject:
   - component: {fileID: 63699967650077620}
   - component: {fileID: 7098641720161422562}
   - component: {fileID: 2452289959491163767}
-  - component: {fileID: 3394080543455903166}
   - component: {fileID: 1906414928439240898}
   - component: {fileID: 4337738817463668327}
   m_Layer: 5
@@ -2325,62 +2324,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7951530727078342137}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 140f78629f7114b44b6211c8923eec2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SelfGroup: {fileID: 7098641720161422562}
-  OnColorChange:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: EventTypeCreator, Assembly-CSharp
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnClose:
-    m_PersistentCalls:
-      m_Calls: []
-  HueSlider: {fileID: 7053839893887572291}
-  SaturationSlider: {fileID: 6078026460683303419}
-  ValueSlider: {fileID: 3406013889518621261}
-  AlphaSlider: {fileID: 573076917341817062}
-  HexCodeField: {fileID: 8037093197203874016}
-  PromptText: {fileID: 923857730508215709}
-  HueValImage: {fileID: 5398791379602389440}
-  HueSatImage: {fileID: 4663418701932058648}
-  SatValHueImage: {fileID: 854723803270792311}
-  SatValImage: {fileID: 6140452042490238109}
-  ValHueSatImage: {fileID: 727243520159374199}
-  AlphaRGBImage: {fileID: 8969784618213667953}
-  FinalColor: {r: 1, g: 1, b: 1, a: 1}
-  PrevColor: {r: 0, g: 0, b: 0, a: 0}
-  ColorPreview: {fileID: 2559800871962270590}
-  imageRefs: []
-  textRefs: []
---- !u!114 &3394080543455903166
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7951530727078342137}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56c34f74c2b50c744be1687b577a0e72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   oldPrompt: 
-  CurrentColor: {r: 1, g: 1, b: 1, a: 1}
-  PreviousColor: {r: 1, g: 1, b: 1, a: 1}
+  CurrentColor: {r: 0, g: 0, b: 0, a: 0}
+  PreviousColor: {r: 0, g: 0, b: 0, a: 0}
   imageRefs: []
   textRefs: []
   HueSlider: {fileID: 7053839893887572291}
@@ -2389,7 +2340,7 @@ MonoBehaviour:
   AlphaSlider: {fileID: 573076917341817062}
   HexCodeField: {fileID: 8037093197203874016}
   SelfGroup: {fileID: 7098641720161422562}
-  ColorPreview: {fileID: 709672918347625487}
+  ColorPreview: {fileID: 2559800871962270590}
   PromptText: {fileID: 923857730508215709}
   HueValImage: {fileID: 5398791379602389440}
   HueSatImage: {fileID: 4663418701932058648}
@@ -2892,7 +2843,7 @@ PrefabInstance:
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 3394080543455903166}
+      objectReference: {fileID: 2452289959491163767}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -2915,7 +2866,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: ColorEditorFixed, Assembly-CSharp
+      value: ColorEditor, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
@@ -3154,7 +3105,7 @@ PrefabInstance:
     - target: {fileID: 6799973699374911685, guid: 60c2f47415a653244ae540dbb47e653c, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 3394080543455903166}
+      objectReference: {fileID: 2452289959491163767}
     - target: {fileID: 6799973699374911685, guid: 60c2f47415a653244ae540dbb47e653c, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -3165,7 +3116,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6799973699374911685, guid: 60c2f47415a653244ae540dbb47e653c, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: ColorEditorFixed, Assembly-CSharp
+      value: ColorEditor, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6799973699374911685, guid: 60c2f47415a653244ae540dbb47e653c, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -3219,7 +3170,7 @@ PrefabInstance:
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 3394080543455903166}
+      objectReference: {fileID: 2452289959491163767}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -3242,7 +3193,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: ColorEditorFixed, Assembly-CSharp
+      value: ColorEditor, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName

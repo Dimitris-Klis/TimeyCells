@@ -59,7 +59,7 @@ public class TimetableGrid : MonoBehaviour
             for (int j = 0; j < children.Count; j++)
             {
                 if (children[j] != null)
-                    DestroyImmediate(children[j].gameObject);
+                    Destroy(children[j].gameObject);
             }
         }
         ColumnsList.Clear();
@@ -255,7 +255,7 @@ public class TimetableGrid : MonoBehaviour
         for (int i = 0; i < children.Count; i++)
         {
             if (children[i] != null)
-                DestroyImmediate(children[i].gameObject);
+                Destroy(children[i].gameObject);
         }
         children.Clear();
         ColumnsList.RemoveAt(colIndex);
@@ -303,7 +303,7 @@ public class TimetableGrid : MonoBehaviour
         for (int i = 0; i < ColumnsList.Count; i++)
         {
             if (ColumnsList[i].isBreak) continue;
-            DestroyImmediate(ColumnsList[i].Children[rowIndex].gameObject);
+            Destroy(ColumnsList[i].Children[rowIndex].gameObject);
             ColumnsList[i].Children.RemoveAt(rowIndex);
         }
         UpdateAllTransforms(0);
@@ -311,7 +311,18 @@ public class TimetableGrid : MonoBehaviour
 
         rect.pivot = originalPivot;
     }
-    
+    public void UpdateAllCells()
+    {
+        for (int i = 0; i < ColumnsList.Count; i++)
+        {
+            for (int j = 0; j < ColumnsList[i].Children.Count; j++)
+            {
+                var c = ColumnsList[i].Children[j];
+                c.Info.UpdateUI();
+
+            }
+        }
+    }
     
     [ContextMenu("Add Break!")]
     public void TestAddBreak() // temp

@@ -45,7 +45,7 @@ public class PaletteCreator : MonoBehaviour
     public int ColorToChange = 0;
     public void OpenCreator(int ID)
     {
-        CellManager.Instance.ShowEditingOverlay();
+        EventManager.Instance.ShowEditingOverlay();
         SelfGroup.interactable = SelfGroup.blocksRaycasts = true;
         SelfGroup.alpha = 1;
         IDToModify = ID;
@@ -70,7 +70,7 @@ public class PaletteCreator : MonoBehaviour
     public void Close()
     {
         ColorEditor.instance.ApplyColors();
-        CellManager.Instance.HideEditingOverlay();
+        EventManager.Instance.HideEditingOverlay();
     }
     //public void ReEnableColorButtons()
     //{

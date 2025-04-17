@@ -29,7 +29,7 @@ public class EventCreator : MonoBehaviour
         DeleteButton.interactable = ID >= 0;
 
         string verb = ID >= 0 ? "Edit" : "Create new";
-        CellManager.Instance.TitleText.text = $"{verb} Event";
+        EventManager.Instance.TitleText.text = $"{verb} Event";
 
         IDToModify = ID;
 
@@ -38,10 +38,10 @@ public class EventCreator : MonoBehaviour
 
         //Setting up the dropdown.
         EventTypeDropdown.ClearOptions();
-        TMP_Dropdown.OptionData[] dropdownOptions = new TMP_Dropdown.OptionData[CellManager.Instance.EventTypes.Count];
+        TMP_Dropdown.OptionData[] dropdownOptions = new TMP_Dropdown.OptionData[EventManager.Instance.EventTypes.Count];
         for (int i = 0; i < dropdownOptions.Length; i++)
         {
-            dropdownOptions[i] = new(CellManager.Instance.EventTypes[i].TypeName);
+            dropdownOptions[i] = new(EventManager.Instance.EventTypes[i].TypeName);
         }
         EventTypeDropdown.AddOptions(dropdownOptions.ToList());
 
@@ -49,7 +49,7 @@ public class EventCreator : MonoBehaviour
         // Setting Defaults
         if (ID >= 0)
         {
-            EventItem a = CellManager.Instance.GetEvent(ID);
+            EventItem a = EventManager.Instance.GetEvent(ID);
 
             // Text
             EventNameInput.text = a.EventName + TMP_Specials.clear;
@@ -57,21 +57,21 @@ public class EventCreator : MonoBehaviour
             Info2Input.text = a.Info2 + TMP_Specials.clear;
 
             // Misc
-            int eventtype = a.EventType >= 0 && a.EventType < CellManager.Instance.EventTypes.Count ? a.EventType : 0; // Prevents out of range exceptions
-            EventTypeDropdown.value = CellManager.Instance.GetEventTypeIndex(eventtype);
+            int eventtype = a.EventType >= 0 && a.EventType < EventManager.Instance.EventTypes.Count ? a.EventType : 0; // Prevents out of range exceptions
+            EventTypeDropdown.value = EventManager.Instance.GetEventTypeIndex(eventtype);
             FavouriteToggle.isOn = a.Favourite;
         }
         else
         {
             // Text
-            EventNameInput.text = PreviewCell.EventNameText.text =  CellManager.Instance.DefaultNewEvent.EventName;
-            Info1Input.text = PreviewCell.Info1Text.text = CellManager.Instance.DefaultNewEvent.Info1;
-            Info2Input.text = PreviewCell.Info2Text.text = CellManager.Instance.DefaultNewEvent.Info2;
+            EventNameInput.text = PreviewCell.EventNameText.text =  EventManager.Instance.DefaultNewEvent.EventName;
+            Info1Input.text = PreviewCell.Info1Text.text = EventManager.Instance.DefaultNewEvent.Info1;
+            Info2Input.text = PreviewCell.Info2Text.text = EventManager.Instance.DefaultNewEvent.Info2;
 
             // Misc
-            EventTypeDropdown.value = CellManager.Instance.DefaultNewEvent.EventType;
+            EventTypeDropdown.value = EventManager.Instance.DefaultNewEvent.EventType;
 
-            FavouriteToggle.isOn = CellManager.Instance.DefaultNewEvent.Favourite;
+            FavouriteToggle.isOn = EventManager.Instance.DefaultNewEvent.Favourite;
         }
 
         // We do this to change the color of the preview, without requiring additional code.
@@ -79,7 +79,7 @@ public class EventCreator : MonoBehaviour
 
         ChangeIsFavourite(FavouriteToggle.isOn);
 
-        CellManager.Instance.ShowEditingOverlay();
+        EventManager.Instance.ShowEditingOverlay();
     }
 
     public void CloseCreator()
@@ -87,7 +87,7 @@ public class EventCreator : MonoBehaviour
         SelfGroup.interactable = SelfGroup.blocksRaycasts = false;
         SelfGroup.alpha = 0;
 
-        CellManager.Instance.HideEditingOverlay();
+        EventManager.Instance.HideEditingOverlay();
     }
 
     // These functions simply change the preview. They're only meant for visual feedback.
@@ -105,7 +105,7 @@ public class EventCreator : MonoBehaviour
     }
     public void ChangeEventType(int type)
     {
-        EventTypeItem e = CellManager.Instance.EventTypes[type];
+        EventTypeItem e = EventManager.Instance.EventTypes[type];
         PreviewCell.BackgroundImage.color = e.BackgroundColor;
         PreviewCell.EventNameText.color = PreviewCell.Info1Text.color = PreviewCell.Info2Text.color = e.TextColor;
     }
@@ -118,7 +118,7 @@ public class EventCreator : MonoBehaviour
         if (IDToModify < 0)
         {
             // Create New
-            CellManager.Instance.CreateNewEvent(out EventItem a);
+            EventManager.Instance.CreateNewEvent(out EventItem a);
             
             a.EventName = EventNameInput.text.Replace(TMP_Specials.clear, "");
             a.Info1 = Info1Input.text.Replace(TMP_Specials.clear, "");
@@ -130,25 +130,29 @@ public class EventCreator : MonoBehaviour
         else
         {
             // Edit Existing
-            EventItem a = CellManager.Instance.GetEvent(IDToModify);
+            EventItem a = EventManager.Instance.GetEvent(IDToModify);
 
             a.EventName = EventNameInput.text.Replace(TMP_Specials.clear, "");
             a.Info1 = Info1Input.text.Replace(TMP_Specials.clear, "");
             a.Info2 = Info2Input.text.Replace(TMP_Specials.clear, "");
 
-            a.EventType = CellManager.Instance.EventTypes[EventTypeDropdown.value].ItemID;
+            a.EventType = EventManager.Instance.EventTypes[EventTypeDropdown.value].ItemID;
             a.Favourite = FavouriteToggle.isOn;
         }
 
-        CellManager.Instance.UpdateEventPreviews();
+        EventManager.Instance.UpdateEventPreviews();
+        EventManager.Instance.UpdateEventSelectors();
+        TimetableEditor.instance.UpdateSelectorPreview();
         CloseCreator();
     }
     public void Delete()
     {
         if (IDToModify >= 0)
         {
-            CellManager.Instance.DeleteEvent(IDToModify);
-            CellManager.Instance.UpdateEventPreviews();
+            EventManager.Instance.DeleteEvent(IDToModify);
+            EventManager.Instance.UpdateEventPreviews();
+            EventManager.Instance.UpdateEventSelectors();
+            TimetableEditor.instance.UpdateSelectorPreview();
             CloseCreator();
         }
     }
