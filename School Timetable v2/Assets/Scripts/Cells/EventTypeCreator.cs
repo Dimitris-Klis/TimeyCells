@@ -11,6 +11,8 @@ public class EventTypeCreator : MonoBehaviour
     public CanvasGroup SelfGroup;
     [Header("Preview")]
     public TimetableCell PreviewCell;
+    [Space]
+    public TMP_Text TitleText;
 
     [Space(30)]
 
@@ -39,7 +41,7 @@ public class EventTypeCreator : MonoBehaviour
         EventTypeNameInput.interactable = ID != 0; // Prevent the user from changing the default event name.
 
         string verb = ID >= 0 ? "Edit" : "Create new";
-        EventManager.Instance.TitleText.text = $"{verb} Event Type";
+        TitleText.text = $"{verb} Event Type";
 
         IDToModify = ID;
 
@@ -84,16 +86,19 @@ public class EventTypeCreator : MonoBehaviour
                 EventManager.Instance.DefaultNewEventType.TextColor;
         }
         
-        EventManager.Instance.ShowEditingOverlay();
+        //EventManager.Instance.ShowEditingOverlay();
     }
 
     public void CloseCreator()
     {
-        SelfGroup.interactable = SelfGroup.blocksRaycasts = false;
-        SelfGroup.alpha = 0;
+        //SelfGroup.interactable = SelfGroup.blocksRaycasts = false;
+        //SelfGroup.alpha = 0;
 
         ColorEditor.instance.ApplyColors();
-        EventManager.Instance.HideEditingOverlay();
+        gameObject.SetActive(false);
+
+
+        //EventManager.Instance.HideEditingOverlay();
     }
 
 

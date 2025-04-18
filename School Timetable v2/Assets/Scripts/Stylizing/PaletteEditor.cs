@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class PaletteEditor : MonoBehaviour
 {
     [Header("References")]
+    public PaletteCreator PaletteCreator;
     public PaletteObject Template;
     public Transform PalettesParent;
     public ColorStylizer Stylizer;
@@ -40,7 +41,12 @@ public class PaletteEditor : MonoBehaviour
 
             Button b = p.GetComponent<Button>();
             int index = p.paletteIndex;
-            b.onClick.AddListener(delegate { PaletteCreator.Instance.OpenCreator(index); });
+            b.onClick.AddListener(
+            delegate 
+            {
+                PaletteCreator.gameObject.SetActive(true);
+                PaletteCreator.OpenCreator(index); 
+            });
 
             p.PaletteNameText.text = presets[i].PaletteName;
             p.BackgroundColorImage.color = presets[i].BackgroundColor;
@@ -49,16 +55,5 @@ public class PaletteEditor : MonoBehaviour
         }
         Template.gameObject.SetActive(false);
         Message.SetActive(PalettesParent.childCount <= 2);
-    }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

@@ -12,18 +12,14 @@ public class EventManager : MonoBehaviour
     
     public TMP_Text TitleText; // We're going to edit the contents so it says "Create" or "Edit"
     public CanvasGroup EditingOverlay;
-    
-    [Space]
-
-    public EventCreator EventCreator;
-    public EventTypeCreator EventTypeCreator;
-
+    public CellInfoEditor CellInfoEditor;
+    public ScrollZoom ZoomHandler;
 
     [Space(30)]
 
     [Header("Creating/Editing Events")]
 
-    public EventCreator EventCreatorUI;
+    public EventCreator EventCreator;
     public EventItem DefaultNewEvent; // When creating a new event, we set the fields to the correct values.
     
 
@@ -31,7 +27,7 @@ public class EventManager : MonoBehaviour
 
     [Header("Creating/Editing Event Types")]
 
-    public EventTypeCreator EventTypeCreatorUI;
+    public EventTypeCreator EventTypeCreator;
     public EventTypeItem DefaultNewEventType;
     
 
@@ -309,15 +305,17 @@ public class EventManager : MonoBehaviour
         b.onClick.RemoveAllListeners();
         if(!EventType)
             b.onClick.AddListener(
-            delegate { 
+            delegate {
                 //Debug.Log($"Opening {id}");
+                EventCreator.gameObject.SetActive(true);
                 EventCreator.OpenCreator(id); 
             });
         else 
             b.onClick.AddListener(
             delegate 
-            { 
+            {
                 //Debug.Log($"Opening {id}");
+                EventTypeCreator.gameObject.SetActive(true);
                 EventTypeCreator.OpenCreator(id); 
             });
     }
@@ -369,7 +367,10 @@ public class EventManager : MonoBehaviour
             // Edit Button Setup
             int id = Events[i].ItemID;
             c.SelfButton.onClick.RemoveAllListeners();
-            c.SelfButton.onClick.AddListener(delegate { TimetableEditor.instance.SelectEvent(id); });
+            if(TimetableEditor.instance.Editing)
+                c.SelfButton.onClick.AddListener(delegate { TimetableEditor.instance.SelectEvent(id); });
+            else
+                c.SelfButton.onClick.AddListener(delegate { CellInfoEditor.ChangeInfoBase(id); });
         }
 
         EventSelectorPreviews[0].EventNameText.text = "None";

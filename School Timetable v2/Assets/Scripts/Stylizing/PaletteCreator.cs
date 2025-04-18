@@ -6,11 +6,6 @@ using TMPro;
 
 public class PaletteCreator : MonoBehaviour
 {
-    public static PaletteCreator Instance;
-    private void Awake()
-    {
-        Instance = this;
-    }
     public ColorStylizer Stylizer;
     public PaletteEditor PaletteEditor;
     public int IDToModify;
@@ -19,7 +14,8 @@ public class PaletteCreator : MonoBehaviour
 
     [Header("Preview")]
     public PaletteObject PalettePreview;
-
+    [Space]
+    public TMP_Text TitleText;
     [Space(20)]
 
     [Header("Property Fields")]
@@ -45,14 +41,18 @@ public class PaletteCreator : MonoBehaviour
     public int ColorToChange = 0;
     public void OpenCreator(int ID)
     {
-        EventManager.Instance.ShowEditingOverlay();
-        SelfGroup.interactable = SelfGroup.blocksRaycasts = true;
-        SelfGroup.alpha = 1;
+        //EventManager.Instance.ShowEditingOverlay();
+        //SelfGroup.interactable = SelfGroup.blocksRaycasts = true;
+        //SelfGroup.alpha = 1;
+
+        string verb = ID >= 0 ? "Edit" : "Create new";
+        TitleText.text = $"{verb} Theme";
+
         IDToModify = ID;
         DeleteButton.interactable = ID >= 0;
         if(ID < 0)
         {
-            PaletteNameInput.text = "Palette Name";
+            PaletteNameInput.text = DefaultPreset.PaletteName;
             PrimaryColorImage.color = PalettePreview.PrimaryColorImage.color = DefaultPreset.PrimaryColor;
             SecondaryColorImage.color = PalettePreview.SecondaryColorImage.color = DefaultPreset.SecondaryColor;
             BackgroundColorImage.color = PalettePreview.BackgroundColorImage.color = DefaultPreset.BackgroundColor;
@@ -70,7 +70,8 @@ public class PaletteCreator : MonoBehaviour
     public void Close()
     {
         ColorEditor.instance.ApplyColors();
-        EventManager.Instance.HideEditingOverlay();
+        gameObject.SetActive(false);
+        //EventManager.Instance.HideEditingOverlay();
     }
     //public void ReEnableColorButtons()
     //{
@@ -104,7 +105,7 @@ public class PaletteCreator : MonoBehaviour
     {
         PalettePreview.PaletteNameText.text = name;
     }
-    public void DeleteColor() 
+    public void Delete() 
     {
         Stylizer.DeleteStyle(IDToModify);
         Close();

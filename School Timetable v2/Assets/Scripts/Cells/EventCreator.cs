@@ -12,9 +12,9 @@ public class EventCreator : MonoBehaviour
 
     [Header("Preview")]
     public TimetableCell PreviewCell;
-
+    [Space]
+    public TMP_Text TitleText;
     [Space(30)]
-
     [Header("Property Fields")]
     public TMP_InputField EventNameInput;
     public TMP_InputField Info1Input;
@@ -29,12 +29,12 @@ public class EventCreator : MonoBehaviour
         DeleteButton.interactable = ID >= 0;
 
         string verb = ID >= 0 ? "Edit" : "Create new";
-        EventManager.Instance.TitleText.text = $"{verb} Event";
+        TitleText.text = $"{verb} Event";
 
         IDToModify = ID;
 
-        SelfGroup.interactable = SelfGroup.blocksRaycasts = true;
-        SelfGroup.alpha = 1;
+        //SelfGroup.interactable = SelfGroup.blocksRaycasts = true;
+        //SelfGroup.alpha = 1;
 
         //Setting up the dropdown.
         EventTypeDropdown.ClearOptions();
@@ -79,15 +79,17 @@ public class EventCreator : MonoBehaviour
 
         ChangeIsFavourite(FavouriteToggle.isOn);
 
-        EventManager.Instance.ShowEditingOverlay();
+        //EventManager.Instance.ShowEditingOverlay();
     }
 
     public void CloseCreator()
     {
-        SelfGroup.interactable = SelfGroup.blocksRaycasts = false;
-        SelfGroup.alpha = 0;
+        //SelfGroup.interactable = SelfGroup.blocksRaycasts = false;
+        //SelfGroup.alpha = 0;
 
-        EventManager.Instance.HideEditingOverlay();
+        gameObject.SetActive(false);
+
+        //EventManager.Instance.HideEditingOverlay();
     }
 
     // These functions simply change the preview. They're only meant for visual feedback.
@@ -147,13 +149,12 @@ public class EventCreator : MonoBehaviour
     }
     public void Delete()
     {
-        if (IDToModify >= 0)
-        {
-            EventManager.Instance.DeleteEvent(IDToModify);
-            EventManager.Instance.UpdateEventPreviews();
-            EventManager.Instance.UpdateEventSelectors();
-            TimetableEditor.instance.UpdateSelectorPreview();
-            CloseCreator();
-        }
+        // Prevent deletion if we're deleting a new event.
+        if (IDToModify < 0) return;
+        EventManager.Instance.DeleteEvent(IDToModify);
+        EventManager.Instance.UpdateEventPreviews();
+        EventManager.Instance.UpdateEventSelectors();
+        TimetableEditor.instance.UpdateSelectorPreview();
+        CloseCreator();
     }
 }

@@ -10,7 +10,7 @@ public class TimetableEditor : MonoBehaviour
     {
         instance = this;
     }
-
+    public bool Editing;
     public TimetableGrid Grid;
     public GameObject[] OtherButtons;
     public CanvasGroup[] OtherGroups;
@@ -26,6 +26,7 @@ public class TimetableEditor : MonoBehaviour
         
         UpdateSelectorPreview();
 
+        EventManager.Instance.ZoomHandler.enabled = true;
         EventSelectorOverlay.SetActive(false);
     }
     public void UpdateSelectorPreview()
@@ -49,6 +50,8 @@ public class TimetableEditor : MonoBehaviour
     }
     public void StartEdit()
     {
+        Editing = true;
+        EventManager.Instance.UpdateEventSelectors();
         for (int i = 0; i < Grid.ColumnsList.Count; i++)
         {
             for (int j = 0; j < Grid.ColumnsList[i].Children.Count; j++)
@@ -76,6 +79,8 @@ public class TimetableEditor : MonoBehaviour
     }
     public void EndEdit()
     {
+        Editing = false;
+        EventManager.Instance.UpdateEventSelectors();
         for (int i = 0; i < Grid.ColumnsList.Count; i++)
         {
             for (int j = 0; j < Grid.ColumnsList[i].Children.Count; j++)
@@ -83,9 +88,13 @@ public class TimetableEditor : MonoBehaviour
                 var c = Grid.ColumnsList[i].Children[j];
                 c.SelfButton.onClick.RemoveAllListeners();
 
-                // function that enables CellInfoEditor
-                //c.SelfButton.onClick.AddListener(delegate { c.Info.SetSelfToSelectedEvent(); });
-
+                CellInfo info = c.Info;
+                c.SelfButton.onClick.AddListener(
+                    delegate
+                    {
+                        EventManager.Instance.CellInfoEditor.gameObject.SetActive(true);
+                        EventManager.Instance.CellInfoEditor.SelectCell(info);
+                    });
             }
         }
 
@@ -108,11 +117,5 @@ public class TimetableEditor : MonoBehaviour
     {
         SelectEvent(0);
         EndEdit();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
