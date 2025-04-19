@@ -7,12 +7,11 @@ public class CellInfo : MonoBehaviour
 {
     public TimetableCell cellUI;
 
-    public int SelectedEvent;
-    public bool ShouldOverride;
-    public EventItem Override;
+    public int SelectedEvent = 0;
+    public EventItemOverride Override = new();
     [Space]
     public int TemporaryEvent;
-    public EventItem TemporaryOverride;
+    public EventItemOverride TemporaryOverride;
     public int weeks;
     //[Space]
     public DateTime StartDate;
@@ -24,16 +23,14 @@ public class CellInfo : MonoBehaviour
     }
     public void UpdateUI()
     {
-        EventItem e = EventManager.Instance.GetEvent(SelectedEvent);
-        if (ShouldOverride)
-        {
-            if(Override.EventName != "") e.EventName = Override.EventName;
-            if (Override.Info1 != "") e.Info1 = Override.Info1;
-            if (Override.Info2 != "") e.Info2 = Override.Info2;
+        EventItem e = new(EventManager.Instance.GetEvent(SelectedEvent));
+        if (Override.EventName != "") e.EventName = Override.EventName;
+        if (Override.Info1 != "") e.Info1 = Override.Info1;
+        if (Override.Info2 != "") e.Info2 = Override.Info2;
 
-            // Add an extra dropdown option to the cellinfo editor, called "Don't Override".
-            if (Override.EventType >= 0) e.EventType = Override.EventType;
-        }
+        // Add an extra dropdown option to the cellinfo editor, called "Don't Override".
+        if (Override.EventType >= 0) e.EventType = Override.EventType;
+        if (Override.OverrideFavourite) e.Favourite = Override.Favourite;
 
         // Actual UI Changes here
         cellUI.EventNameText.text = e.EventName;

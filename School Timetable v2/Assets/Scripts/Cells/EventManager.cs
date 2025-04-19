@@ -9,11 +9,8 @@ public class EventManager : MonoBehaviour
     public static EventManager Instance;
     
     [Header("General")]
-    
-    public TMP_Text TitleText; // We're going to edit the contents so it says "Create" or "Edit"
-    public CanvasGroup EditingOverlay;
     public CellInfoEditor CellInfoEditor;
-    public ScrollZoom ZoomHandler;
+    //public ScrollZoom ZoomHandler;
 
     [Space(30)]
 
@@ -83,16 +80,6 @@ public class EventManager : MonoBehaviour
         UpdateEventTypePreviews();
         UpdateEventPreviews();
         UpdateEventSelectors();
-    }
-    public void ShowEditingOverlay()
-    {
-        EditingOverlay.alpha = 1;
-        EditingOverlay.interactable = EditingOverlay.blocksRaycasts = true;
-    }
-    public void HideEditingOverlay()
-    {
-        EditingOverlay.alpha = 0;
-        EditingOverlay.interactable = EditingOverlay.blocksRaycasts = false;
     }
     public void CreateNewEventType(out EventTypeItem _item)
     {

@@ -27,10 +27,10 @@ public class EventTypeCreator : MonoBehaviour
     [Space]
     public Button DeleteButton;
 
-    private void Start()
-    {
-        CloseCreator();
-    }
+    //private void Start()
+    //{
+    //    CloseCreator();
+    //}
 
     public void OpenCreator(int ID)
     {
@@ -55,6 +55,9 @@ public class EventTypeCreator : MonoBehaviour
 
             // Text String
             EventTypeNameInput.text = a.TypeName;
+            if (EventTypeNameInput.text != "") EventTypeNameInput.text += TMP_Specials.clear;
+
+            PreviewCell.EventNameText.text = a.TypeName;
 
             // Background Color
             ChangeBackgroundColor.color =

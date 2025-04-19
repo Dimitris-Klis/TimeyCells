@@ -14,12 +14,15 @@ public class u200bValidator : TMP_InputValidator
         return ch;
     }
     public void HideCharacter(ref string text, ref int pos, char ch)
-    {
+    {   
         text = text.Replace(TMP_Specials.clear, "");
         if (pos >= text.Length && text.Length > 0) pos = text.Length;
-
         text = text.Insert(pos, ch.ToString());
         pos += 1;
-        text += TMP_Specials.clear;
+        if(text.Length > 0)
+        {
+            text += TMP_Specials.clear;
+        }
+        if (text == TMP_Specials.clear) text = "";
     }
 }

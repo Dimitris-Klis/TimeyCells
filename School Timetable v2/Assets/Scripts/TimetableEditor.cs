@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.UI;
+using TMPro;
 
 public class TimetableEditor : MonoBehaviour
 {
@@ -11,12 +13,16 @@ public class TimetableEditor : MonoBehaviour
         instance = this;
     }
     public bool Editing;
+    public TMP_Text TimetableNameText;
+    public TMP_InputField TimetableNameInput;
     public TimetableGrid Grid;
     public GameObject[] OtherButtons;
     public CanvasGroup[] OtherGroups;
     public GameObject[] EditorButtons;
+    public Button ColumnDoneButton;
     [Space]
     public GameObject EventSelectorOverlay;
+    public Button SelectorCancelButton;
     [Space]
     public TimetableCell SelectedCellPreview;
     public int SelectedID;
@@ -26,7 +32,7 @@ public class TimetableEditor : MonoBehaviour
         
         UpdateSelectorPreview();
 
-        EventManager.Instance.ZoomHandler.enabled = true;
+        //EventManager.Instance.ZoomHandler.enabled = true;
         EventSelectorOverlay.SetActive(false);
     }
     public void UpdateSelectorPreview()
@@ -51,6 +57,8 @@ public class TimetableEditor : MonoBehaviour
     public void StartEdit()
     {
         Editing = true;
+        TimetableNameText.gameObject.SetActive(!Editing);
+        TimetableNameInput.gameObject.SetActive(Editing);
         EventManager.Instance.UpdateEventSelectors();
         for (int i = 0; i < Grid.ColumnsList.Count; i++)
         {
@@ -76,10 +84,18 @@ public class TimetableEditor : MonoBehaviour
         {
             EditorButtons[i].SetActive(true);
         }
+        SelectorCancelButton.onClick.RemoveAllListeners();
+        SelectorCancelButton.onClick.AddListener(delegate
+        {
+            EventSelectorOverlay.SetActive(false);
+            //EventManager.Instance.ZoomHandler.enabled = true;
+        });
     }
     public void EndEdit()
     {
         Editing = false;
+        TimetableNameText.gameObject.SetActive(!Editing);
+        TimetableNameInput.gameObject.SetActive(Editing);
         EventManager.Instance.UpdateEventSelectors();
         for (int i = 0; i < Grid.ColumnsList.Count; i++)
         {
@@ -111,11 +127,43 @@ public class TimetableEditor : MonoBehaviour
         {
             EditorButtons[i].SetActive(false);
         }
+        SelectorCancelButton.onClick.RemoveAllListeners();
+        SelectorCancelButton.onClick.AddListener(delegate
+        {
+            EventSelectorOverlay.SetActive(false);
+        });
+    }
+
+    public void StartEditColumns()
+    {
+        TimetableNameText.gameObject.SetActive(Editing);
+        TimetableNameInput.gameObject.SetActive(!Editing);
+        for (int i = 0; i < EditorButtons.Length; i++)
+        {
+            EditorButtons[i].SetActive(false);
+        }
+        ColumnDoneButton.gameObject.SetActive(true);
+    }
+    public void EndEditColumns()
+    {
+        TimetableNameText.gameObject.SetActive(!Editing);
+        TimetableNameInput.gameObject.SetActive(Editing);
+        Grid.RemoveColumnButtons();
+        for (int i = 0; i < EditorButtons.Length; i++)
+        {
+            EditorButtons[i].SetActive(true);
+        }
+        ColumnDoneButton.gameObject.SetActive(false);
+    }
+    public void SetTimetableName(string text)
+    {
+        TimetableNameText.text = text.Replace(TMP_Specials.clear, "");
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         SelectEvent(0);
+        EndEditColumns();
         EndEdit();
     }
 }

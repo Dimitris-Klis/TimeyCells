@@ -59,7 +59,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -148,6 +148,7 @@ GameObject:
   - component: {fileID: 7397136840226335528}
   - component: {fileID: 1392058315196227010}
   - component: {fileID: 6799973699374911685}
+  - component: {fileID: 2472948376520321698}
   m_Layer: 5
   m_Name: TMP InputField
   m_TagString: Untagged
@@ -274,7 +275,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2472948376520321698}
+        m_TargetAssemblyTypeName: EmptyInputFieldFixer, Assembly-CSharp
+        m_MethodName: CheckIfEmpty
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -314,6 +327,20 @@ MonoBehaviour:
   isAlert: 0
   m_InputValidator: {fileID: 11400000, guid: d753b3ffec2efb343bb5e616f274061d, type: 2}
   m_ShouldActivateOnSelect: 1
+--- !u!114 &2472948376520321698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3892283280714325856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70df738ef9cd0ab498b37334a1d96d20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TMPField: {fileID: 6799973699374911685}
+  CharacterLimit: 0
 --- !u!1 &6800076543082358738
 GameObject:
   m_ObjectHideFlags: 0
@@ -426,7 +453,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

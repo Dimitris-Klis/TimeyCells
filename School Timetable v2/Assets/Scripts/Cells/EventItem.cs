@@ -13,4 +13,23 @@ public class EventItem
     [Space]
     public int EventType;
     public bool Favourite;
+
+    public EventItem(EventItem e)
+    {
+        ItemID = e.ItemID;
+        EventName = e.EventName;
+        Info1 = e.Info1;
+        Info2 = e.Info2;
+        EventType = e.EventType;
+        Favourite = e.Favourite;
+    }
+    public EventItem()
+    {
+        ItemID = 0;
+        EventName = "";
+        Info1 = "";
+        Info2 = "";
+        EventType = 0;
+        Favourite = false;
+    }
 }
