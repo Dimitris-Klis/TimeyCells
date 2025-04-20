@@ -21,7 +21,7 @@ public class TimetableGrid : MonoBehaviour
     public Button AddColButtonPrefab;
     public Button RemoveColButtonPrefab;
     public Vector2 ColumnButtonsOffset = -Vector2.up * 20;
-
+    public int MaxColumns = 40;
 
     Vector2 PivotFix = Vector2.up;
     Vector2 originalPivot;
@@ -65,6 +65,7 @@ public class TimetableGrid : MonoBehaviour
     public void SetupAddColumnButtons(bool colspan)
     {
         RemoveColumnButtons();
+        if (ColumnsList.Count >= MaxColumns) return;
         for (int i = 0; i <= ColumnsList.Count; i++)
         {
             if (i == ColumnsList.Count)

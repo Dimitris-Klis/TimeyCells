@@ -14,7 +14,9 @@ public class CellInfo : MonoBehaviour
     public EventItemOverride TemporaryOverride;
     public int weeks;
     //[Space]
-    public DateTime StartDate;
+    public bool OverrideCommonTime;
+    public TimeSpan StartTime;
+    public TimeSpan Length;
 
     public void SetSelfToSelectedEvent()
     {
