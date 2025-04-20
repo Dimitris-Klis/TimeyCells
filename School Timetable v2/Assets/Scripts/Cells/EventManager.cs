@@ -323,7 +323,7 @@ public class EventManager : MonoBehaviour
         }
         else if (modAmount < 0)
         {
-            // Substitue while loop for a for loop to prevent crashing.
+            // Substitue while loop with a for loop to prevent crashing.
             for (int i = 0; i < Events.Count + 10; i++)
             {
                 Destroy(EventSelectorPreviews[^1].gameObject);

@@ -105,11 +105,11 @@ public class TimetableEditor : MonoBehaviour
 
                 CellInfo info = c.Info;
                 c.SelfButton.onClick.AddListener(
-                    delegate
-                    {
-                        EventManager.Instance.CellInfoEditor.gameObject.SetActive(true);
-                        EventManager.Instance.CellInfoEditor.SelectCell(info);
-                    });
+                delegate
+                {
+                    EventManager.Instance.CellInfoEditor.gameObject.SetActive(true);
+                    EventManager.Instance.CellInfoEditor.SelectCell(info);
+                });
             }
         }
 
@@ -159,7 +159,7 @@ public class TimetableEditor : MonoBehaviour
         TimetableNameText.text = text.Replace(TMP_Specials.clear, "");
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void Setup()
     {
         SelectEvent(0);
         EndEditColumns();

@@ -7,9 +7,15 @@ using System;
 public class WeekDay
 {
     // The days for which the day will run.
-    public bool Mon, Tue, Wed, Thu, Fri, Sat, Sun;
+    public uint Days; // max is 127
     [Space]
     public string DayName;
     public TimeSpan StartTime = new(7, 30, 0);
     public TimeSpan CommonLength = new(1, 0, 0);
+
+    public WeekDay(string _DayName, uint _Days)
+    {
+        DayName= _DayName;
+        Days = _Days;
+    }
 }
