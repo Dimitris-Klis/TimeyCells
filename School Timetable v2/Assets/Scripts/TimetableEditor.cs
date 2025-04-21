@@ -104,12 +104,13 @@ public class TimetableEditor : MonoBehaviour
                 var c = Grid.ColumnsList[i].Children[j];
                 c.SelfButton.onClick.RemoveAllListeners();
 
-                CellInfo info = c.Info;
+                int col = i, row=j;
+
                 c.SelfButton.onClick.AddListener(
                 delegate
                 {
                     EventManager.Instance.CellInfoEditor.gameObject.SetActive(true);
-                    EventManager.Instance.CellInfoEditor.SelectCell(info);
+                    EventManager.Instance.CellInfoEditor.SelectCell(col, row);
                 });
             }
         }

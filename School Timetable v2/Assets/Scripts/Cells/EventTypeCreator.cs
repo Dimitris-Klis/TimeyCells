@@ -74,7 +74,7 @@ public class EventTypeCreator : MonoBehaviour
         else
         {
             // Text String
-            EventTypeNameInput.text = EventManager.Instance.DefaultNewEventType.TypeName;
+            EventTypeNameInput.text = PreviewCell.EventNameText.text = EventManager.Instance.DefaultNewEventType.TypeName;
 
             // Background Color
             ChangeBackgroundColor.color = 

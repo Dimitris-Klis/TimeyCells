@@ -8,7 +8,8 @@ using System;
 
 public class CellInfoEditor : MonoBehaviour
 {
-    CellInfo SelectedInfo;
+    int SelectedCellColumn=-1;
+    int SelectedCellRow=-1;
     int originalEvent;
     public TimetableCell MainPreview;
     public TimetableCell BasePreview;
@@ -23,11 +24,14 @@ public class CellInfoEditor : MonoBehaviour
     public TMP_InputField StartTimeInput;
     public TMP_InputField LengthInput;
 
-
-    public void SelectCell(CellInfo info)
+    public void SelectCell(int column, int row)
     {
-        SelectedInfo = info;
-        originalEvent = SelectedInfo.SelectedEvent;
+        SelectedCellColumn = column;
+        SelectedCellRow = row;
+
+        CellInfo selectedInfo = TimetableEditor.instance.Grid.ColumnsList[column].Children[row].Info;
+
+        originalEvent = selectedInfo.SelectedEvent;
         //EventManager.Instance.ZoomHandler.enabled = false;
 
         //Setting up the dropdown.
@@ -40,50 +44,74 @@ public class CellInfoEditor : MonoBehaviour
         }
         TypeOverride.AddOptions(dropdownOptions.ToList());
 
-        TypeOverride.value = info.Override.EventType + 1;
-        EventNameOverride.text = info.Override.EventName;
-        Info1Override.text = info.Override.Info1;
-        Info2Override.text = info.Override.Info2;
+        TypeOverride.value = selectedInfo.Override.EventType + 1;
+        EventNameOverride.text = selectedInfo.Override.EventName;
+        Info1Override.text = selectedInfo.Override.Info1;
+        Info2Override.text = selectedInfo.Override.Info2;
 
-        FavouriteOverride.value = (info.Override.OverrideFavourite ? 1 : 0) * (1 + (info.Override.Favourite ? 1 : 0));
+        FavouriteOverride.value = (selectedInfo.Override.OverrideFavourite ? 1 : 0) * (1 + (selectedInfo.Override.Favourite ? 1 : 0));
+
+        if (selectedInfo.OverrideCommonLength)
+        {
+            LengthInput.text = $"{selectedInfo.Length.Hours}:{string.Format("{0:00}", selectedInfo.Length.Minutes)}";
+        }
+        else
+        {
+            TimeSpan commonLen = DayTimeManager.instance.GetCellCommonLength(SelectedCellRow);
+            LengthInput.text = $"{commonLen.Hours}:{string.Format("{0:00}", commonLen.Minutes)}";
+        }
+        
+
+        TimeSpan t = DayTimeManager.instance.GetCellStartTime(SelectedCellColumn, SelectedCellRow);
+        StartTimeInput.text = $"{t.Hours}:{string.Format("{0:00}", t.Minutes)}";
+
+        StartTimeInput.interactable = !selectedInfo.cellUI.isbreak;
+        LengthInput.interactable = OverrideTimeToggle.isOn = selectedInfo.OverrideCommonLength;
 
         UpdatePreviews();
     }
+    public CellInfo GetSelectedInfo()
+    {
+        return TimetableEditor.instance.Grid.ColumnsList[SelectedCellColumn].Children[SelectedCellRow].Info; 
+    }
     public void ToggleOverrideTime(bool overridetime)
     {
-        StartTimeInput.gameObject.SetActive(overridetime && !SelectedInfo.cellUI.isbreak);
-        LengthInput.gameObject.SetActive(overridetime);
+        LengthInput.interactable = overridetime;
     }
     public void ParseLength(string text)
     {
         text = text.Replace(TMP_Specials.clear, "");
-        if(!DayTimeManager.ParsableLength(text, out DateTime length))
+        if(!DayTimeManager.TryParseLength(text, out DateTime length))
         {
-            LengthInput.text = $"{SelectedInfo.Length.Hours}:{SelectedInfo.Length.Minutes}";
+            TimeSpan commonLen = DayTimeManager.instance.GetCellCommonLength(SelectedCellRow);
+            LengthInput.text = $"{commonLen.Hours}:{string.Format("{0:00}", commonLen.Minutes)}";
         }
     }
-    public void ParseTime(string text)
+    public void ParseStartTime(string text)
     {
         text = text.Replace(TMP_Specials.clear, "");
-        if (!DayTimeManager.ParsableLength(text, out DateTime length))
+        if (!DayTimeManager.TryParseTime(text, out DateTime length) ||
+            SelectedCellColumn > 0 && DayTimeManager.instance.TimeDiff(length.TimeOfDay, SelectedCellColumn - 1, SelectedCellRow) < TimeSpan.Zero)
         {
-            TimeSpan t = DayTimeManager.instance.GetCellTime(SelectedInfo);
-            LengthInput.text = $"{t.Hours}:{(t.Minutes<10?"0":"")}{t.Minutes}";
+            TimeSpan t = DayTimeManager.instance.GetCellStartTime(SelectedCellColumn, SelectedCellRow);
+            StartTimeInput.text = $"{t.Hours}:{string.Format("{0:00}", t.Minutes)}";
         }
     }
     
     // This should be used by the 'Event Selector' overlay.
     public void ChangeInfoBase(int EventID)
     {
-        SelectedInfo.SelectedEvent = EventID;
-        SelectedInfo.UpdateUI();
+        CellInfo c = GetSelectedInfo();
+        c.SelectedEvent = EventID;
+        c.UpdateUI();
         TimetableEditor.instance.EventSelectorOverlay.SetActive(false);
 
         UpdatePreviews();
     }
     public void UpdatePreviews()
     {
-        EventItem e = EventManager.Instance.GetEvent(SelectedInfo.SelectedEvent);
+        CellInfo c = GetSelectedInfo();
+        EventItem e = EventManager.Instance.GetEvent(c.SelectedEvent);
         EventTypeItem et = EventManager.Instance.GetEventType(e.EventType);
 
         BasePreview.EventNameText.text = MainPreview.EventNameText.text = e.EventName;
@@ -142,16 +170,45 @@ public class CellInfoEditor : MonoBehaviour
     public void Save()
     {
         //EventManager.Instance.ZoomHandler.enabled = true;
-
+        CellInfo c = GetSelectedInfo();
         //TO DO: Make special override type of EventItem
-        SelectedInfo.Override.EventName = EventNameOverride.text.Replace(TMP_Specials.clear, "");
-        SelectedInfo.Override.Info1 = Info1Override.text.Replace(TMP_Specials.clear, "");
-        SelectedInfo.Override.Info2 = Info2Override.text.Replace(TMP_Specials.clear, "");
-        SelectedInfo.Override.EventType = TypeOverride.value - 1;
-        SelectedInfo.Override.OverrideFavourite = FavouriteOverride.value > 0;
-        SelectedInfo.Override.Favourite = FavouriteOverride.value > 1;
-        SelectedInfo.UpdateUI();
-        SelectedInfo = null;
+        c.Override.EventName = EventNameOverride.text.Replace(TMP_Specials.clear, "");
+        c.Override.Info1 = Info1Override.text.Replace(TMP_Specials.clear, "");
+        c.Override.Info2 = Info2Override.text.Replace(TMP_Specials.clear, "");
+        c.Override.EventType = TypeOverride.value - 1;
+        c.Override.OverrideFavourite = FavouriteOverride.value > 0;
+        c.Override.Favourite = FavouriteOverride.value > 1;
+
+        c.OverrideCommonLength = OverrideTimeToggle.isOn;
+        DateTime len;
+        DayTimeManager.TryParseLength(LengthInput.text.Replace(TMP_Specials.clear, ""), out len);
+        c.Length = len.TimeOfDay;
+
+        DateTime start;
+        DayTimeManager.TryParseTime(StartTimeInput.text.Replace(TMP_Specials.clear, ""), out start);
+
+        if (SelectedCellColumn == 0)
+        {
+            DayTimeManager.instance.WeekDays[SelectedCellRow].StartTime = start.TimeOfDay;
+        }
+        else if(!c.cellUI.isbreak)
+        {
+            CellInfo PrevInfo = TimetableEditor.instance.Grid.ColumnsList[SelectedCellColumn-1].Children[SelectedCellRow].Info;
+
+            long ticks = DayTimeManager.instance.TimeDiff(start.TimeOfDay, SelectedCellColumn - 1, SelectedCellRow).Ticks;
+
+            // Instead of using Mathf.Abs, we manually make the value absolute to avoid losing any bytes, since this is a long.
+            if (ticks < 0) ticks = -ticks;
+
+            PrevInfo.Length = new TimeSpan(ticks);
+
+            PrevInfo.OverrideCommonLength = PrevInfo.Length != DayTimeManager.instance.GetCellCommonLength(SelectedCellRow);
+        }
+
+        c.UpdateUI();
+
+        SelectedCellColumn = -1;
+        SelectedCellRow = -1;
 
         gameObject.SetActive(false);
     }

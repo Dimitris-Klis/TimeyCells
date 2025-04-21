@@ -46,15 +46,11 @@ public class DayTimeManager : MonoBehaviour
     {
         Setup();
     }
+
+    // Finds a weekday that contains day 0-6.
     public int GetWeekDayIndex(int day) // 0-6
     {
-        //int Sat = day % 2;
-        //int Fri = day % 4;
-        //int Thu = day % 8;
-        //int Wed = day % 16;
-        //int Tue = day % 32;
-        //int Mon = day % 64;
-        //int Sun = day % 128;
+        // Sun=0, Mon=1, Tue=2, Wed=3, Thu=4, Fri=5, Sat=6
 
         int divider = (int)Mathf.Pow(2, day);
 
@@ -64,35 +60,30 @@ public class DayTimeManager : MonoBehaviour
         }
         return -1;
     }
-    public TimeSpan GetCellTime(CellInfo info)
+    public TimeSpan GetCellCommonLength(int weekday)
     {
-        // Get weekday
-        int weekdayindex = -1;
-
-        for (int i = 0; i < Grid.ColumnsList.Count; i++)
-        {
-            for (int j = 0; j < Grid.ColumnsList[i].Children.Count; j++)
-            {
-                var c = Grid.ColumnsList[i].Children[j];
-                if (c.Info == info)
-                {
-                    weekdayindex = j;
-                    break;
-                }
-            }
-        }
-        if (weekdayindex < 0)
+        return WeekDays[weekday].CommonLength;
+    }
+    // Compare new startTime with a cell's time
+    public TimeSpan TimeDiff(TimeSpan newStartTime, int col, int weekday)
+    {
+        TimeSpan t = GetCellStartTime(col, weekday);
+        return newStartTime.Subtract(t);
+    }
+    public TimeSpan GetCellStartTime(int col, int weekday)
+    {
+        if (weekday < 0)
         {
             Debug.LogWarning("Weekday Index out of range!!!");
             return TimeSpan.Zero;
         }
 
-        WeekDay wd = WeekDays[weekdayindex];
+        WeekDay wd = WeekDays[weekday];
         TimeSpan t = wd.StartTime;
 
-        for (int i = 0; i < Grid.ColumnsList.Count; i++)
+        for (int i = 0; i < col-1; i++)
         {
-            int index = weekdayindex;
+            int index = weekday;
             if (Grid.ColumnsList[i].isBreak) index = 0; // Accounting for rowspans
 
             var c = Grid.ColumnsList[i].Children[index].Info;
@@ -101,22 +92,16 @@ public class DayTimeManager : MonoBehaviour
             if (nullOverride) nullOverride = c.Override.EventType < 0 && c.Override.OverrideFavourite == false;
 
             if (c.SelectedEvent == 0 && nullOverride) continue; // If the cell is 'None' and has no overrides, ignore it.
+
             if (c.OverrideCommonLength)
                 t += c.Length;
             else
                 t += wd.CommonLength;
         }
-        return TimeSpan.Zero;
+        return t;
     }
     public CellInfo GetCurrentCellInfo(int weekdayindex, out TimeSpan diff)
     {
-        /*
-            NOTE: We will allow the user to modify both length and start time in each cellInfo.
-            
-            Start time will simply affect the previous cell's length (as long as: startTime > previous startTime)
-            When the previous cell's length gets affected, we will also set its 'OverrideCommonLength' bool to 'true'.
-        */
-
         WeekDay wd = WeekDays[weekdayindex];
         TimeSpan t = wd.StartTime;
         for (int i = 0; i < Grid.ColumnsList.Count; i++)
@@ -154,7 +139,6 @@ public class DayTimeManager : MonoBehaviour
             wantedTime = DateTime.Now;
             wantedTime = wantedTime.AddTicks(-(wantedTime.Ticks % TimeSpan.TicksPerSecond)) + new TimeSpan(0, 0, 0, 0, 500);
             int weekdayindex = GetWeekDayIndex((int)DateTime.Now.DayOfWeek);
-
             // If today has no events
             if (weekdayindex < 0)
             {
@@ -215,7 +199,7 @@ public class DayTimeManager : MonoBehaviour
         }
 
     }
-    public static bool ParsableTime(string text, out DateTime result)
+    public static bool TryParseTime(string text, out DateTime result)
     {
         return
             DateTime.TryParseExact(text, "H:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out result) ||
@@ -226,7 +210,7 @@ public class DayTimeManager : MonoBehaviour
             DateTime.TryParseExact(text, "h.mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out result) ||
             DateTime.TryParseExact(text, "h.mmtt", CultureInfo.InvariantCulture, DateTimeStyles.None, out result);
     }
-    public static bool ParsableLength(string text, out DateTime result)
+    public static bool TryParseLength(string text, out DateTime result)
     {
         return DateTime.TryParseExact(text, "H:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out result) ||
             // Supporting the british
