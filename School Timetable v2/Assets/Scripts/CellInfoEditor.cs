@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 using System.Linq;
+using UnityEngine.UI;
+using System;
 
 public class CellInfoEditor : MonoBehaviour
 {
@@ -16,6 +18,11 @@ public class CellInfoEditor : MonoBehaviour
     public TMP_InputField Info2Override;
     public TMP_Dropdown TypeOverride;
     public TMP_Dropdown FavouriteOverride;
+    [Space]
+    public Toggle OverrideTimeToggle;
+    public TMP_InputField StartTimeInput;
+    public TMP_InputField LengthInput;
+
 
     public void SelectCell(CellInfo info)
     {
@@ -42,7 +49,29 @@ public class CellInfoEditor : MonoBehaviour
 
         UpdatePreviews();
     }
-
+    public void ToggleOverrideTime(bool overridetime)
+    {
+        StartTimeInput.gameObject.SetActive(overridetime && !SelectedInfo.cellUI.isbreak);
+        LengthInput.gameObject.SetActive(overridetime);
+    }
+    public void ParseLength(string text)
+    {
+        text = text.Replace(TMP_Specials.clear, "");
+        if(!DayTimeManager.ParsableLength(text, out DateTime length))
+        {
+            LengthInput.text = $"{SelectedInfo.Length.Hours}:{SelectedInfo.Length.Minutes}";
+        }
+    }
+    public void ParseTime(string text)
+    {
+        text = text.Replace(TMP_Specials.clear, "");
+        if (!DayTimeManager.ParsableLength(text, out DateTime length))
+        {
+            TimeSpan t = DayTimeManager.instance.GetCellTime(SelectedInfo);
+            LengthInput.text = $"{t.Hours}:{(t.Minutes<10?"0":"")}{t.Minutes}";
+        }
+    }
+    
     // This should be used by the 'Event Selector' overlay.
     public void ChangeInfoBase(int EventID)
     {

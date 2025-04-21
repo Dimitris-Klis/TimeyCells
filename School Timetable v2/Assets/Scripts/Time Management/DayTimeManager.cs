@@ -7,10 +7,16 @@ using TMPro;
 
 public class DayTimeManager : MonoBehaviour
 {
+    public static DayTimeManager instance;
+    private void Awake()
+    {
+        instance = this;
+    }
     public TimetableGrid Grid;
     public string testtime = "12:00";
     public List<WeekDay> WeekDays = new List<WeekDay>(); // Up to 7 weekdays
     public GameObject Highlight;
+    public RectTransform HighlightRect;
     public TMP_Text TimeLeftText;
     DateTime wantedTime = DateTime.Now;
 
@@ -58,6 +64,50 @@ public class DayTimeManager : MonoBehaviour
         }
         return -1;
     }
+    public TimeSpan GetCellTime(CellInfo info)
+    {
+        // Get weekday
+        int weekdayindex = -1;
+
+        for (int i = 0; i < Grid.ColumnsList.Count; i++)
+        {
+            for (int j = 0; j < Grid.ColumnsList[i].Children.Count; j++)
+            {
+                var c = Grid.ColumnsList[i].Children[j];
+                if (c.Info == info)
+                {
+                    weekdayindex = j;
+                    break;
+                }
+            }
+        }
+        if (weekdayindex < 0)
+        {
+            Debug.LogWarning("Weekday Index out of range!!!");
+            return TimeSpan.Zero;
+        }
+
+        WeekDay wd = WeekDays[weekdayindex];
+        TimeSpan t = wd.StartTime;
+
+        for (int i = 0; i < Grid.ColumnsList.Count; i++)
+        {
+            int index = weekdayindex;
+            if (Grid.ColumnsList[i].isBreak) index = 0; // Accounting for rowspans
+
+            var c = Grid.ColumnsList[i].Children[index].Info;
+
+            bool nullOverride = c.Override.EventName == "" && c.Override.Info1 == "" && c.Override.Info2 == "";
+            if (nullOverride) nullOverride = c.Override.EventType < 0 && c.Override.OverrideFavourite == false;
+
+            if (c.SelectedEvent == 0 && nullOverride) continue; // If the cell is 'None' and has no overrides, ignore it.
+            if (c.OverrideCommonLength)
+                t += c.Length;
+            else
+                t += wd.CommonLength;
+        }
+        return TimeSpan.Zero;
+    }
     public CellInfo GetCurrentCellInfo(int weekdayindex, out TimeSpan diff)
     {
         /*
@@ -100,8 +150,9 @@ public class DayTimeManager : MonoBehaviour
     {
         if(DateTime.Now >= wantedTime) // Updating content every 1 system second.
         {
-            
-            wantedTime = DateTime.Now + new TimeSpan(0, 0, 1);
+
+            wantedTime = DateTime.Now;
+            wantedTime = wantedTime.AddTicks(-(wantedTime.Ticks % TimeSpan.TicksPerSecond)) + new TimeSpan(0, 0, 0, 0, 500);
             int weekdayindex = GetWeekDayIndex((int)DateTime.Now.DayOfWeek);
 
             // If today has no events
@@ -134,7 +185,7 @@ public class DayTimeManager : MonoBehaviour
             }
             Highlight.SetActive(!TimetableEditor.instance.Editing);
             Highlight.transform.position = CurrentInfo.transform.position;
-
+            HighlightRect.sizeDelta = CurrentInfo.GetComponent<RectTransform>().sizeDelta + (Vector2.one * 6.2f);
             TimeLeftText.text = !TimetableEditor.instance.Editing ? "Next event in:" + timeUntilNextLesson.ToString(@"mm\:ss") : "";
         }
     }
@@ -164,4 +215,22 @@ public class DayTimeManager : MonoBehaviour
         }
 
     }
+    public static bool ParsableTime(string text, out DateTime result)
+    {
+        return
+            DateTime.TryParseExact(text, "H:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out result) ||
+            DateTime.TryParseExact(text, "h:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out result) ||
+            DateTime.TryParseExact(text, "h:mmtt", CultureInfo.InvariantCulture, DateTimeStyles.None, out result) ||
+            // Supporting the british
+            DateTime.TryParseExact(text, "H.mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out result) ||
+            DateTime.TryParseExact(text, "h.mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out result) ||
+            DateTime.TryParseExact(text, "h.mmtt", CultureInfo.InvariantCulture, DateTimeStyles.None, out result);
+    }
+    public static bool ParsableLength(string text, out DateTime result)
+    {
+        return DateTime.TryParseExact(text, "H:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out result) ||
+            // Supporting the british
+            DateTime.TryParseExact(text, "H.mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out result);
+    }
+    
 }

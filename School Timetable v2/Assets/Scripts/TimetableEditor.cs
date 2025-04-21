@@ -15,6 +15,7 @@ public class TimetableEditor : MonoBehaviour
     public TMP_Text TimetableNameText;
     public TMP_InputField TimetableNameInput;
     public TimetableGrid Grid;
+    public DayTimeManager dayTimeManager;
     public GameObject[] OtherButtons;
     public CanvasGroup[] OtherGroups;
     public GameObject[] EditorButtons;
@@ -153,6 +154,19 @@ public class TimetableEditor : MonoBehaviour
             EditorButtons[i].SetActive(true);
         }
         ColumnDoneButton.gameObject.SetActive(false);
+
+        // Button functionality for new columns
+        for (int i = 0; i < Grid.ColumnsList.Count; i++)
+        {
+            for (int j = 0; j < Grid.ColumnsList[i].Children.Count; j++)
+            {
+                var c = Grid.ColumnsList[i].Children[j];
+                c.SelfButton.onClick.RemoveAllListeners();
+                c.SelfButton.onClick.AddListener(delegate { c.Info.SetSelfToSelectedEvent(); });
+
+            }
+        }
+        dayTimeManager.Highlight.transform.SetAsLastSibling();
     }
     public void SetTimetableName(string text)
     {
