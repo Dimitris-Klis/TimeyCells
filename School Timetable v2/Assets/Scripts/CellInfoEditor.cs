@@ -53,17 +53,18 @@ public class CellInfoEditor : MonoBehaviour
 
         if (selectedInfo.OverrideCommonLength)
         {
-            LengthInput.text = $"{selectedInfo.Length.Hours}:{string.Format("{0:00}", selectedInfo.Length.Minutes)}";
+
+            LengthInput.text = DayTimeManager.instance.FormatLength(selectedInfo.Length);
         }
         else
         {
             TimeSpan commonLen = DayTimeManager.instance.GetCellCommonLength(SelectedCellRow);
-            LengthInput.text = $"{commonLen.Hours}:{string.Format("{0:00}", commonLen.Minutes)}";
+            LengthInput.text = DayTimeManager.instance.FormatLength(commonLen);
         }
         
 
         TimeSpan t = DayTimeManager.instance.GetCellStartTime(SelectedCellColumn, SelectedCellRow);
-        StartTimeInput.text = $"{t.Hours}:{string.Format("{0:00}", t.Minutes)}";
+        StartTimeInput.text = DayTimeManager.instance.FormatTime(t);
 
         StartTimeInput.interactable = !selectedInfo.cellUI.isbreak;
         LengthInput.interactable = OverrideTimeToggle.isOn = selectedInfo.OverrideCommonLength;
@@ -84,7 +85,7 @@ public class CellInfoEditor : MonoBehaviour
         if(!DayTimeManager.TryParseLength(text, out DateTime length))
         {
             TimeSpan commonLen = DayTimeManager.instance.GetCellCommonLength(SelectedCellRow);
-            LengthInput.text = $"{commonLen.Hours}:{string.Format("{0:00}", commonLen.Minutes)}";
+            LengthInput.text = DayTimeManager.instance.FormatLength(commonLen);
         }
     }
     public void ParseStartTime(string text)
@@ -94,7 +95,7 @@ public class CellInfoEditor : MonoBehaviour
             SelectedCellColumn > 0 && DayTimeManager.instance.TimeDiff(length.TimeOfDay, SelectedCellColumn - 1, SelectedCellRow) < TimeSpan.Zero)
         {
             TimeSpan t = DayTimeManager.instance.GetCellStartTime(SelectedCellColumn, SelectedCellRow);
-            StartTimeInput.text = $"{t.Hours}:{string.Format("{0:00}", t.Minutes)}";
+            StartTimeInput.text = DayTimeManager.instance.FormatTime(t);
         }
     }
     
@@ -180,31 +181,34 @@ public class CellInfoEditor : MonoBehaviour
         c.Override.Favourite = FavouriteOverride.value > 1;
 
         c.OverrideCommonLength = OverrideTimeToggle.isOn;
-        DateTime len;
-        DayTimeManager.TryParseLength(LengthInput.text.Replace(TMP_Specials.clear, ""), out len);
-        c.Length = len.TimeOfDay;
-
-        DateTime start;
-        DayTimeManager.TryParseTime(StartTimeInput.text.Replace(TMP_Specials.clear, ""), out start);
-
-        if (SelectedCellColumn == 0)
+        
+        if (DayTimeManager.TryParseLength(LengthInput.text.Replace(TMP_Specials.clear, ""), out DateTime len))
         {
-            DayTimeManager.instance.WeekDays[SelectedCellRow].StartTime = start.TimeOfDay;
-        }
-        else if(!c.cellUI.isbreak)
-        {
-            CellInfo PrevInfo = TimetableEditor.instance.Grid.ColumnsList[SelectedCellColumn-1].Children[SelectedCellRow].Info;
-
-            long ticks = DayTimeManager.instance.TimeDiff(start.TimeOfDay, SelectedCellColumn - 1, SelectedCellRow).Ticks;
-
-            // Instead of using Mathf.Abs, we manually make the value absolute to avoid losing any bytes, since this is a long.
-            if (ticks < 0) ticks = -ticks;
-
-            PrevInfo.Length = new TimeSpan(ticks);
-
-            PrevInfo.OverrideCommonLength = PrevInfo.Length != DayTimeManager.instance.GetCellCommonLength(SelectedCellRow);
+            c.Length = len.TimeOfDay;
         }
 
+        if (DayTimeManager.TryParseTime(StartTimeInput.text.Replace(TMP_Specials.clear, ""), out DateTime start))
+        {
+            if (SelectedCellColumn == 0)
+            {
+                DayTimeManager.instance.WeekDays[SelectedCellRow].StartTime = start.TimeOfDay;
+            }
+            else if (!c.cellUI.isbreak)
+            {
+                CellInfo PrevInfo = TimetableEditor.instance.Grid.ColumnsList[SelectedCellColumn - 1].Children[SelectedCellRow].Info;
+
+                long ticks = DayTimeManager.instance.TimeDiff(start.TimeOfDay, SelectedCellColumn - 1, SelectedCellRow).Ticks;
+
+                // Instead of using Mathf.Abs, we manually make the value absolute to avoid losing any bytes, since this is a long.
+                if (ticks < 0) ticks = -ticks;
+
+                PrevInfo.Length = new TimeSpan(ticks);
+
+                PrevInfo.OverrideCommonLength = PrevInfo.Length != DayTimeManager.instance.GetCellCommonLength(SelectedCellRow);
+            }
+        }
+
+        DayTimeManager.instance.UpdateTimeIndexes();
         c.UpdateUI();
 
         SelectedCellColumn = -1;
