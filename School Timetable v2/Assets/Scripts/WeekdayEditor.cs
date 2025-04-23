@@ -7,6 +7,7 @@ using System;
 
 public class WeekdayEditor : MonoBehaviour
 {
+    public WeekDayObject WeekdayPreview;
     public TMP_InputField WeekdayName;
     public TMP_InputField StartTimeField;
     public TMP_InputField CommonLengthField;
@@ -19,7 +20,7 @@ public class WeekdayEditor : MonoBehaviour
         
         WeekDay SelectedWeekday = DayTimeManager.instance.WeekDays[index];
         
-        WeekdayName.text = SelectedWeekday.DayName;
+        WeekdayName.text = WeekdayPreview.WeekDayName.text = SelectedWeekday.DayName;
         StartTimeField.text = DayTimeManager.instance.FormatTime(SelectedWeekday.StartTime);
         CommonLengthField.text = DayTimeManager.instance.FormatLength(SelectedWeekday.CommonLength);
 
@@ -34,16 +35,16 @@ public class WeekdayEditor : MonoBehaviour
 
         for (int i = 0; i < DayTimeManager.instance.WeekDays.Count; i++)
         {
-            WeekDay wd = DayTimeManager.instance.WeekDays[index];
+            WeekDay wd = DayTimeManager.instance.WeekDays[i];
             
-            uint Sun = wd.Days / 2 % 2;
-            uint Mon = wd.Days / 4 % 2;
-            uint Tue = wd.Days / 8 % 2;
-            uint Wed = wd.Days / 16 % 2;
-            uint Thu = wd.Days / 32 % 2;
-            uint Fri = wd.Days / 64 % 2;
-            uint Sat = wd.Days / 128 % 2;
-
+            uint Sun = wd.Days /  1 % 2;
+            uint Mon = wd.Days /  2 % 2;
+            uint Tue = wd.Days /  4 % 2;
+            uint Wed = wd.Days /  8 % 2;
+            uint Thu = wd.Days / 16 % 2;
+            uint Fri = wd.Days / 32 % 2;
+            uint Sat = wd.Days / 64 % 2;
+            
             if (i == index)
             {
                 DayToggles[0].isOn = Mon == 1;
@@ -53,9 +54,10 @@ public class WeekdayEditor : MonoBehaviour
                 DayToggles[4].isOn = Fri == 1;
                 DayToggles[5].isOn = Sat == 1;
                 DayToggles[6].isOn = Sun == 1;
+
+                // Debug.Log($"{Sat}{Fri}{Thu}{Wed}{Tue}{Mon}{Sun}");
                 continue;
             }
-
             DayToggles[0].interactable = DayToggles[0].interactable && Mon == 0;
             DayToggles[1].interactable = DayToggles[1].interactable && Tue == 0;
             DayToggles[2].interactable = DayToggles[2].interactable && Wed == 0;
@@ -98,14 +100,16 @@ public class WeekdayEditor : MonoBehaviour
             wd.CommonLength = result2.TimeOfDay;
         }
 
-        int Sun = DayToggles[0].isOn ? 1 : 0;//* 1
-        int Mon = (DayToggles[1].isOn ? 1 : 0) * 2;
-        int Tue = (DayToggles[2].isOn ? 1 : 0) * 4;
-        int Wed = (DayToggles[3].isOn ? 1 : 0) * 8;
-        int Thu = (DayToggles[4].isOn ? 1 : 0) * 16;
-        int Fri = (DayToggles[5].isOn ? 1 : 0) * 32;
-        int Sat = (DayToggles[6].isOn ? 1 : 0) * 64;
+        int Sun = DayToggles[6].isOn ? 1 : 0;//* 1
+        int Mon = (DayToggles[0].isOn ? 1 : 0) * 2;
+        int Tue = (DayToggles[1].isOn ? 1 : 0) * 4;
+        int Wed = (DayToggles[2].isOn ? 1 : 0) * 8;
+        int Thu = (DayToggles[3].isOn ? 1 : 0) * 16;
+        int Fri = (DayToggles[4].isOn ? 1 : 0) * 32;
+        int Sat = (DayToggles[5].isOn ? 1 : 0) * 64;
 
         wd.Days = (uint)(Mon + Tue + Wed + Thu + Fri + Sat + Sun);
+        
+        gameObject.SetActive(false);
     }
 }

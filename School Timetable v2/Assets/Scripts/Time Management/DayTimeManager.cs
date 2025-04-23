@@ -25,6 +25,7 @@ public class DayTimeManager : MonoBehaviour
 
     [Space(20)]
     [Header("Spawning Previews")]
+    public WeekdayEditor WeekdayEditor;
     public WeekDayObject WeekDayPrefab;
     public Transform WeekDaysParent;
     public List<WeekDayObject> WeekDayPreviews = new();
@@ -227,7 +228,13 @@ public class DayTimeManager : MonoBehaviour
             WeekDayPreviews.Add(w);
 
             w.WeekDayName.text = WeekDays[i].DayName;
-            //w.selfButton.onClick.AddListener(WeekDayCreator.OpenCreator)
+            int weekdayToOpen = i;
+            w.selfButton.onClick.AddListener(
+            delegate 
+            {
+                WeekdayEditor.gameObject.SetActive(true);
+                WeekdayEditor.OpenWeekday(weekdayToOpen);
+            });
         }
     }
     public void UpdateTimeIndexes()

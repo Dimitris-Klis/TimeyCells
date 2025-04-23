@@ -27158,6 +27158,7 @@ MonoBehaviour:
   Highlight: {fileID: 1165173795}
   HighlightRect: {fileID: 1165173796}
   TimeLeftText: {fileID: 1964385369}
+  WeekdayEditor: {fileID: 1328001925}
   WeekDayPrefab: {fileID: 6694743357736253523, guid: c8997f0764a64a54885b95fd1565775f, type: 3}
   WeekDaysParent: {fileID: 2093600407}
   WeekDayPreviews: []
@@ -27320,23 +27321,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1328001920}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: CloseCreator
+      value: SetActive
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: EventCreator, Assembly-CSharp
+      value: UnityEngine.GameObject, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -47645,6 +47646,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86c970931bc566a45a4494983dca8933, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  WeekdayPreview: {fileID: 1388958920}
   WeekdayName: {fileID: 971071778}
   StartTimeField: {fileID: 890551862}
   CommonLengthField: {fileID: 877150152}
@@ -48944,7 +48946,7 @@ PrefabInstance:
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1328001925}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -48955,7 +48957,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: EventCreator, Assembly-CSharp
+      value: WeekdayEditor, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -49601,6 +49603,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1387991659}
   m_CullTransparentMesh: 1
+--- !u!114 &1388958920 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6694743357736253523, guid: c8997f0764a64a54885b95fd1565775f, type: 3}
+  m_PrefabInstance: {fileID: 461960816}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a165d82d919430644b353691b08d90cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1391362300
 GameObject:
   m_ObjectHideFlags: 0

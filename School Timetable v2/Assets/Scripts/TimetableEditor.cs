@@ -84,6 +84,11 @@ public class TimetableEditor : MonoBehaviour
         {
             EditorButtons[i].SetActive(true);
         }
+        for (int i = 0; i < DayTimeManager.instance.WeekDayPreviews.Count; i++)
+        {
+            DayTimeManager.instance.WeekDayPreviews[i].selfButton.interactable = false;
+        }
+
         SelectorCancelButton.onClick.RemoveAllListeners();
         SelectorCancelButton.onClick.AddListener(delegate
         {
@@ -166,6 +171,11 @@ public class TimetableEditor : MonoBehaviour
                 c.SelfButton.onClick.AddListener(delegate { c.Info.SetSelfToSelectedEvent(); });
 
             }
+        }
+
+        for (int i = 0; i < DayTimeManager.instance.WeekDayPreviews.Count; i++)
+        {
+            DayTimeManager.instance.WeekDayPreviews[i].selfButton.interactable = true;
         }
         dayTimeManager.Highlight.transform.SetAsLastSibling();
     }
