@@ -133,6 +133,11 @@ public class TimetableEditor : MonoBehaviour
         {
             EditorButtons[i].SetActive(false);
         }
+        for (int i = 0; i < DayTimeManager.instance.WeekDayPreviews.Count; i++)
+        {
+            DayTimeManager.instance.WeekDayPreviews[i].selfButton.interactable = true;
+        }
+
         SelectorCancelButton.onClick.RemoveAllListeners();
         SelectorCancelButton.onClick.AddListener(delegate
         {

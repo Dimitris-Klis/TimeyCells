@@ -22,7 +22,8 @@ public class CellInfoEditor : MonoBehaviour
     [Space]
     public Toggle OverrideTimeToggle;
     public TMP_InputField StartTimeInput;
-    public TMP_InputField LengthInput;
+    public TMP_InputField LengthInputHours;
+    public TMP_InputField LengthInputMinutes;
 
     public void SelectCell(int column, int row)
     {
@@ -53,13 +54,15 @@ public class CellInfoEditor : MonoBehaviour
 
         if (selectedInfo.OverrideCommonLength)
         {
-
-            LengthInput.text = DayTimeManager.instance.FormatLength(selectedInfo.Length);
+            LengthInputHours.text = selectedInfo.Length.Hours.ToString();
+            LengthInputMinutes.text = selectedInfo.Length.Minutes.ToString();
         }
         else
         {
             TimeSpan commonLen = DayTimeManager.instance.GetCellCommonLength(SelectedCellRow);
-            LengthInput.text = DayTimeManager.instance.FormatLength(commonLen);
+
+            LengthInputHours.text = commonLen.Hours.ToString();
+            LengthInputMinutes.text = commonLen.Minutes.ToString();
         }
         
 
@@ -67,7 +70,9 @@ public class CellInfoEditor : MonoBehaviour
         StartTimeInput.text = DayTimeManager.instance.FormatTime(t);
 
         StartTimeInput.interactable = !selectedInfo.cellUI.isbreak;
-        LengthInput.interactable = OverrideTimeToggle.isOn = selectedInfo.OverrideCommonLength;
+
+        LengthInputHours.interactable = OverrideTimeToggle.isOn = selectedInfo.OverrideCommonLength;
+        LengthInputMinutes.interactable = OverrideTimeToggle.isOn = selectedInfo.OverrideCommonLength;
 
         UpdatePreviews();
     }
@@ -77,7 +82,8 @@ public class CellInfoEditor : MonoBehaviour
     }
     public void ToggleOverrideTime(bool overridetime)
     {
-        LengthInput.interactable = overridetime;
+        LengthInputHours.interactable = OverrideTimeToggle.isOn = overridetime;
+        LengthInputMinutes.interactable = OverrideTimeToggle.isOn = overridetime;
     }
     public void ParseLength(string text)
     {
@@ -85,9 +91,40 @@ public class CellInfoEditor : MonoBehaviour
         if(!DayTimeManager.TryParseLength(text, out DateTime length))
         {
             TimeSpan commonLen = DayTimeManager.instance.GetCellCommonLength(SelectedCellRow);
-            LengthInput.text = DayTimeManager.instance.FormatLength(commonLen);
+
+            LengthInputHours.text = commonLen.Hours.ToString();
+            LengthInputMinutes.text = commonLen.Minutes.ToString();
         }
     }
+    public void ParseMinutes(string text)
+    {
+        text = text.Replace(TMP_Specials.clear, "");
+        if (int.TryParse(text, out int length))
+        {
+            if (length > 59) length = 59;
+            LengthInputMinutes.text = length.ToString();
+        }
+        else
+        {
+            TimeSpan commonLen = DayTimeManager.instance.GetCellCommonLength(SelectedCellRow);
+            LengthInputMinutes.text = commonLen.Minutes.ToString();
+        }
+    }
+    public void ParseHours(string text)
+    {
+        text = text.Replace(TMP_Specials.clear, "");
+        if (int.TryParse(text, out int length))
+        {
+            if (length > 23) length = 23; // No event will last 24 hours!
+            LengthInputHours.text = length.ToString();
+        }
+        else
+        {
+            TimeSpan commonLen = DayTimeManager.instance.GetCellCommonLength(SelectedCellRow);
+            LengthInputHours.text = commonLen.Hours.ToString();
+        }
+    }
+
     public void ParseStartTime(string text)
     {
         text = text.Replace(TMP_Specials.clear, "");
@@ -181,8 +218,9 @@ public class CellInfoEditor : MonoBehaviour
         c.Override.Favourite = FavouriteOverride.value > 1;
 
         c.OverrideCommonLength = OverrideTimeToggle.isOn;
-        
-        if (DayTimeManager.TryParseLength(LengthInput.text.Replace(TMP_Specials.clear, ""), out DateTime len))
+
+        string lentext = LengthInputHours.text.Replace(TMP_Specials.clear, "") + ":" + LengthInputMinutes.text.Replace(TMP_Specials.clear, "");
+        if (DayTimeManager.TryParseLength(lentext, out DateTime len))
         {
             c.Length = len.TimeOfDay;
         }

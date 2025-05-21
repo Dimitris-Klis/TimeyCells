@@ -10,7 +10,8 @@ public class WeekdayEditor : MonoBehaviour
     public WeekDayObject WeekdayPreview;
     public TMP_InputField WeekdayName;
     public TMP_InputField StartTimeField;
-    public TMP_InputField CommonLengthField;
+    public TMP_InputField CommonLengthFieldHours;
+    public TMP_InputField CommonLengthFieldMinutes;
     public Toggle[] DayToggles;
     public int WeekdayIndex;
 
@@ -22,7 +23,8 @@ public class WeekdayEditor : MonoBehaviour
         
         WeekdayName.text = WeekdayPreview.WeekDayName.text = SelectedWeekday.DayName;
         StartTimeField.text = DayTimeManager.instance.FormatTime(SelectedWeekday.StartTime);
-        CommonLengthField.text = DayTimeManager.instance.FormatLength(SelectedWeekday.CommonLength);
+        CommonLengthFieldHours.text = SelectedWeekday.CommonLength.Hours.ToString();
+        CommonLengthFieldMinutes.text = SelectedWeekday.CommonLength.Minutes.ToString();
 
 
         DayToggles[0].interactable = true;
@@ -82,7 +84,36 @@ public class WeekdayEditor : MonoBehaviour
         if (!DayTimeManager.TryParseLength(text, out DateTime length))
         {
             WeekDay wd = DayTimeManager.instance.WeekDays[WeekdayIndex];
-            StartTimeField.text = DayTimeManager.instance.FormatLength(wd.CommonLength);
+            CommonLengthFieldHours.text = wd.CommonLength.Hours.ToString();
+            CommonLengthFieldMinutes.text = wd.CommonLength.Minutes.ToString();
+        }
+    }
+    public void ParseMinutes(string text)
+    {
+        text = text.Replace(TMP_Specials.clear, "");
+        if(int.TryParse(text, out int length))
+        {
+            if (length > 59) length = 59;
+            CommonLengthFieldMinutes.text = length.ToString();
+        }
+        else
+        {
+            WeekDay wd = DayTimeManager.instance.WeekDays[WeekdayIndex];
+            CommonLengthFieldMinutes.text = wd.CommonLength.Minutes.ToString();
+        }
+    }
+    public void ParseHours(string text)
+    {
+        text = text.Replace(TMP_Specials.clear, "");
+        if (int.TryParse(text, out int length))
+        {
+            if (length > 23) length = 23; // No event will last 24 hours!
+            CommonLengthFieldHours.text = length.ToString();
+        }
+        else
+        {
+            WeekDay wd = DayTimeManager.instance.WeekDays[WeekdayIndex];
+            CommonLengthFieldHours.text = wd.CommonLength.Hours.ToString();
         }
     }
     public void Save()
@@ -95,7 +126,8 @@ public class WeekdayEditor : MonoBehaviour
         {
             wd.StartTime = result.TimeOfDay;
         }
-        if (DayTimeManager.TryParseLength(StartTimeField.text.Replace(TMP_Specials.clear, ""), out DateTime result2))
+        string lentext = CommonLengthFieldHours.text.Replace(TMP_Specials.clear, "") + ":" + CommonLengthFieldMinutes.text.Replace(TMP_Specials.clear, "");
+        if (DayTimeManager.TryParseLength(lentext, out DateTime result2))
         {
             wd.CommonLength = result2.TimeOfDay;
         }
