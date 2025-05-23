@@ -34,9 +34,6 @@ public class EventTypeCreator : MonoBehaviour
 
     public void OpenCreator(int ID)
     {
-        //coloreditor.OnClose.RemoveAllListeners();
-        //coloreditor.OnClose.AddListener(delegate { ReEnableColorButtons(); });
-
         DeleteButton.interactable = ID > 0; // Prevent the user from deleting the new or the default event type.
         EventTypeNameInput.interactable = ID != 0; // Prevent the user from changing the default event name.
 
@@ -88,20 +85,12 @@ public class EventTypeCreator : MonoBehaviour
                 PreviewCell.Info2Text.color = 
                 EventManager.Instance.DefaultNewEventType.TextColor;
         }
-        
-        //EventManager.Instance.ShowEditingOverlay();
     }
 
     public void CloseCreator()
     {
-        //SelfGroup.interactable = SelfGroup.blocksRaycasts = false;
-        //SelfGroup.alpha = 0;
-
         ColorEditor.instance.ApplyColors();
         gameObject.SetActive(false);
-
-
-        //EventManager.Instance.HideEditingOverlay();
     }
 
 
@@ -126,21 +115,15 @@ public class EventTypeCreator : MonoBehaviour
             ColorEditor.instance.AssignNewImages(ChangeTextColor);
         }
     }
-
-    //public void ReEnableColorButtons()
-    //{
-    //    ChangeTextButton.interactable = ChangeBackgroundButton.interactable = true;
-    //}
-
-    public void Save()
+    public void Confirm()
     {
-        if(IDToModify < 0)
+        if (IDToModify < 0)
         {
             // Create New
             EventManager.Instance.CreateNewEventType(out EventTypeItem a);
             a.BackgroundColor = ChangeBackgroundColor.color;
             a.TextColor = ChangeTextColor.color;
-            a.TypeName = EventTypeNameInput.text.Replace(TMP_Specials.clear,"");
+            a.TypeName = EventTypeNameInput.text.Replace(TMP_Specials.clear, "");
         }
         else
         {
@@ -148,7 +131,7 @@ public class EventTypeCreator : MonoBehaviour
             EventTypeItem a = EventManager.Instance.GetEventType(IDToModify);
             a.BackgroundColor = ChangeBackgroundColor.color;
             a.TextColor = ChangeTextColor.color;
-            a.TypeName = EventTypeNameInput.text.Replace(TMP_Specials.clear,"");
+            a.TypeName = EventTypeNameInput.text.Replace(TMP_Specials.clear, "");
 
             EventManager.Instance.UpdateEventPreviews();
             EventManager.Instance.UpdateEventSelectors();
@@ -170,9 +153,5 @@ public class EventTypeCreator : MonoBehaviour
             TimetableEditor.instance.UpdateSelectorPreview();
             CloseCreator();
         }
-    }
-    public void Cancel()
-    {
-        CloseCreator();
     }
 }

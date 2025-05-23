@@ -205,7 +205,7 @@ public class CellInfoEditor : MonoBehaviour
         //EventManager.Instance.ZoomHandler.enabled = true;
         gameObject.SetActive(false);
     }
-    public void Save()
+    public void Confirm()
     {
         //EventManager.Instance.ZoomHandler.enabled = true;
         CellInfo c = GetSelectedInfo();
@@ -233,7 +233,8 @@ public class CellInfoEditor : MonoBehaviour
             }
             else if (!c.cellUI.isbreak)
             {
-                CellInfo PrevInfo = TimetableEditor.instance.Grid.ColumnsList[SelectedCellColumn - 1].Children[SelectedCellRow].Info;
+                int childIndex = TimetableEditor.instance.Grid.ColumnsList[SelectedCellColumn - 1].isBreak ? 0 : SelectedCellRow;
+                CellInfo PrevInfo = TimetableEditor.instance.Grid.ColumnsList[SelectedCellColumn - 1].Children[childIndex].Info;
 
                 long ticks = DayTimeManager.instance.TimeDiff(start.TimeOfDay, SelectedCellColumn - 1, SelectedCellRow).Ticks;
 

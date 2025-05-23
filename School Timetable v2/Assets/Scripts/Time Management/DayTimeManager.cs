@@ -4,6 +4,7 @@ using System.Collections;
 using System;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class DayTimeManager : MonoBehaviour
 {
@@ -35,6 +36,10 @@ public class DayTimeManager : MonoBehaviour
     public Transform TimeIndexesParent;
     public List<TimeIndexObject> TimeIndexPreviews = new();
 
+    [Space(20)]
+    [Header("IndexProperties")]
+    public Toggle CustomColSpansToggle;
+    public TMP_InputField ColSpansLabelInput;
 
     DateTime wantedTime = DateTime.Now;
 
@@ -118,16 +123,16 @@ public class DayTimeManager : MonoBehaviour
             else
                 t += wd.CommonLength;
         }
-        Debug.Log($"{t.Hours}:{t.Minutes}");
+        //Debug.Log($"{t.Hours}:{t.Minutes}");
         return t;
     }
     public bool isEmpty(int col, int weekday)
     {
         int wantedIndex = weekday;
-        
         if(Grid.ColumnsList[col].isBreak) wantedIndex = 0;
         
-        var c = Grid.ColumnsList[col].Children[wantedIndex].Info;
+
+        var c = Grid.ColumnsList[col].isBreak ? Grid.ColumnsList[col].Children[0].Info : Grid.ColumnsList[col].Children[wantedIndex].Info;
 
         bool noText = c.Override.EventName == "" && c.Override.Info1 == "" && c.Override.Info2 == "";
         bool noEventsOrFavs = c.Override.EventType < 0 && !c.Override.OverrideFavourite;
@@ -245,31 +250,50 @@ public class DayTimeManager : MonoBehaviour
         TimeIndexPreviews.Clear();
 
         int rowIndex = GetWeekDayIndex((int)DateTime.Now.DayOfWeek);
-        WeekDay wd = WeekDays[rowIndex];
 
         int ColumnIndex = 1;
         for (int i = 0; i < Grid.ColumnsList.Count; i++)
         {
             TimeIndexObject ti = Instantiate(TimeIndexPrefab, TimeIndexesParent);
             TimeIndexPreviews.Add(ti);
-
-            if (isEmpty(i, rowIndex))
+            //ti.TimeParent.SetActive(rowIndex >= 0);
+            if (rowIndex < 0 || isEmpty(i, rowIndex))
             {
                 ti.TimeText.text = "";
                 ti.IndexText.text = "";
 
                 continue;
             }
+
             TimeSpan t = GetCellStartTime(i, rowIndex);
             string tstring = FormatTime(t);
 
             ti.TimeText.text = tstring;
+            if (Grid.ColumnsList[i].isBreak)
+            {
+                if (CustomColSpansToggle.isOn)
+                {
+                    ti.IndexText.text = ColSpansLabelInput.text.Replace(TMP_Specials.clear, "");
+                    continue;
+                }
+            }
             ti.IndexText.text = ColumnIndex.ToString();
-
             ColumnIndex++;
 
             //w.selfButton.onClick.AddListener(WeekDayCreator.OpenCreator)
         }
+    }
+    public void AddNewWeekday(int index)
+    {
+        WeekDays.Insert(index, new WeekDay("New Weekday", 0));
+        UpdateWeekDays();
+        UpdateTimeIndexes();
+    }
+    public void RemoveWeekday(int index)
+    {
+        WeekDays.RemoveAt(index);
+        UpdateWeekDays();
+        UpdateTimeIndexes();
     }
 
     public string FormatTime(TimeSpan t)

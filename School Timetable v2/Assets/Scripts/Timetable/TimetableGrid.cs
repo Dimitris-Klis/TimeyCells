@@ -20,8 +20,15 @@ public class TimetableGrid : MonoBehaviour
     public TimetableCell TimetablePrefab;
     public Button AddColButtonPrefab;
     public Button RemoveColButtonPrefab;
+    public Transform ColButtonParent;
     public Vector2 ColumnButtonsOffset = -Vector2.up * 20;
     public int MaxColumns = 40;
+    [Space]
+    public Button AddRowButtonPrefab;
+    public Button RemoveRowButtonPrefab;
+    public Transform RowButtonParent;
+    public Vector2 RowButtonsOffset = Vector2.right * 20;
+    public int MaxRows = 7;
 
     Vector2 PivotFix = Vector2.up;
     Vector2 originalPivot;
@@ -34,6 +41,7 @@ public class TimetableGrid : MonoBehaviour
     }
     public List<Column> ColumnsList = new();
     public List<Button> ColumnButtons = new();
+    public List<Button> RowButtons = new();
 
     public void Start()
     {
@@ -45,7 +53,6 @@ public class TimetableGrid : MonoBehaviour
     {
         if (rect == null) rect = GetComponent<RectTransform>();
 
-        FitToContent();
         originalPivot = rect.pivot;
         rect.pivot = PivotFix;
 
@@ -60,44 +67,26 @@ public class TimetableGrid : MonoBehaviour
         }
         AddAllOffsets();
         rect.pivot = new(0.5f, 0.5f);
+
+        FitToContent();
     }
-    //The buttons which will add columns
+
+    //The buttons which will add/delete columns
     public void SetupAddColumnButtons(bool colspan)
     {
         RemoveColumnButtons();
-        if (ColumnsList.Count >= MaxColumns) return;
-        for (int i = 0; i <= ColumnsList.Count; i++)
+        if (Columns >= MaxColumns) return;
+
+        var c = ColumnsList[0].Children[0];
+
+        for (int i = 0; i <= Columns; i++)
         {
-            if (i == ColumnsList.Count)
-            {
-                var finalc = ColumnsList[^1].Children[0];
-                Vector3 finalbuttonPos = finalc.transform.localPosition;
-                finalbuttonPos.y = rect.sizeDelta.y / 2;
-                finalbuttonPos.x += CellSize.x / 2 + Spacing.x / 2;
-
-                Button finalb = Instantiate(AddColButtonPrefab, this.transform);
-                finalb.transform.localPosition = finalbuttonPos + (Vector3)ColumnButtonsOffset;
-                ColumnButtons.Add(finalb);
-
-                // OnClick event
-                int finalIndex = ColumnsList.Count;
-                if (!colspan)
-                {
-                    finalb.onClick.AddListener(delegate { AddColumn(finalIndex); });
-                }
-                else
-                {
-                    finalb.onClick.AddListener(delegate { AddBreak(finalIndex); });
-                }
-                continue;
-            }
-            var c = ColumnsList[i].Children[0];
             Vector3 buttonPos = c.transform.localPosition;
-            buttonPos.y = rect.sizeDelta.y / 2;
-            buttonPos.x -= CellSize.x / 2 + Spacing.x / 2;
+            buttonPos.y = 0;
+            buttonPos.x += -(CellSize.x + Spacing.x) + (CellSize.x * i) + (Spacing.x * i) + (CellSize.x / 2) + (Spacing.x / 2);
             
-            Button b = Instantiate(AddColButtonPrefab, this.transform);
-            b.transform.localPosition = buttonPos + (Vector3)ColumnButtonsOffset;
+            Button b = Instantiate(AddColButtonPrefab, ColButtonParent);
+            b.transform.localPosition = buttonPos;
             ColumnButtons.Add(b);
 
             // OnClick event
@@ -115,20 +104,69 @@ public class TimetableGrid : MonoBehaviour
     public void SetupDeleteColumnButtons()
     {
         RemoveColumnButtons();
-        if (ColumnsList.Count == 1) return;
-        for (int i = 0; i < ColumnsList.Count; i++)
-        {
-            var c = ColumnsList[i].Children[0];
-            Vector3 buttonPos = c.transform.localPosition;
-            buttonPos.y = rect.sizeDelta.y / 2;
+        if (ColumnsList.Count <= 1) return;
 
-            Button b = Instantiate(RemoveColButtonPrefab, this.transform);
-            b.transform.localPosition = buttonPos + (Vector3)ColumnButtonsOffset;
+        var c = ColumnsList[0].Children[0];
+
+        for (int i = 0; i < Columns; i++)
+        {
+            Vector3 buttonPos = c.transform.localPosition;
+            buttonPos.y = 0;
+            buttonPos.x += (CellSize.x * i) + (Spacing.x * i);
+            Button b = Instantiate(RemoveColButtonPrefab, ColButtonParent);
+            b.transform.localPosition = buttonPos;
             ColumnButtons.Add(b);
 
             // OnClick event
             int colIndex = i;
             b.onClick.AddListener(delegate { RemoveColumn(colIndex); });
+        }
+    }
+
+
+    //The buttons which will add/delete rows
+    public void SetupAddRowButtons()
+    {
+        RemoveRowButtons();
+        if (Rows >= MaxRows) return;
+
+        var c = ColumnsList[0].Children[0];
+        
+        for (int i = 0; i <= Rows; i++)
+        {
+            Vector3 buttonPos = c.transform.localPosition;
+            buttonPos.y -=  -(CellSize.y + Spacing.y) + (CellSize.y*i) + (Spacing.y * i) + (CellSize.y / 2) + Spacing.y / 2 ;
+            buttonPos.x = 0;
+
+            Button b = Instantiate(AddRowButtonPrefab, RowButtonParent);
+            b.transform.localPosition = buttonPos;
+            RowButtons.Add(b);
+
+            // OnClick event
+            int colIndex = i;
+            b.onClick.AddListener(delegate { AddRow(colIndex); });
+        }
+    }
+    public void SetupDeleteRowButtons()
+    {
+        RemoveRowButtons();
+        if (Rows <= 1) return;
+
+        var c = ColumnsList[0].Children[0];
+
+        for (int i = 0; i < Rows; i++)
+        {
+            Vector3 buttonPos = c.transform.localPosition;
+            buttonPos.y -= (CellSize.y * i) + (Spacing.y * i);
+            buttonPos.x = 0;
+
+            Button b = Instantiate(RemoveRowButtonPrefab, RowButtonParent);
+            b.transform.localPosition = buttonPos;
+            RowButtons.Add(b);
+
+            // OnClick event
+            int colIndex = i;
+            b.onClick.AddListener(delegate { RemoveRow(colIndex); });
         }
     }
     public void RemoveColumnButtons()
@@ -139,6 +177,15 @@ public class TimetableGrid : MonoBehaviour
         }
         ColumnButtons.Clear();
     }
+    public void RemoveRowButtons()
+    {
+        for (int i = 0; i < RowButtons.Count; i++)
+        {
+            Destroy(RowButtons[i].gameObject);
+        }
+        RowButtons.Clear();
+    }
+
     public void ClearAll()
     {
         if (ColumnsList.Count <= 0) return;
@@ -171,7 +218,7 @@ public class TimetableGrid : MonoBehaviour
         wantedscale.x = Columns * CellSize.x + (Columns - 1) * Spacing.x;
         wantedscale.x += Padding.x;
 
-        wantedscale.y = Rows * CellSize.y + (Columns - 1) * Spacing.y;
+        wantedscale.y = (Rows+1) * CellSize.y + (Rows-1) * Spacing.y;
         wantedscale.y += Padding.y;
 
         rect.sizeDelta = wantedscale;
@@ -314,8 +361,9 @@ public class TimetableGrid : MonoBehaviour
 
         rect.pivot = originalPivot;
         SetupAddColumnButtons(true);
-
         UpdateAllCells();
+
+        DayTimeManager.instance.UpdateTimeIndexes();
     }
     public void AddColumn(int columnIndex)
     {
@@ -343,6 +391,8 @@ public class TimetableGrid : MonoBehaviour
         SetupAddColumnButtons(false);
 
         UpdateAllCells();
+
+        DayTimeManager.instance.UpdateTimeIndexes();
     }
     public void RemoveColumn(int colIndex)
     {
@@ -385,11 +435,12 @@ public class TimetableGrid : MonoBehaviour
         SetupDeleteColumnButtons();
 
         UpdateAllCells();
+
+        DayTimeManager.instance.UpdateTimeIndexes();
     }
 
     public void AddRow(int rowIndex)
     {
-        
         originalPivot = rect.pivot;
         rect.pivot = PivotFix;
 
@@ -407,6 +458,10 @@ public class TimetableGrid : MonoBehaviour
         AddAllOffsets();
 
         rect.pivot = originalPivot;
+
+        SetupAddRowButtons();
+        UpdateAllCells();
+        DayTimeManager.instance.AddNewWeekday(rowIndex);
     }
     public void RemoveRow(int rowIndex)
     {
@@ -435,6 +490,10 @@ public class TimetableGrid : MonoBehaviour
         AddAllOffsets();
 
         rect.pivot = originalPivot;
+
+        SetupDeleteRowButtons();
+        UpdateAllCells();
+        DayTimeManager.instance.RemoveWeekday(rowIndex);
     }
     public void UpdateAllCells()
     {
@@ -447,34 +506,5 @@ public class TimetableGrid : MonoBehaviour
 
             }
         }
-    }
-    
-    [ContextMenu("Add Break!")]
-    public void TestAddBreak() // temp
-    {
-        AddBreak(2);
-    }
-    [ContextMenu("Add Column!")]
-    public void TestAddCol() // temp
-    {
-        AddColumn(2);
-    }
-
-    [ContextMenu("Remove Column!")]
-    public void removelastcolumntest()
-    {
-        RemoveColumn(2);
-    }
-    
-    [ContextMenu("New Row!")]
-    public void testrow()
-    {
-        AddRow(1);
-    }
-
-    [ContextMenu("Remove Row!")]
-    public void testrow2()
-    {
-        RemoveRow(1);
     }
 }

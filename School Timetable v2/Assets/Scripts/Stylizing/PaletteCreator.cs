@@ -111,9 +111,9 @@ public class PaletteCreator : MonoBehaviour
         Close();
         PaletteEditor.AddCustomPalettes();
     }
-    public void Save()
+    public void Confirm()
     {
-        if(IDToModify >= 0)
+        if (IDToModify >= 0)
         {
             Stylizer.ColorStyles[IDToModify].PaletteName = PaletteNameInput.text;
             Stylizer.ColorStyles[IDToModify].PrimaryColor = PrimaryColorImage.color;

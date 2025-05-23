@@ -116,13 +116,16 @@ public class WeekdayEditor : MonoBehaviour
             CommonLengthFieldHours.text = wd.CommonLength.Hours.ToString();
         }
     }
-    public void Save()
+
+    // There is no cancel function. Cancelling is as simple as turning off the Editor gameobject.
+
+    public void Confirm()
     {
         WeekDay wd = DayTimeManager.instance.WeekDays[WeekdayIndex];
 
         wd.DayName = WeekdayName.text;
 
-        if(DayTimeManager.TryParseTime(StartTimeField.text.Replace(TMP_Specials.clear, ""), out DateTime result))
+        if (DayTimeManager.TryParseTime(StartTimeField.text.Replace(TMP_Specials.clear, ""), out DateTime result))
         {
             wd.StartTime = result.TimeOfDay;
         }
@@ -141,7 +144,7 @@ public class WeekdayEditor : MonoBehaviour
         int Sat = (DayToggles[5].isOn ? 1 : 0) * 64;
 
         wd.Days = (uint)(Mon + Tue + Wed + Thu + Fri + Sat + Sun);
-        
+
         gameObject.SetActive(false);
     }
 }

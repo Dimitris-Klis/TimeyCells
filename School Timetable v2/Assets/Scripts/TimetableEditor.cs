@@ -84,16 +84,15 @@ public class TimetableEditor : MonoBehaviour
         {
             EditorButtons[i].SetActive(true);
         }
-        for (int i = 0; i < DayTimeManager.instance.WeekDayPreviews.Count; i++)
-        {
-            DayTimeManager.instance.WeekDayPreviews[i].selfButton.interactable = false;
-        }
+        //for (int i = 0; i < DayTimeManager.instance.WeekDayPreviews.Count; i++)
+        //{
+        //    DayTimeManager.instance.WeekDayPreviews[i].selfButton.interactable = false;
+        //}
 
         SelectorCancelButton.onClick.RemoveAllListeners();
         SelectorCancelButton.onClick.AddListener(delegate
         {
             EventSelectorOverlay.SetActive(false);
-            //EventManager.Instance.ZoomHandler.enabled = true;
         });
     }
     public void EndEdit()
@@ -133,10 +132,10 @@ public class TimetableEditor : MonoBehaviour
         {
             EditorButtons[i].SetActive(false);
         }
-        for (int i = 0; i < DayTimeManager.instance.WeekDayPreviews.Count; i++)
-        {
-            DayTimeManager.instance.WeekDayPreviews[i].selfButton.interactable = true;
-        }
+        //for (int i = 0; i < DayTimeManager.instance.WeekDayPreviews.Count; i++)
+        //{
+        //    DayTimeManager.instance.WeekDayPreviews[i].selfButton.interactable = true;
+        //}
 
         SelectorCancelButton.onClick.RemoveAllListeners();
         SelectorCancelButton.onClick.AddListener(delegate
@@ -154,12 +153,18 @@ public class TimetableEditor : MonoBehaviour
             EditorButtons[i].SetActive(false);
         }
         ColumnDoneButton.gameObject.SetActive(true);
+
+        for (int i = 0; i < DayTimeManager.instance.WeekDayPreviews.Count; i++)
+        {
+            DayTimeManager.instance.WeekDayPreviews[i].selfButton.interactable = false;
+        }
     }
     public void EndEditColumns()
     {
         TimetableNameText.gameObject.SetActive(!Editing);
         TimetableNameInput.gameObject.SetActive(Editing);
         Grid.RemoveColumnButtons();
+        Grid.RemoveRowButtons();
         for (int i = 0; i < EditorButtons.Length; i++)
         {
             EditorButtons[i].SetActive(true);

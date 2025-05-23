@@ -214,6 +214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IndexText: {fileID: 4996586589993553093}
+  TimeParent: {fileID: 8863589105228472473}
   TimeText: {fileID: 5729125665702364136}
 --- !u!1 &3524575243549861132
 GameObject:

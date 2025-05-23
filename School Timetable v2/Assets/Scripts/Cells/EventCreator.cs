@@ -82,16 +82,6 @@ public class EventCreator : MonoBehaviour
         //EventManager.Instance.ShowEditingOverlay();
     }
 
-    public void CloseCreator()
-    {
-        //SelfGroup.interactable = SelfGroup.blocksRaycasts = false;
-        //SelfGroup.alpha = 0;
-
-        gameObject.SetActive(false);
-
-        //EventManager.Instance.HideEditingOverlay();
-    }
-
     // These functions simply change the preview. They're only meant for visual feedback.
     public void ChangeEventName(string text)
     {
@@ -115,13 +105,13 @@ public class EventCreator : MonoBehaviour
     {
         PreviewCell.FavouriteImage.gameObject.SetActive(favourite);
     }
-    public void Save()
+    public void Confirm()
     {
         if (IDToModify < 0)
         {
             // Create New
             EventManager.Instance.CreateNewEvent(out EventItem a);
-            
+
             a.EventName = EventNameInput.text.Replace(TMP_Specials.clear, "");
             a.Info1 = Info1Input.text.Replace(TMP_Specials.clear, "");
             a.Info2 = Info2Input.text.Replace(TMP_Specials.clear, "");
@@ -145,7 +135,7 @@ public class EventCreator : MonoBehaviour
         EventManager.Instance.UpdateEventPreviews();
         EventManager.Instance.UpdateEventSelectors();
         TimetableEditor.instance.UpdateSelectorPreview();
-        CloseCreator();
+        gameObject.SetActive(false);
     }
     public void Delete()
     {
@@ -155,6 +145,6 @@ public class EventCreator : MonoBehaviour
         EventManager.Instance.UpdateEventPreviews();
         EventManager.Instance.UpdateEventSelectors();
         TimetableEditor.instance.UpdateSelectorPreview();
-        CloseCreator();
+        gameObject.SetActive(false);
     }
 }
