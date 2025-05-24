@@ -96,7 +96,7 @@ public class EventTypeCreator : MonoBehaviour
 
     public void ChangeEventTypeName(string text)
     {
-        PreviewCell.EventNameText.text = text;
+        PreviewCell.EventNameText.text = text.Replace(TMP_Specials.clear, "");
     }
 
 

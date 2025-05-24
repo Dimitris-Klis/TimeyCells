@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class TabHandler : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class TabHandler : MonoBehaviour
         public GameObject TabObject;
     }
     public Tab[] tabs;
-
+    public UnityEvent OnSelectTab;
     public void SelectTab(int index)
     {
         if (index < 0 || index >= tabs.Length) return;
@@ -21,6 +22,7 @@ public class TabHandler : MonoBehaviour
             tabs[i].TabObject.SetActive(index == i);
             tabs[i].TabButton.interactable = index != i;
         }
+        OnSelectTab.Invoke();
     }
     private void Start()
     {

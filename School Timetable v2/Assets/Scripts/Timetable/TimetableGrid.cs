@@ -392,21 +392,22 @@ public class TimetableGrid : MonoBehaviour
 
         UpdateAllCells();
 
+        DayTimeManager.instance.AddIndexLabel(columnIndex);
         DayTimeManager.instance.UpdateTimeIndexes();
     }
-    public void RemoveColumn(int colIndex)
+    public void RemoveColumn(int columnIndex)
     {
         
         originalPivot = rect.pivot;
         rect.pivot = PivotFix;
 
         RemoveAllOffsets();
-        if (colIndex < 0 || colIndex >= ColumnsList.Count)
+        if (columnIndex < 0 || columnIndex >= ColumnsList.Count)
         {
             Debug.LogWarning("Remove Column says: Index out of Range!");
             return;
         }
-        var children = ColumnsList[colIndex].Children;
+        var children = ColumnsList[columnIndex].Children;
         for (int i = 0; i < children.Count; i++)
         {
             if (children[i] != null)
@@ -422,12 +423,12 @@ public class TimetableGrid : MonoBehaviour
             }
         }
         children.Clear();
-        ColumnsList.RemoveAt(colIndex);
+        ColumnsList.RemoveAt(columnIndex);
 
         Columns--;
         FitToContent();
 
-        UpdateAllTransforms(colIndex);
+        UpdateAllTransforms(columnIndex);
         AddAllOffsets();
 
         rect.pivot = originalPivot;
@@ -435,7 +436,8 @@ public class TimetableGrid : MonoBehaviour
         SetupDeleteColumnButtons();
 
         UpdateAllCells();
-
+        
+        DayTimeManager.instance.RemoveIndexLabel(columnIndex);
         DayTimeManager.instance.UpdateTimeIndexes();
     }
 

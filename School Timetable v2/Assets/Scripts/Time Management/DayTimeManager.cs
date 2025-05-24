@@ -35,9 +35,11 @@ public class DayTimeManager : MonoBehaviour
     public TimeIndexObject TimeIndexPrefab;
     public Transform TimeIndexesParent;
     public List<TimeIndexObject> TimeIndexPreviews = new();
+    public List<LabelIndex> TimeLabels = new();
 
     [Space(20)]
     [Header("IndexProperties")]
+    public LabelEditor labelEditor;
     public Toggle CustomColSpansToggle;
     public TMP_InputField ColSpansLabelInput;
 
@@ -116,9 +118,11 @@ public class DayTimeManager : MonoBehaviour
             bool noText = c.Override.EventName == "" && c.Override.Info1 == "" && c.Override.Info2 == "";
             bool noEventsOrFavs = c.Override.EventType < 0 && !c.Override.OverrideFavourite;
 
-            if (c.SelectedEvent == 0 && noText && noEventsOrFavs) continue; // If the cell is 'None' and has no overrides, ignore it.
+            if (c.SelectedEventBase == 0 && noText && noEventsOrFavs) continue; // If the cell is 'None' and has no overrides, ignore it.
 
-            if (c.OverrideCommonLength)
+            if(c.WeeksLifetime>=0 && c.TempOverrideCommonLength)
+                t += c.TempLength;
+            else if (c.OverrideCommonLength)
                 t += c.Length;
             else
                 t += wd.CommonLength;
@@ -137,7 +141,7 @@ public class DayTimeManager : MonoBehaviour
         bool noText = c.Override.EventName == "" && c.Override.Info1 == "" && c.Override.Info2 == "";
         bool noEventsOrFavs = c.Override.EventType < 0 && !c.Override.OverrideFavourite;
 
-        return c.SelectedEvent == 0 && noText && noEventsOrFavs;
+        return c.SelectedEventBase == 0 && noText && noEventsOrFavs;
     }
     public CellInfo GetCurrentCellInfo(int weekdayindex, out TimeSpan diff)
     {
@@ -153,7 +157,7 @@ public class DayTimeManager : MonoBehaviour
             bool nullOverride = c.Override.EventName == "" && c.Override.Info1 == "" && c.Override.Info2 == "";
             if(nullOverride) nullOverride = c.Override.EventType < 0 && c.Override.OverrideFavourite == false;
 
-            if (c.SelectedEvent == 0 && nullOverride) continue; // If the cell is 'None' and has no overrides, ignore it.
+            if (c.SelectedEventBase == 0 && nullOverride) continue; // If the cell is 'None' and has no overrides, ignore it.
             if (c.OverrideCommonLength)
                 t += c.Length;
             else
@@ -174,7 +178,6 @@ public class DayTimeManager : MonoBehaviour
     {
         if(DateTime.Now >= wantedTime) // Updating content every 1 system second.
         {
-
             wantedTime = DateTime.Now;
             wantedTime = wantedTime.AddTicks(-(wantedTime.Ticks % TimeSpan.TicksPerSecond)) + new TimeSpan(0, 0, 0, 0, 500);
             int weekdayindex = GetWeekDayIndex((int)DateTime.Now.DayOfWeek);
@@ -243,6 +246,11 @@ public class DayTimeManager : MonoBehaviour
     }
     public void UpdateTimeIndexes()
     {
+        while(Grid.ColumnsList.Count > TimeLabels.Count)
+        {
+            TimeLabels.Add(new());
+        }
+
         for (int i = 0; i < TimeIndexPreviews.Count; i++)
         {
             Destroy(TimeIndexPreviews[i].gameObject);
@@ -254,14 +262,26 @@ public class DayTimeManager : MonoBehaviour
         int ColumnIndex = 1;
         for (int i = 0; i < Grid.ColumnsList.Count; i++)
         {
+            // TO DO: ADD A BUTTON TO THE OBJECT THAT ON CLICK: OPENS THE LABEL EDITOR AT THE INDEX OF i.
             TimeIndexObject ti = Instantiate(TimeIndexPrefab, TimeIndexesParent);
             TimeIndexPreviews.Add(ti);
+            int LabelIndex = i;
+            ti.button.onClick.AddListener(delegate { labelEditor.gameObject.SetActive(true); labelEditor.ActivateEditor(LabelIndex); });
+            
+
             //ti.TimeParent.SetActive(rowIndex >= 0);
             if (rowIndex < 0 || isEmpty(i, rowIndex))
             {
                 ti.TimeText.text = "";
-                ti.IndexText.text = "";
-
+                if (TimeLabels[i].CustomLabel)
+                {
+                    ti.IndexText.text = TimeLabels[i].CustomLabelName;
+                    if (TimeLabels[i].CountAsIndex) ColumnIndex++;
+                }
+                else
+                {
+                    ti.IndexText.text = "";
+                }
                 continue;
             }
 
@@ -269,13 +289,12 @@ public class DayTimeManager : MonoBehaviour
             string tstring = FormatTime(t);
 
             ti.TimeText.text = tstring;
-            if (Grid.ColumnsList[i].isBreak)
+
+            if (TimeLabels[i].CustomLabel)
             {
-                if (CustomColSpansToggle.isOn)
-                {
-                    ti.IndexText.text = ColSpansLabelInput.text.Replace(TMP_Specials.clear, "");
-                    continue;
-                }
+                ti.IndexText.text = TimeLabels[i].CustomLabelName;
+                if (TimeLabels[i].CountAsIndex) ColumnIndex++;
+                continue;
             }
             ti.IndexText.text = ColumnIndex.ToString();
             ColumnIndex++;
@@ -295,6 +314,15 @@ public class DayTimeManager : MonoBehaviour
         UpdateWeekDays();
         UpdateTimeIndexes();
     }
+    public void AddIndexLabel(int index)
+    {
+        TimeLabels.Insert(index, new());
+    }
+    public void RemoveIndexLabel(int index)
+    {
+        TimeLabels.RemoveAt(index);
+    }
+
 
     public string FormatTime(TimeSpan t)
     {
@@ -342,4 +370,14 @@ public class DayTimeManager : MonoBehaviour
             DateTime.TryParseExact(text, "H.mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out result);
     }
     
+    public void Set24h(bool is24)
+    {
+        _24hFormat = is24;
+        UpdateTimeIndexes();
+    }
+    public void SetEnglish(bool english)
+    {
+        EnglishFormat = english;
+        UpdateTimeIndexes();
+    }
 }
