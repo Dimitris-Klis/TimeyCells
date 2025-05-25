@@ -506,7 +506,6 @@ public class CellInfoEditor : MonoBehaviour
             c.TempOverrideCommonLength = TempOverrideTimeToggle.isOn;
 
             c.OverrideDate = OverrideDate;
-
             if (int.TryParse(DelayInput.text.Replace(TMP_Specials.clear, ""), out int delay))
                 c.WeeksDelay = delay;
             else
@@ -517,6 +516,25 @@ public class CellInfoEditor : MonoBehaviour
                 c.WeeksLifetime = length;
             else
                 c.WeeksLifetime = 0;
+
+
+            WeekDay wd = DayTimeManager.instance.WeekDays[SelectedCellRow];
+            int dayOfWeek=6; // The cell info's day of week
+            for (int i = 64; i > 1; i/=2)
+            {
+                if (wd.Days / i % 2 == 1) break;
+                dayOfWeek--;
+            }
+            if(dayOfWeek >= (int)c.OverrideDate.DayOfWeek)
+            {
+                c.ExpirationLength = dayOfWeek - (int)c.OverrideDate.DayOfWeek;
+            }
+            else
+            {
+                c.ExpirationLength = 7 - dayOfWeek + (int)c.OverrideDate.DayOfWeek;
+            }
+            //Debug.Log($"today: {OverrideDate.DayOfWeek}, goal: {dayOfWeek}");
+            //Debug.Log("ExpirationDate: " + c.OverrideDate.AddDays(c.WeeksDelay * 7 + c.WeeksLifetime * 7 + c.ExpirationLength).Date);
         }
         else
         {

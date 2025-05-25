@@ -13,6 +13,7 @@ public class CellInfo : MonoBehaviour
     public int TemporaryBase;
     public EventItemOverride TemporaryOverride = new();
     public DateTime OverrideDate = DateTime.Now;
+    public int ExpirationLength = 0;
     public int WeeksDelay = 0;
     public int WeeksLifetime = -1;
     //[Space]
@@ -48,9 +49,11 @@ public class CellInfo : MonoBehaviour
         cellUI.EventNameText.color = cellUI.Info1Text.color = cellUI.Info2Text.color = et.TextColor;
         cellUI.BackgroundImage.color = et.BackgroundColor;
 
-        if (WeeksLifetime >= 0 && DateTime.Now <= OverrideDate.AddDays(WeeksDelay * 7 + WeeksLifetime * 7 + 7-(int)OverrideDate.DayOfWeek))
+        CheckIfTempExpired();
+
+        if (WeeksLifetime >= 0)
         {
-            if (DateTime.Now >= OverrideDate.AddDays(WeeksDelay * 7 + WeeksLifetime * 7))
+            if (DateTime.Now >= OverrideDate.AddDays(WeeksDelay * 7))
             {
                 EventItem temp_e = new(EventManager.Instance.GetEvent(TemporaryBase));
                 if (TemporaryOverride.EventName != "") temp_e.EventName = TemporaryOverride.EventName;
@@ -79,22 +82,13 @@ public class CellInfo : MonoBehaviour
                 cellUI.FavouriteImage.gameObject.SetActive(temp_e.Favourite);
             }
         }
-        else
+    }
+    public void CheckIfTempExpired()
+    {
+        if(WeeksLifetime >= 0 && DateTime.Now > OverrideDate.AddDays(WeeksDelay * 7 + WeeksLifetime * 7 + ExpirationLength).AddHours(23).AddMinutes(59))
         {
             WeeksLifetime = -1;
+            UpdateUI();
         }
-    }
-
-    [ContextMenu("Test DateTime")]
-    public void Test()
-    {
-        DateTime now = DateTime.Now;
-        string nowstring = now.ToString();
-
-        int currDay = (int)now.DayOfWeek;
-        Debug.Log(currDay);
-        //Debug.Log(now);
-        //Debug.Log(nowstring);
-        //Debug.Log(DateTime.Parse(nowstring));
     }
 }

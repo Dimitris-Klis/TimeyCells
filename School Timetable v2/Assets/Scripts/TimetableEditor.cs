@@ -158,6 +158,10 @@ public class TimetableEditor : MonoBehaviour
         {
             DayTimeManager.instance.WeekDayPreviews[i].selfButton.interactable = false;
         }
+        for (int i = 0; i < DayTimeManager.instance.TimeIndexPreviews.Count; i++)
+        {
+            DayTimeManager.instance.TimeIndexPreviews[i].button.interactable = false;
+        }
     }
     public void EndEditColumns()
     {
@@ -186,6 +190,10 @@ public class TimetableEditor : MonoBehaviour
         for (int i = 0; i < DayTimeManager.instance.WeekDayPreviews.Count; i++)
         {
             DayTimeManager.instance.WeekDayPreviews[i].selfButton.interactable = true;
+        }
+        for (int i = 0; i < DayTimeManager.instance.TimeIndexPreviews.Count; i++)
+        {
+            DayTimeManager.instance.TimeIndexPreviews[i].button.interactable = true;
         }
         dayTimeManager.Highlight.transform.SetAsLastSibling();
     }

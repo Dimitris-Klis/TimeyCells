@@ -3,81 +3,60 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class DragHandle : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public DragNSwapTest.SwapDimensions SwapDimension;
-    public RectTransform Child;
-    public RectTransform Self;
-    public Vector3 startPos;
-    public float moveSpeed = 5;
-    bool mouse;
-    public void OnPointerDown(PointerEventData eventData)
+    public DragHandleManager.SwapAxis SwapAxis;
+    [HideInInspector] public Vector3 startPos;
+    [HideInInspector] public int currIndex;
+
+    public void OnBeginDrag(PointerEventData eventData)
     {
-        mouse = true;
-        Child.transform.SetAsLastSibling();
-        transform.SetAsLastSibling();
-    }
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        mouse = false;
+        startPos = transform.position;
+
+        if (SwapAxis == DragHandleManager.SwapAxis.Horizontal)
+            currIndex = DragHandleManager.instance.HandlesHorizontal.IndexOf(this);
+        else
+            currIndex = DragHandleManager.instance.HandlesVertical.IndexOf(this);
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void OnDrag(PointerEventData eventData)
     {
-        Vector3 vec = transform.localPosition;
-        if (SwapDimension == DragNSwapTest.SwapDimensions.Horizontal)
+        Vector3 pos = transform.position;
+        if(SwapAxis == DragHandleManager.SwapAxis.Horizontal)
         {
-            vec.x = Child.localPosition.x;
-            transform.localPosition = vec;
+            pos.x = eventData.position.x;
         }
         else
         {
-            vec.y = Child.localPosition.y;
-            transform.localPosition = vec;
+            pos.y = eventData.position.y;
         }
-        startPos = transform.localPosition;
+        transform.position = pos;
+        int newIndex = DragHandleManager.instance.GetClosestIndex(transform.position, SwapAxis);
+        if(newIndex != -1 && newIndex != currIndex)
+        {
+            OnSwapDragged(currIndex, newIndex);
+
+            if(SwapAxis == DragHandleManager.SwapAxis.Horizontal)
+                DragHandleManager.instance.SwapHorizontal(currIndex, newIndex);
+            else
+                DragHandleManager.instance.SwapVertical(currIndex, newIndex);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnEndDrag(PointerEventData eventData)
     {
-        Vector3 pos = transform.localPosition;
-        Vector3 childpos = Child.localPosition;
-        if (mouse)
-        {
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(DragNSwapTest.instance.DragParent, Input.mousePosition, null, out Vector2 mousepos);
-            if (SwapDimension == DragNSwapTest.SwapDimensions.Horizontal)
-                pos.x = childpos.x = mousepos.x;
-            else
-                pos.y = childpos.y = mousepos.y;
+        transform.position = startPos;
+    }
 
-            DragNSwapTest.instance.TrySwap(this);
-        }
-        else
-        {
-            if (SwapDimension == DragNSwapTest.SwapDimensions.Horizontal)
-            {
-                if(pos.x != startPos.x)
-                {
-                    pos.x += Mathf.Sign(startPos.x - pos.x) * moveSpeed * 100 * Time.deltaTime;
-                    if (Mathf.Abs(pos.x - startPos.x) < .5f) pos.x = startPos.x;
-                }
-                
-                childpos.x = pos.x;
-            }
-            else
-            {
-                if (pos.y != startPos.y)
-                {
-                    pos.y += Mathf.Sign(startPos.y - pos.y) * moveSpeed * 100 * Time.deltaTime;
-                    if (Mathf.Abs(pos.y - startPos.y) < .5f) pos.y = startPos.y;
-                }
+    // This is used to call any other swapping functions (mainly for swapping the Timetable Grid's rows or columns)
+    public virtual void OnSwapDragged(int IndexA, int IndexB)
+    {
 
-                childpos.x = pos.x;
-            }
-        }
-        transform.localPosition = pos;
-        Child.localPosition = childpos;
+    }
+
+    // We use this to update DragHandle GFX.
+    public virtual void OnSwap()
+    {
+
     }
 }

@@ -16,7 +16,7 @@ public class DayTimeManager : MonoBehaviour
     [Header("The Basics")]
     public TimetableGrid Grid;
     public List<WeekDay> WeekDays = new List<WeekDay>(); // Up to 7 weekdays
-    
+
     [Space(20)]
     [Header("Displaying Time")]
     public GameObject Highlight;
@@ -51,12 +51,12 @@ public class DayTimeManager : MonoBehaviour
         // If no save is found:
 
         // Default week days:                 SFTWTMS
-                                           // 0000001 = 01 Sun -> Since DateTime.DayOfWeek uses Sunday as 0, I too have to use sunday as 0.
-           WeekDays.Add(new("Monday", 2)); // 0000010 = 02 Mon
-          WeekDays.Add(new("Tuesday", 4)); // 0000100 = 04 Tue
+        // 0000001 = 01 Sun -> Since DateTime.DayOfWeek uses Sunday as 0, I too have to use sunday as 0.
+        WeekDays.Add(new("Monday", 2)); // 0000010 = 02 Mon
+        WeekDays.Add(new("Tuesday", 4)); // 0000100 = 04 Tue
         WeekDays.Add(new("Wednesday", 8)); // 0001000 = 08 Wed
         WeekDays.Add(new("Thursday", 16)); // 0010000 = 16 Thu
-          WeekDays.Add(new("Friday", 32)); // 0100000 = 32 Fri
+        WeekDays.Add(new("Friday", 32)); // 0100000 = 32 Fri
 
         // Set Grid rows to weekdays count.
         Grid.Rows = WeekDays.Count;
@@ -120,7 +120,7 @@ public class DayTimeManager : MonoBehaviour
 
             if (c.SelectedEventBase == 0 && noText && noEventsOrFavs) continue; // If the cell is 'None' and has no overrides, ignore it.
 
-            if(c.WeeksLifetime>=0 && c.TempOverrideCommonLength)
+            if (c.WeeksLifetime >= 0 && c.TempOverrideCommonLength)
                 t += c.TempLength;
             else if (c.OverrideCommonLength)
                 t += c.Length;
@@ -133,8 +133,8 @@ public class DayTimeManager : MonoBehaviour
     public bool isEmpty(int col, int weekday)
     {
         int wantedIndex = weekday;
-        if(Grid.ColumnsList[col].isBreak) wantedIndex = 0;
-        
+        if (Grid.ColumnsList[col].isBreak) wantedIndex = 0;
+
 
         var c = Grid.ColumnsList[col].isBreak ? Grid.ColumnsList[col].Children[0].Info : Grid.ColumnsList[col].Children[wantedIndex].Info;
 
@@ -155,7 +155,7 @@ public class DayTimeManager : MonoBehaviour
             var c = Grid.ColumnsList[i].Children[index].Info;
 
             bool nullOverride = c.Override.EventName == "" && c.Override.Info1 == "" && c.Override.Info2 == "";
-            if(nullOverride) nullOverride = c.Override.EventType < 0 && c.Override.OverrideFavourite == false;
+            if (nullOverride) nullOverride = c.Override.EventType < 0 && c.Override.OverrideFavourite == false;
 
             if (c.SelectedEventBase == 0 && nullOverride) continue; // If the cell is 'None' and has no overrides, ignore it.
             if (c.OverrideCommonLength)
@@ -165,7 +165,7 @@ public class DayTimeManager : MonoBehaviour
 
             // We keep adding cellInfo lengths until they pass the current time.
             // The moment we pass the time, we've found the info.
-            if (DateTime.Now.TimeOfDay < t) 
+            if (DateTime.Now.TimeOfDay < t)
             {
                 diff = t - DateTime.Now.TimeOfDay;
                 return c;
@@ -176,11 +176,14 @@ public class DayTimeManager : MonoBehaviour
     }
     private void Update()
     {
-        if(DateTime.Now >= wantedTime) // Updating content every 1 system second.
+        if (DateTime.Now >= wantedTime) // Updating content every 1 system second.
         {
             wantedTime = DateTime.Now;
             wantedTime = wantedTime.AddTicks(-(wantedTime.Ticks % TimeSpan.TicksPerSecond)) + new TimeSpan(0, 0, 0, 0, 500);
             int weekdayindex = GetWeekDayIndex((int)DateTime.Now.DayOfWeek);
+
+            Grid.CheckCellTempEvents();
+
             // If today has no events
             if (weekdayindex < 0)
             {
@@ -237,7 +240,7 @@ public class DayTimeManager : MonoBehaviour
             w.WeekDayName.text = WeekDays[i].DayName;
             int weekdayToOpen = i;
             w.selfButton.onClick.AddListener(
-            delegate 
+            delegate
             {
                 WeekdayEditor.gameObject.SetActive(true);
                 WeekdayEditor.OpenWeekday(weekdayToOpen);
@@ -246,7 +249,7 @@ public class DayTimeManager : MonoBehaviour
     }
     public void UpdateTimeIndexes()
     {
-        while(Grid.ColumnsList.Count > TimeLabels.Count)
+        while (Grid.ColumnsList.Count > TimeLabels.Count)
         {
             TimeLabels.Add(new());
         }
@@ -267,13 +270,13 @@ public class DayTimeManager : MonoBehaviour
             TimeIndexPreviews.Add(ti);
             int LabelIndex = i;
             ti.button.onClick.AddListener(delegate { labelEditor.gameObject.SetActive(true); labelEditor.ActivateEditor(LabelIndex); });
-            
+
 
             //ti.TimeParent.SetActive(rowIndex >= 0);
             if (rowIndex < 0 || isEmpty(i, rowIndex))
             {
                 ti.TimeText.text = "";
-                if (TimeLabels[i].CustomLabel)
+                if (TimeLabels[i].IsCustomLabel)
                 {
                     ti.IndexText.text = TimeLabels[i].CustomLabelName;
                     if (TimeLabels[i].CountAsIndex) ColumnIndex++;
@@ -290,7 +293,7 @@ public class DayTimeManager : MonoBehaviour
 
             ti.TimeText.text = tstring;
 
-            if (TimeLabels[i].CustomLabel)
+            if (TimeLabels[i].IsCustomLabel)
             {
                 ti.IndexText.text = TimeLabels[i].CustomLabelName;
                 if (TimeLabels[i].CountAsIndex) ColumnIndex++;
@@ -314,6 +317,16 @@ public class DayTimeManager : MonoBehaviour
         UpdateWeekDays();
         UpdateTimeIndexes();
     }
+    public void SwapWeekDays(int IndexA, int IndexB)
+    {
+        WeekDay wdA = WeekDays[IndexA];
+        WeekDays[IndexA] = WeekDays[IndexB];
+        WeekDays[IndexB] = wdA;
+
+        UpdateWeekDays();
+    }
+
+
     public void AddIndexLabel(int index)
     {
         TimeLabels.Insert(index, new());
@@ -322,7 +335,25 @@ public class DayTimeManager : MonoBehaviour
     {
         TimeLabels.RemoveAt(index);
     }
-
+    public void SwapIndexLabels(int IndexA, int IndexB)
+    {
+        LabelIndex LabelATemp = TimeLabels[IndexA];
+        TimeLabels[IndexA] = TimeLabels[IndexB];
+        TimeLabels[IndexB] = LabelATemp;
+    }
+    public string GetColumnIndexAt(int index)
+    {
+        int rowIndex = GetWeekDayIndex((int)DateTime.Now.DayOfWeek);
+        if (TimeLabels[index].IsCustomLabel)
+        {
+            return TimeLabels[index].CustomLabelName;
+        }
+        else if(isEmpty(index, rowIndex))
+        {
+            return "";
+        }
+        return index.ToString();
+    }
 
     public string FormatTime(TimeSpan t)
     {

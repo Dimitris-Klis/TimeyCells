@@ -12,9 +12,6 @@ public class WeekDay
     public string DayName;
     public TimeSpan StartTime = new(7, 30, 0);
     
-    public TimeSpan TempStartTime = new(7, 30, 0);
-    public DateTime ExpirationDate = DateTime.MinValue;
-    
     public TimeSpan CommonLength = new(1, 0, 0);
 
     public WeekDay(string _DayName, uint _Days)

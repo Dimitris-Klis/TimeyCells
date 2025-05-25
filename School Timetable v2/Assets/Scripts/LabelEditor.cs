@@ -19,12 +19,12 @@ public class LabelEditor : MonoBehaviour
         CustomLabelToggle.isOn = 
             CustomLabelInput.interactable = 
             CountAsIndexToggle.interactable = 
-            obj.CustomLabel;
+            obj.IsCustomLabel;
 
         TimeIndexPreview.TimeText.text = DayTimeManager.instance.TimeIndexPreviews[objectToModify].TimeText.text;
         TimeIndexPreview.IndexText.text = obj.CustomLabelName;
 
-        if (obj.CustomLabel)
+        if (obj.IsCustomLabel)
         {
             CustomLabelInput.text = obj.CustomLabelName + TMP_Specials.clear;
         }
@@ -44,7 +44,7 @@ public class LabelEditor : MonoBehaviour
     public void Confirm()
     {
         var obj = DayTimeManager.instance.TimeLabels[objectToModify];
-        obj.CustomLabel = CustomLabelToggle.isOn;
+        obj.IsCustomLabel = CustomLabelToggle.isOn;
         obj.CountAsIndex = CountAsIndexToggle.isOn;
         obj.CustomLabelName = CustomLabelInput.text.Replace(TMP_Specials.clear, "");
         DayTimeManager.instance.UpdateTimeIndexes();

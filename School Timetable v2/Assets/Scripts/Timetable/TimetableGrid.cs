@@ -66,7 +66,7 @@ public class TimetableGrid : MonoBehaviour
             UpdateColumnTransform(ColumnsList[^1], ColumnsList.Count - 1);
         }
         AddAllOffsets();
-        rect.pivot = new(0.5f, 0.5f);
+        rect.pivot = originalPivot;
 
         FitToContent();
     }
@@ -497,15 +497,71 @@ public class TimetableGrid : MonoBehaviour
         UpdateAllCells();
         DayTimeManager.instance.RemoveWeekday(rowIndex);
     }
+
+    public void SwapColumns(int IndexA, int IndexB)
+    {
+        Column columnA = ColumnsList[IndexA];
+        ColumnsList[IndexA] = ColumnsList[IndexB];
+        ColumnsList[IndexB] = columnA;
+        rect.pivot = PivotFix;
+        RemoveAllOffsets();
+        if (!ColumnsList[IndexA].isBreak)
+            UpdateColumnTransform(ColumnsList[IndexA], IndexA);
+        else
+            UpdateBreakTransform(IndexA);
+        if (!ColumnsList[IndexB].isBreak)
+            UpdateColumnTransform(ColumnsList[IndexB], IndexB);
+        else
+            UpdateBreakTransform(IndexB);
+        AddAllOffsets();
+        rect.pivot = originalPivot;
+
+        // Swapping labels
+        DayTimeManager.instance.SwapIndexLabels(IndexA, IndexB);
+    }
+    public void SwapRows(int IndexA, int IndexB)
+    {
+        rect.pivot = PivotFix;
+        RemoveAllOffsets();
+        for (int i = 0; i < ColumnsList.Count; i++)
+        {
+            if (ColumnsList[i].isBreak) continue;
+            TimetableCell IndexATemp = ColumnsList[i].Children[IndexA];
+
+            ColumnsList[i].Children[IndexA] = ColumnsList[i].Children[IndexB];
+            ColumnsList[i].Children[IndexB] = IndexATemp;
+
+            UpdateColumnTransform(ColumnsList[i], i);
+        }
+        AddAllOffsets();
+        rect.pivot = originalPivot;
+
+        // Swapping weekdays
+        DayTimeManager.instance.SwapWeekDays(IndexA, IndexB);
+    }
+
+    [ContextMenu("Test swapping rows!")]
+    public void TestSwapRows()
+    {
+        SwapRows(0, 1);
+    }
     public void UpdateAllCells()
     {
         for (int i = 0; i < ColumnsList.Count; i++)
         {
             for (int j = 0; j < ColumnsList[i].Children.Count; j++)
             {
-                var c = ColumnsList[i].Children[j];
-                c.Info.UpdateUI();
-
+                ColumnsList[i].Children[j].Info.UpdateUI();
+            }
+        }
+    }
+    public void CheckCellTempEvents()
+    {
+        for (int i = 0; i < ColumnsList.Count; i++)
+        {
+            for (int j = 0; j < ColumnsList[i].Children.Count; j++)
+            {
+                ColumnsList[i].Children[j].Info.UpdateUI();
             }
         }
     }
