@@ -352,7 +352,7 @@ public class DayTimeManager : MonoBehaviour
         {
             return "";
         }
-        return index.ToString();
+        return (index+1).ToString();
     }
 
     public string FormatTime(TimeSpan t)

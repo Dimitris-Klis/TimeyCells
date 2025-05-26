@@ -6,10 +6,6 @@ using TMPro;
 public class TimeIndexDrag : DragHandle
 {
     public TMP_Text IndexText;
-    private void Start()
-    {
-        OnSwap();
-    }
     public override void OnSwapDragged(int IndexA, int IndexB)
     {
         DayTimeManager.instance.Grid.SwapColumns(IndexA, IndexB);

@@ -173,6 +173,8 @@ public class CellInfoEditor : MonoBehaviour
         OverrideDate = DateTime.Today;
         DelaySlider.SetValueWithoutNotify(0);
         LengthSlider.SetValueWithoutNotify(0);
+        DelayInput.text = DelaySlider.value.ToString();
+        LengthInput.text = LengthSlider.value.ToString();
 
         TempLengthInputHours.text = "";
         TempLengthInputMinutes.text = "";

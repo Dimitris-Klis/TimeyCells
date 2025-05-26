@@ -196,6 +196,7 @@ public class TimetableEditor : MonoBehaviour
             DayTimeManager.instance.TimeIndexPreviews[i].button.interactable = true;
         }
         dayTimeManager.Highlight.transform.SetAsLastSibling();
+        DragHandleManager.instance.EndSwap();
     }
     public void SetTimetableName(string text)
     {
