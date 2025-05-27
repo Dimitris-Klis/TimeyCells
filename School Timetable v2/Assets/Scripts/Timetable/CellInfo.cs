@@ -5,7 +5,7 @@ using System;
 
 public class CellInfo : MonoBehaviour
 {
-    public TimetableCell cellUI;
+    public TimetableCell CellUI;
 
     public int SelectedEventBase = 0;
     public EventItemOverride Override = new();
@@ -13,14 +13,53 @@ public class CellInfo : MonoBehaviour
     public int TemporaryBase;
     public EventItemOverride TemporaryOverride = new();
     public DateTime OverrideDate = DateTime.Now;
-    public int ExpirationLength = 0;
-    public int WeeksDelay = 0;
-    public int WeeksLifetime = -1;
+    public int OverrideLength = 0;
+    public int OverrideDelayWeeks = 0;
+    public int ExtraOverrideLengthWeeks = -1;
     //[Space]
     public bool OverrideCommonLength;
     public bool TempOverrideCommonLength;
-    public TimeSpan Length;
-    public TimeSpan TempLength;
+    public TimeSpan NewLength;
+    public TimeSpan TempNewLength;
+
+    public CellInfo(TimetableCell cellUI, TimetableData.CellInfoData data)
+    {
+        CellUI = cellUI;
+        SelectedEventBase = data.SelectedEvent;
+
+        Override.EventName = data.EventNameOverride;
+        Override.Info1 = data.Info1Override;
+        Override.Info2 = data.Info2Override;
+        Override.EventType = data.EventTypeOverride;
+        Override.OverrideFavourite = data.OverrideFavourite > 0;
+        Override.Favourite = data.OverrideFavourite > 1;
+
+        OverrideCommonLength = data.OverrideCommonLength;
+        NewLength = new(data.NewLength[0], data.NewLength[1], 0);
+
+        if (data.ExtraOverrideLengthWeeks >= 0)
+        {
+            // Expiration Date Stuff
+            OverrideDate = new(data.OverrideDate[0], data.OverrideDate[1], data.OverrideDate[2]);
+
+            OverrideLength = data.OverrideLength;
+            OverrideDelayWeeks = data.OverrideDelayWeeks;
+
+            // Temporary Overrides
+            TemporaryBase = data.TempSelectedEvent;
+
+            TemporaryOverride.EventName = data.TempEventNameOverride;
+            TemporaryOverride.Info1 = data.TempInfo1Override;
+            TemporaryOverride.Info2 = data.TempInfo2Override;
+            TemporaryOverride.EventType = data.TempEventTypeOverride;
+
+            TemporaryOverride.OverrideFavourite = data.TempOverrideFavourite > 0;
+            TemporaryOverride.Favourite = data.TempOverrideFavourite > 1;
+
+            TempOverrideCommonLength = data.TempOverrideCommonLength;
+            TempNewLength = new(data.TempNewLength[0], data.TempNewLength[1], 0);
+        }
+    }
 
     public void SetSelfToSelectedEvent()
     {
@@ -39,21 +78,21 @@ public class CellInfo : MonoBehaviour
         if (Override.OverrideFavourite) e.Favourite = Override.Favourite;
 
         // Actual UI Changes here
-        cellUI.EventNameText.text = e.EventName;
-        cellUI.Info1Text.text = e.Info1;
-        cellUI.Info2Text.text = e.Info2;
+        CellUI.EventNameText.text = e.EventName;
+        CellUI.Info1Text.text = e.Info1;
+        CellUI.Info2Text.text = e.Info2;
 
-        cellUI.FavouriteImage.gameObject.SetActive(e.Favourite);
+        CellUI.FavouriteImage.gameObject.SetActive(e.Favourite);
 
         EventTypeItem et = EventManager.Instance.GetEventType(e.EventType);
-        cellUI.EventNameText.color = cellUI.Info1Text.color = cellUI.Info2Text.color = et.TextColor;
-        cellUI.BackgroundImage.color = et.BackgroundColor;
+        CellUI.EventNameText.color = CellUI.Info1Text.color = CellUI.Info2Text.color = et.TextColor;
+        CellUI.BackgroundImage.color = et.BackgroundColor;
 
         CheckIfTempExpired();
 
-        if (WeeksLifetime >= 0)
+        if (ExtraOverrideLengthWeeks >= 0)
         {
-            if (DateTime.Now >= OverrideDate.AddDays(WeeksDelay * 7))
+            if (DateTime.Now >= OverrideDate.AddDays(OverrideDelayWeeks * 7))
             {
                 EventItem temp_e = new(EventManager.Instance.GetEvent(TemporaryBase));
                 if (TemporaryOverride.EventName != "") temp_e.EventName = TemporaryOverride.EventName;
@@ -68,26 +107,26 @@ public class CellInfo : MonoBehaviour
                 if (TemporaryOverride.EventType >= 0) temp_e.EventType = TemporaryOverride.EventType;
                 if (TemporaryOverride.OverrideFavourite) temp_e.Favourite = TemporaryOverride.Favourite;
 
-                cellUI.EventNameText.text = temp_e.EventName;
-                cellUI.Info1Text.text = temp_e.Info1;
-                cellUI.Info2Text.text = temp_e.Info2;
+                CellUI.EventNameText.text = temp_e.EventName;
+                CellUI.Info1Text.text = temp_e.Info1;
+                CellUI.Info2Text.text = temp_e.Info2;
                 
                 EventTypeItem temp_et = EventManager.Instance.GetEventType(temp_e.EventType);
                 if(temp_et.ItemID >= 0)
                 {
-                    cellUI.EventNameText.color = cellUI.Info1Text.color = cellUI.Info2Text.color = temp_et.TextColor;
-                    cellUI.BackgroundImage.color = temp_et.BackgroundColor;
+                    CellUI.EventNameText.color = CellUI.Info1Text.color = CellUI.Info2Text.color = temp_et.TextColor;
+                    CellUI.BackgroundImage.color = temp_et.BackgroundColor;
                 }
                 
-                cellUI.FavouriteImage.gameObject.SetActive(temp_e.Favourite);
+                CellUI.FavouriteImage.gameObject.SetActive(temp_e.Favourite);
             }
         }
     }
     public void CheckIfTempExpired()
     {
-        if(WeeksLifetime >= 0 && DateTime.Now > OverrideDate.AddDays(WeeksDelay * 7 + WeeksLifetime * 7 + ExpirationLength).AddHours(23).AddMinutes(59))
+        if(ExtraOverrideLengthWeeks >= 0 && DateTime.Now > OverrideDate.AddDays(OverrideDelayWeeks * 7 + ExtraOverrideLengthWeeks * 7 + OverrideLength).AddHours(23).AddMinutes(59))
         {
-            WeeksLifetime = -1;
+            ExtraOverrideLengthWeeks = -1;
             UpdateUI();
         }
     }

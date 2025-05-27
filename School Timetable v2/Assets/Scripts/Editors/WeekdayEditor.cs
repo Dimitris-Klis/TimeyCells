@@ -42,15 +42,15 @@ public class WeekdayEditor : MonoBehaviour
         
         WeekDay SelectedWeekday = DayTimeManager.instance.WeekDays[index];
 
-        if (SelectedWeekday.WeeksLifetime > -1)
+        if (SelectedWeekday.ExtraOverrideLengthWeeks > -1)
         {
             TabHandler.SelectTab(1);
             Override.SetActive(true);
             DeleteOverrideButton.SetActive(true);
             Create.SetActive(false);
 
-            DelaySlider.value = SelectedWeekday.WeeksDelay;
-            LengthSlider.value = SelectedWeekday.WeeksLifetime;
+            DelaySlider.value = SelectedWeekday.OverrideDelayWeeks;
+            LengthSlider.value = SelectedWeekday.ExtraOverrideLengthWeeks;
             DelayInput.text = DelaySlider.value.ToString();
             LengthInput.text = LengthSlider.value.ToString();
 
@@ -292,27 +292,27 @@ public class WeekdayEditor : MonoBehaviour
             
             if (dayOfWeek >= (int)wd.OverrideDate.DayOfWeek)
             {
-                wd.ExpirationLength = dayOfWeek - (int)wd.OverrideDate.DayOfWeek;
+                wd.OverrideLength = dayOfWeek - (int)wd.OverrideDate.DayOfWeek;
             }
             else
             {
-                wd.ExpirationLength = 7 - dayOfWeek + (int)wd.OverrideDate.DayOfWeek;
+                wd.OverrideLength = 7 - dayOfWeek + (int)wd.OverrideDate.DayOfWeek;
             }
 
             if (int.TryParse(DelayInput.text.Replace(TMP_Specials.clear, ""), out int delay))
-                wd.WeeksDelay = delay;
+                wd.OverrideDelayWeeks = delay;
             else
-                wd.WeeksDelay = 0;
+                wd.OverrideDelayWeeks = 0;
 
 
             if (int.TryParse(LengthInput.text.Replace(TMP_Specials.clear, ""), out int length))
-                wd.WeeksLifetime = length;
+                wd.ExtraOverrideLengthWeeks = length;
             else
-                wd.WeeksLifetime = 0;
+                wd.ExtraOverrideLengthWeeks = 0;
         }
         else
         {
-            wd.WeeksLifetime = -1;
+            wd.ExtraOverrideLengthWeeks = -1;
         }
 
         gameObject.SetActive(false);

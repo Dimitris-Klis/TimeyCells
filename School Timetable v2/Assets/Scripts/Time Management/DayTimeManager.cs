@@ -45,33 +45,9 @@ public class DayTimeManager : MonoBehaviour
 
     DateTime wantedTime = DateTime.Now;
 
-    public void Setup()
+    public void Setup() // This should be called by SaveManager
     {
         WeekDays.Clear();
-        // If no save is found:
-
-        // Default week days:                 SFTWTMS
-        // 0000001 = 01 Sun -> Since DateTime.DayOfWeek uses Sunday as 0, I too have to use sunday as 0.
-        WeekDays.Add(new("Monday", 2)); // 0000010 = 02 Mon
-        WeekDays.Add(new("Tuesday", 4)); // 0000100 = 04 Tue
-        WeekDays.Add(new("Wednesday", 8)); // 0001000 = 08 Wed
-        WeekDays.Add(new("Thursday", 16)); // 0010000 = 16 Thu
-        WeekDays.Add(new("Friday", 32)); // 0100000 = 32 Fri
-
-        // Set Grid rows to weekdays count.
-        Grid.Rows = WeekDays.Count;
-        Grid.Setup();
-        TimetableEditor.instance.Setup();
-        Grid.UpdateAllCells();
-        Highlight.transform.SetAsLastSibling();
-        UpdateWeekDays();
-        UpdateTimeIndexes();
-        // Get current day. loop thru rows and columns.
-        // If cellInfo overrides CommonTime, use the override instead.
-    }
-    private void Start()
-    {
-        Setup();
     }
 
     // Finds a weekday that contains day 0-6.
@@ -111,7 +87,7 @@ public class DayTimeManager : MonoBehaviour
         for (int i = 0; i < col; i++)
         {
             int index = weekday;
-            if (Grid.ColumnsList[i].isBreak) index = 0; // Accounting for rowspans
+            if (Grid.ColumnsList[i].IsMultirow) index = 0; // Accounting for rowspans
 
             var c = Grid.ColumnsList[i].Children[index].Info;
 
@@ -120,10 +96,10 @@ public class DayTimeManager : MonoBehaviour
 
             if (c.SelectedEventBase == 0 && noText && noEventsOrFavs) continue; // If the cell is 'None' and has no overrides, ignore it.
 
-            if (c.WeeksLifetime >= 0 && c.TempOverrideCommonLength)
-                t += c.TempLength;
+            if (c.ExtraOverrideLengthWeeks >= 0 && c.TempOverrideCommonLength)
+                t += c.TempNewLength;
             else if (c.OverrideCommonLength)
-                t += c.Length;
+                t += c.NewLength;
             else
                 t += wd.CommonLength;
         }
@@ -133,10 +109,10 @@ public class DayTimeManager : MonoBehaviour
     public bool isEmpty(int col, int weekday)
     {
         int wantedIndex = weekday;
-        if (Grid.ColumnsList[col].isBreak) wantedIndex = 0;
+        if (Grid.ColumnsList[col].IsMultirow) wantedIndex = 0;
 
 
-        var c = Grid.ColumnsList[col].isBreak ? Grid.ColumnsList[col].Children[0].Info : Grid.ColumnsList[col].Children[wantedIndex].Info;
+        var c = Grid.ColumnsList[col].IsMultirow ? Grid.ColumnsList[col].Children[0].Info : Grid.ColumnsList[col].Children[wantedIndex].Info;
 
         bool noText = c.Override.EventName == "" && c.Override.Info1 == "" && c.Override.Info2 == "";
         bool noEventsOrFavs = c.Override.EventType < 0 && !c.Override.OverrideFavourite;
@@ -150,7 +126,7 @@ public class DayTimeManager : MonoBehaviour
         for (int i = 0; i < Grid.ColumnsList.Count; i++)
         {
             int index = weekdayindex;
-            if (Grid.ColumnsList[i].isBreak) index = 0; // Accounting for rowspans
+            if (Grid.ColumnsList[i].IsMultirow) index = 0; // Accounting for rowspans
 
             var c = Grid.ColumnsList[i].Children[index].Info;
 
@@ -159,7 +135,7 @@ public class DayTimeManager : MonoBehaviour
 
             if (c.SelectedEventBase == 0 && nullOverride) continue; // If the cell is 'None' and has no overrides, ignore it.
             if (c.OverrideCommonLength)
-                t += c.Length;
+                t += c.NewLength;
             else
                 t += wd.CommonLength;
 

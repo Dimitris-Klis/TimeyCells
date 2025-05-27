@@ -57,9 +57,10 @@ public class EventManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+    }
 
-        // TO DO: PREVENT DEFAULT EVENT GENERATION WHEN LOADING SAVE FILE.
-        
+    public void InitializeLists()
+    {
         if (GetEventType(0) == null)
         {
             // The Default Event Type
@@ -81,6 +82,7 @@ public class EventManager : MonoBehaviour
         UpdateEventPreviews();
         UpdateEventSelectors();
     }
+
     public void CreateNewEventType(out EventTypeItem _item)
     {
         EventTypes.Add(new());
