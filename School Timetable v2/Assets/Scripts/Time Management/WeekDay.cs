@@ -14,7 +14,7 @@ public class WeekDay
         StartTime = new(data.StartTime[0], data.StartTime[1], 0);
         CommonLength = new(data.CommonLength[0], data.CommonLength[1], 0);
 
-        ExtraOverrideLengthWeeks = data.ExtraOverrideLengthWeeks;
+        OverrideExtraLengthWeeks = data.ExtraOverrideLengthWeeks;
 
         if (data.ExtraOverrideLengthWeeks >= 0)
         {
@@ -45,7 +45,7 @@ public class WeekDay
     public TimeSpan TempCommonLength = new(1, 0, 0);
 
     public int OverrideDelayWeeks = 0;
-    public int ExtraOverrideLengthWeeks = -1;
+    public int OverrideExtraLengthWeeks = -1;
     public int OverrideMode = 0; // 0: No Override, 1: Override StartTime, 2: Override CommonLength, 3: OverrideAll
 
     public DateTime OverrideDate = DateTime.MinValue;
@@ -58,9 +58,9 @@ public class WeekDay
     }
     public void CheckExpirationDate()
     {
-        if (ExtraOverrideLengthWeeks >= 0 && DateTime.Now > OverrideDate.AddDays(OverrideDelayWeeks * 7 + ExtraOverrideLengthWeeks * 7 + OverrideLength).AddHours(23).AddMinutes(59))
+        if (OverrideExtraLengthWeeks >= 0 && DateTime.Now > OverrideDate.AddDays(OverrideDelayWeeks * 7 + OverrideExtraLengthWeeks * 7 + OverrideLength).AddHours(23).AddMinutes(59))
         {
-            ExtraOverrideLengthWeeks = -1;
+            OverrideExtraLengthWeeks = -1;
         }
     }
 }

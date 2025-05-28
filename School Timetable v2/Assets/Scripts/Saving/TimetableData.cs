@@ -3,13 +3,15 @@ using System.Collections;
 using UnityEngine;
 
 [System.Serializable]
+public class SerializableList<T> // This makes it 10 times easier to store lists. Thank you c8theino!
+{
+    public List<T> list = new List<T>();
+}
+
+[System.Serializable]
 public class TimetableData
 {
-    [System.Serializable]
-    public class SerializableList<T> // This makes it 10 times easier to store lists. Thank you c8theino!
-    {
-        public List<T> list = new List<T>();
-    }
+    
 
     [System.Serializable]
     public class WeekDayData
@@ -42,7 +44,7 @@ public class TimetableData
             CommonLength[0] = Weekday.CommonLength.Hours;
             CommonLength[1] = Weekday.CommonLength.Minutes;
 
-            ExtraOverrideLengthWeeks = Weekday.ExtraOverrideLengthWeeks;
+            ExtraOverrideLengthWeeks = Weekday.OverrideExtraLengthWeeks;
 
             if(ExtraOverrideLengthWeeks >= 0)
             {
@@ -143,16 +145,102 @@ public class TimetableData
                 TempNewLength[1] = c.TempNewLength.Minutes;
             }
         }
+
+        public CellInfoData()
+        {
+            SelectedEvent = 0;
+
+            // Normal Overriding
+            EventNameOverride = "";
+            Info1Override = "";
+            Info2Override = "";
+
+            EventTypeOverride = 0;
+
+            OverrideFavourite = 0; // 0: Don't Override, 1: No, 2: Yes
+
+            OverrideCommonLength = false;
+            NewLength = new int[2] { 0, 0 }; // Hours, Minutes
+
+            // Temporary Overriding
+
+            // Expiration Stuff
+            OverrideDate = new int[3] { 0, 0, 0 }; // Year, Month, Day
+            OverrideLength = 0;
+            ExtraOverrideLengthWeeks = -1; // By default, we aren't overriding.
+            OverrideDelayWeeks = 0;
+
+            // Temporary Overrides
+            TempSelectedEvent = 0;
+
+            TempEventNameOverride = "";
+            TempInfo1Override = "";
+            TempInfo2Override = "";
+
+            TempEventTypeOverride = 0;
+
+            TempOverrideFavourite = 0; // 0: Don't Override, 1: No, 2: Yes
+
+            TempOverrideCommonLength = false;
+            TempNewLength = new int[2] { 0, 0 }; // Hours, Minutes
+        }
+    }
+    public class ExtraCellInfoData : CellInfoData
+    {
+        public string StartTime = "";
+        public string TempStartTime = "";
+
+        public ExtraCellInfoData()
+        {
+            StartTime = "";
+            TempStartTime = "";
+            SelectedEvent = 0;
+
+            // Normal Overriding
+            EventNameOverride = "";
+            Info1Override = "";
+            Info2Override = "";
+
+            EventTypeOverride = 0;
+
+            OverrideFavourite = 0; // 0: Don't Override, 1: No, 2: Yes
+
+            OverrideCommonLength = false;
+            NewLength = new int[2] { 0, 0 }; // Hours, Minutes
+
+            // Temporary Overriding
+
+            // Expiration Stuff
+            OverrideDate = new int[3] { 0, 0, 0 }; // Year, Month, Day
+            OverrideLength = 0;
+            ExtraOverrideLengthWeeks = -1; // By default, we aren't overriding.
+            OverrideDelayWeeks = 0;
+
+            // Temporary Overrides
+            TempSelectedEvent = 0;
+
+            TempEventNameOverride = "";
+            TempInfo1Override = "";
+            TempInfo2Override = "";
+
+            TempEventTypeOverride = 0;
+
+            TempOverrideFavourite = 0; // 0: Don't Override, 1: No, 2: Yes
+
+            TempOverrideCommonLength = false;
+            TempNewLength = new int[2] { 0, 0 }; // Hours, Minutes
+        }
     }
 
     [System.Serializable]
     public class ColumnData
     {
-        public SerializableList<CellInfoData> children;
+        public SerializableList<CellInfoData> children = new();
         public bool IsMultirow;
 
         public ColumnData(TimetableGrid.Column c)
         {
+            children.list = new();
             IsMultirow = c.IsMultirow;
             for (int i = 0; i < c.Children.Count; i++)
             {
@@ -186,10 +274,20 @@ public class TimetableData
     }
 
     public string TimetableName;
-    public SerializableList<EventTypeData> EventTypes;
-    public SerializableList<EventItem> Events;
-    public SerializableList<ColumnData> Columns;  // Use the length of this to figure out Column Count
+    public SerializableList<EventTypeData> EventTypes = new();
+    public SerializableList<EventItem> Events = new();
+    public SerializableList<ColumnData> Columns = new();  // Use the length of this to figure out Column Count
 
-    public SerializableList<WeekDayData> Weekdays; // Use the length of this to figure out Row Count
-    public SerializableList<LabelIndex> Labels;
+    public SerializableList<WeekDayData> Weekdays = new(); // Use the length of this to figure out Row Count
+    public SerializableList<LabelIndex> Labels = new();
+
+    public TimetableData()
+    {
+        TimetableName = "";
+        EventTypes.list = new();
+        Events.list = new();
+        Columns.list = new();
+        Weekdays.list = new();
+        Labels.list = new();
+    }
 }

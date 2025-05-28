@@ -15,17 +15,19 @@ public class CellInfo : MonoBehaviour
     public DateTime OverrideDate = DateTime.Now;
     public int OverrideLength = 0;
     public int OverrideDelayWeeks = 0;
-    public int ExtraOverrideLengthWeeks = -1;
+    public int OverrideExtraLengthWeeks = -1;
     //[Space]
     public bool OverrideCommonLength;
     public bool TempOverrideCommonLength;
     public TimeSpan NewLength;
     public TimeSpan TempNewLength;
 
-    public CellInfo(TimetableCell cellUI, TimetableData.CellInfoData data)
+    public void SetupSelf(TimetableData.CellInfoData data)
     {
-        CellUI = cellUI;
         SelectedEventBase = data.SelectedEvent;
+
+        Override = new();
+        TemporaryOverride = new();
 
         Override.EventName = data.EventNameOverride;
         Override.Info1 = data.Info1Override;
@@ -90,7 +92,7 @@ public class CellInfo : MonoBehaviour
 
         CheckIfTempExpired();
 
-        if (ExtraOverrideLengthWeeks >= 0)
+        if (OverrideExtraLengthWeeks >= 0)
         {
             if (DateTime.Now >= OverrideDate.AddDays(OverrideDelayWeeks * 7))
             {
@@ -124,9 +126,9 @@ public class CellInfo : MonoBehaviour
     }
     public void CheckIfTempExpired()
     {
-        if(ExtraOverrideLengthWeeks >= 0 && DateTime.Now > OverrideDate.AddDays(OverrideDelayWeeks * 7 + ExtraOverrideLengthWeeks * 7 + OverrideLength).AddHours(23).AddMinutes(59))
+        if(OverrideExtraLengthWeeks >= 0 && DateTime.Now > OverrideDate.AddDays(OverrideDelayWeeks * 7 + OverrideExtraLengthWeeks * 7 + OverrideLength).AddHours(23).AddMinutes(59))
         {
-            ExtraOverrideLengthWeeks = -1;
+            OverrideExtraLengthWeeks = -1;
             UpdateUI();
         }
     }

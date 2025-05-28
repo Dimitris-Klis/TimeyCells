@@ -121,24 +121,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efea42bdb7f7e9f46b4028813fa8ba31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellUI: {fileID: 6856377578852616562}
-  SelectedEvent: 0
-  Override:
-    ItemID: 0
-    EventName: 
-    Info1: 
-    Info2: 
-    EventType: 0
-    Favourite: 0
-  TemporaryEvent: 0
-  TemporaryOverride:
-    ItemID: 0
-    EventName: 
-    Info1: 
-    Info2: 
-    EventType: 0
-    Favourite: 0
-  weeks: 0
+  CellUI: {fileID: 6856377578852616562}
+  SelectedEventBase: 0
+  TemporaryBase: 0
+  OverrideLength: 0
+  OverrideDelayWeeks: 0
+  ExtraOverrideLengthWeeks: 0
+  OverrideCommonLength: 0
+  TempOverrideCommonLength: 0
 --- !u!114 &6856377578852616562 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3318060688402306648, guid: 4508aae164ba2b546aa3aa1caff179cf, type: 3}

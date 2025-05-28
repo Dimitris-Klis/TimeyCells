@@ -50,4 +50,11 @@ public class PaletteDropdown : MonoBehaviour
         value= newvalue;
         onValueChanged.Invoke(value);
     }
+    public void SetValueWithoutNotify(int newvalue)
+    {
+        value = newvalue;
+        if (value >= PalettesParent.childCount) value = 0;
+        onValueChanged.Invoke(value);
+        PalettesParent.GetChild(newvalue + 1).GetComponent<PaletteObject>().toggle.isOn = true;
+    }
 }

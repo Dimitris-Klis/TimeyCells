@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class TimetableCell : MonoBehaviour
 {
-    public bool isbreak;
+    public bool IsMultirow;
     public RectTransform rect;
     [Space]
     public Image BackgroundImage;

@@ -133,22 +133,33 @@ public class EventTypeCreator : MonoBehaviour
             a.TextColor = ChangeTextColor.color;
             a.TypeName = EventTypeNameInput.text.Replace(TMP_Specials.clear, "");
 
-            EventManager.Instance.UpdateEventPreviews();
+            EventManager.Instance.UpdateEventPreviews(true);
             EventManager.Instance.UpdateEventSelectors();
             TimetableEditor.instance.UpdateSelectorPreview();
         }
-
-        EventManager.Instance.UpdateEventTypePreviews();
+        SaveManager.ChangesMade();
+        EventManager.Instance.UpdateEventTypePreviews(true);
         CloseCreator();
     }
-    public void Delete()
+    public void Delete(bool confirm)
     {
         if(IDToModify > 0)
         {
+            if (!confirm)
+            {
+                ConfirmationManager.ButtonPrompt Cancel = new("Cancel", null);
+                ConfirmationManager.ButtonPrompt Confirm = new("Delete", delegate { Delete(true); });
+                ConfirmationManager.Instance.ShowConfirmation
+                (
+                    "Are you sure?", $"Are you sure you want to delete the event type '{EventTypeNameInput.text.Replace(TMP_Specials.clear, "")}'?",
+                    Cancel, Confirm
+                );
+                return;
+            }
             EventManager.Instance.DeleteEventType(IDToModify);
 
-            EventManager.Instance.UpdateEventTypePreviews();
-            EventManager.Instance.UpdateEventPreviews();
+            EventManager.Instance.UpdateEventTypePreviews(true);
+            EventManager.Instance.UpdateEventPreviews(true);
             EventManager.Instance.UpdateEventSelectors();
             TimetableEditor.instance.UpdateSelectorPreview();
             CloseCreator();

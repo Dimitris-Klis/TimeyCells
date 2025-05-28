@@ -78,8 +78,8 @@ public class EventManager : MonoBehaviour
             defaultEvent.Info2 = "";
             defaultEvent.EventType = 0;
         }
-        UpdateEventTypePreviews();
-        UpdateEventPreviews();
+        UpdateEventTypePreviews(false);
+        UpdateEventPreviews(false);
         UpdateEventSelectors();
     }
 
@@ -185,7 +185,7 @@ public class EventManager : MonoBehaviour
         }
         Debug.Log($"No event found with ID '{ID}'!");
     }
-    public void UpdateEventTypePreviews()
+    public void UpdateEventTypePreviews(bool updatecells)
     {
         int modAmount = EventTypes.Count - EventTypePreviews.Count;
         
@@ -232,10 +232,10 @@ public class EventManager : MonoBehaviour
             // Edit Button Setup
             SetButton(c.SelfButton, EventTypes[i].ItemID, true);
         }
-
-        TimetableEditor.instance.Grid.UpdateAllCells();
+        if(updatecells)
+            TimetableEditor.instance.Grid.UpdateAllCells();
     }
-    public void UpdateEventPreviews()
+    public void UpdateEventPreviews(bool updatecells)
     {
         int modAmount = Events.Count - EventPreviews.Count;
 
@@ -286,8 +286,8 @@ public class EventManager : MonoBehaviour
 
         EventPreviews[0].EventNameText.text = "None";
         EventPreviews[0].SelfButton.interactable = false;
-
-        TimetableEditor.instance.Grid.UpdateAllCells();
+        if(updatecells)
+            TimetableEditor.instance.Grid.UpdateAllCells();
     }
     void SetButton(Button b, int id, bool EventType)
     {

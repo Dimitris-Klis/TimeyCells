@@ -41,10 +41,6 @@ public class PaletteCreator : MonoBehaviour
     public int ColorToChange = 0;
     public void OpenCreator(int ID)
     {
-        //EventManager.Instance.ShowEditingOverlay();
-        //SelfGroup.interactable = SelfGroup.blocksRaycasts = true;
-        //SelfGroup.alpha = 1;
-
         string verb = ID >= 0 ? "Edit" : "Create new";
         TitleText.text = $"{verb} Theme";
 
@@ -52,35 +48,29 @@ public class PaletteCreator : MonoBehaviour
         DeleteButton.interactable = ID >= 0;
         if(ID < 0)
         {
-            PaletteNameInput.text = DefaultPreset.PaletteName;
+            PaletteNameInput.text = DefaultPreset.PaletteName + TMP_Specials.clear;
+            PalettePreview.PaletteNameText.text = DefaultPreset.PaletteName;
             PrimaryColorImage.color = PalettePreview.PrimaryColorImage.color = DefaultPreset.PrimaryColor;
             SecondaryColorImage.color = PalettePreview.SecondaryColorImage.color = DefaultPreset.SecondaryColor;
             BackgroundColorImage.color = PalettePreview.BackgroundColorImage.color = DefaultPreset.BackgroundColor;
         }
         else
         {
+            PaletteNameInput.text = Stylizer.ColorStyles[ID].PaletteName + TMP_Specials.clear;
+            PalettePreview.PaletteNameText.text = Stylizer.ColorStyles[ID].PaletteName;
             PrimaryColorImage.color = PalettePreview.PrimaryColorImage.color = Stylizer.ColorStyles[ID].PrimaryColor;
             SecondaryColorImage.color = PalettePreview.SecondaryColorImage.color = Stylizer.ColorStyles[ID].SecondaryColor;
             BackgroundColorImage.color = PalettePreview.BackgroundColorImage.color = Stylizer.ColorStyles[ID].BackgroundColor;
         }
-
-        //coloreditor.OnClose.RemoveAllListeners();
-        //coloreditor.OnClose.AddListener(delegate { ReEnableColorButtons(); });
     }
     public void Close()
     {
         ColorEditor.instance.ApplyColors();
         gameObject.SetActive(false);
-        //EventManager.Instance.HideEditingOverlay();
     }
-    //public void ReEnableColorButtons()
-    //{
-    //    PrimaryColorButton.interactable = SecondaryColorButton.interactable = BackgroundColorButton.interactable = true;
-    //}
     public void ActivateColorEditor(int colorToChange)
     {
         ColorToChange = colorToChange;
-        //PrimaryColorButton.interactable = SecondaryColorButton.interactable = BackgroundColorButton.interactable = false;
         Color currentColor = Color.white;
         switch (ColorToChange)
         {
@@ -103,19 +93,31 @@ public class PaletteCreator : MonoBehaviour
     }
     public void ChangePaletteName(string name)
     {
-        PalettePreview.PaletteNameText.text = name;
+        PalettePreview.PaletteNameText.text = name.Replace(TMP_Specials.clear, "");
     }
-    public void Delete() 
+    public void Delete(bool confirm) 
     {
+        if (!confirm)
+        {
+            ConfirmationManager.ButtonPrompt Cancel = new("Cancel", null);
+            ConfirmationManager.ButtonPrompt Confirm = new("Delete", delegate { Delete(true); });
+            ConfirmationManager.Instance.ShowConfirmation
+            (
+                "Are you sure?", $"Are you sure you want to delete the theme '{PaletteNameInput.text.Replace(TMP_Specials.clear, "")}'?",
+                Cancel, Confirm
+            );
+            return;
+        }
         Stylizer.DeleteStyle(IDToModify);
         Close();
         PaletteEditor.AddCustomPalettes();
+        SaveManager.instance.SaveSettings();
     }
     public void Confirm()
     {
         if (IDToModify >= 0)
         {
-            Stylizer.ColorStyles[IDToModify].PaletteName = PaletteNameInput.text;
+            Stylizer.ColorStyles[IDToModify].PaletteName = PaletteNameInput.text.Replace(TMP_Specials.clear, "");
             Stylizer.ColorStyles[IDToModify].PrimaryColor = PrimaryColorImage.color;
             Stylizer.ColorStyles[IDToModify].SecondaryColor = SecondaryColorImage.color;
             Stylizer.ColorStyles[IDToModify].BackgroundColor = BackgroundColorImage.color;
@@ -124,7 +126,7 @@ public class PaletteCreator : MonoBehaviour
         {
             ColorStylePreset p = new();
             p.IsCustomPreset = true;
-            p.PaletteName = PaletteNameInput.text;
+            p.PaletteName = PaletteNameInput.text.Replace(TMP_Specials.clear, "");
             p.PrimaryColor = PrimaryColorImage.color;
             p.SecondaryColor = SecondaryColorImage.color;
             p.BackgroundColor = BackgroundColorImage.color;
@@ -134,6 +136,7 @@ public class PaletteCreator : MonoBehaviour
         Stylizer.GetElements();
         Stylizer.UpdateDropdown();
         PaletteEditor.AddCustomPalettes();
+        SaveManager.instance.SaveSettings();
         Close();
     }
 }

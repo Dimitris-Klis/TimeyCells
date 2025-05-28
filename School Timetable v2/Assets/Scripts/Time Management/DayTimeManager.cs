@@ -32,6 +32,10 @@ public class DayTimeManager : MonoBehaviour
     [Space]
     public bool _24hFormat;
     public bool EnglishFormat;
+    [Space]
+    public Toggle _24hToggle;
+    public Toggle EnglishToggle;
+    [Space]
     public TimeIndexObject TimeIndexPrefab;
     public Transform TimeIndexesParent;
     public List<TimeIndexObject> TimeIndexPreviews = new();
@@ -40,10 +44,10 @@ public class DayTimeManager : MonoBehaviour
     [Space(20)]
     [Header("IndexProperties")]
     public LabelEditor labelEditor;
-    public Toggle CustomColSpansToggle;
-    public TMP_InputField ColSpansLabelInput;
 
     DateTime wantedTime = DateTime.Now;
+
+    public bool begin = false;
 
     public void Setup() // This should be called by SaveManager
     {
@@ -96,7 +100,7 @@ public class DayTimeManager : MonoBehaviour
 
             if (c.SelectedEventBase == 0 && noText && noEventsOrFavs) continue; // If the cell is 'None' and has no overrides, ignore it.
 
-            if (c.ExtraOverrideLengthWeeks >= 0 && c.TempOverrideCommonLength)
+            if (c.OverrideExtraLengthWeeks >= 0 && c.TempOverrideCommonLength)
                 t += c.TempNewLength;
             else if (c.OverrideCommonLength)
                 t += c.NewLength;
@@ -152,6 +156,7 @@ public class DayTimeManager : MonoBehaviour
     }
     private void Update()
     {
+        if (!begin) return;
         if (DateTime.Now >= wantedTime) // Updating content every 1 system second.
         {
             wantedTime = DateTime.Now;
@@ -370,21 +375,30 @@ public class DayTimeManager : MonoBehaviour
             DateTime.TryParseExact(text, "h.mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out result) ||
             DateTime.TryParseExact(text, "h.mmtt", CultureInfo.InvariantCulture, DateTimeStyles.None, out result);
     }
-    public static bool TryParseLength(string text, out DateTime result)
+    public static bool TryParseLength(string hours, string minutes, out TimeSpan result)
     {
-        return DateTime.TryParseExact(text, "H:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out result) ||
-            // Supporting the british
-            DateTime.TryParseExact(text, "H.mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out result);
+        if(int.TryParse(hours, out int h) && int.TryParse(minutes, out int m))
+        {
+            if (h > 23) h = 23; // No event will last 24 hours!
+            if( m  > 59) m = 59;
+
+            result = new(h, m, 0);
+            return true;
+        }
+        result = new TimeSpan(0, 0, 0);
+        return false;
     }
     
     public void Set24h(bool is24)
     {
         _24hFormat = is24;
+        SaveManager.instance.SaveSettings();
         UpdateTimeIndexes();
     }
     public void SetEnglish(bool english)
     {
         EnglishFormat = english;
+        SaveManager.instance.SaveSettings();
         UpdateTimeIndexes();
     }
 }

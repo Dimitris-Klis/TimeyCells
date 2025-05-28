@@ -43,6 +43,7 @@ public class LabelEditor : MonoBehaviour
     }
     public void Confirm()
     {
+        SaveManager.ChangesMade();
         var obj = DayTimeManager.instance.TimeLabels[objectToModify];
         obj.IsCustomLabel = CustomLabelToggle.isOn;
         obj.CountAsIndex = CountAsIndexToggle.isOn;

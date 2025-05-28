@@ -8,8 +8,8 @@ using System;
 
 public class CellInfoEditor : MonoBehaviour
 {
-    int SelectedCellColumn=-1;
-    int SelectedCellRow=-1;
+    public int SelectedCellColumn =-1;
+    public int SelectedCellRow =-1;
     int originalEvent;
     public TimetableCell MainPreview;
     public TimetableCell BasePreview;
@@ -53,16 +53,15 @@ public class CellInfoEditor : MonoBehaviour
     public TMP_InputField TempLengthInputHours;
     public TMP_InputField TempLengthInputMinutes;
 
-    DateTime OverrideDate;
+    public DateTime OverrideDate = DateTime.MinValue;
 
     public void SelectCell(int column, int row)
     {
-        
         SelectedCellColumn = column;
         SelectedCellRow = row;
 
         CellInfo selectedInfo = TimetableEditor.instance.Grid.ColumnsList[column].Children[row].Info;
-        if (selectedInfo.ExtraOverrideLengthWeeks < 0)
+        if (selectedInfo.OverrideExtraLengthWeeks < 0)
         {
             tabs.SelectTab(0);
             TempPropertiesLayout.SetActive(false);
@@ -109,7 +108,7 @@ public class CellInfoEditor : MonoBehaviour
             LengthInputMinutes.text = commonLen.Minutes.ToString();
         }
 
-        if (selectedInfo.ExtraOverrideLengthWeeks > -1)
+        if (selectedInfo.OverrideExtraLengthWeeks > -1)
         {
             TempTypeOverride.SetValueWithoutNotify(selectedInfo.TemporaryOverride.EventType + 1);
             TempEventNameOverride.SetTextWithoutNotify(selectedInfo.TemporaryOverride.EventName);
@@ -120,10 +119,10 @@ public class CellInfoEditor : MonoBehaviour
 
 
             DelaySlider.SetValueWithoutNotify(selectedInfo.OverrideDelayWeeks);
-            LengthSlider.SetValueWithoutNotify(selectedInfo.ExtraOverrideLengthWeeks);
+            LengthSlider.SetValueWithoutNotify(selectedInfo.OverrideExtraLengthWeeks);
 
             DelayInput.SetTextWithoutNotify(selectedInfo.OverrideDelayWeeks.ToString() + TMP_Specials.clear);
-            LengthInput.SetTextWithoutNotify(selectedInfo.ExtraOverrideLengthWeeks.ToString() + TMP_Specials.clear);
+            LengthInput.SetTextWithoutNotify(selectedInfo.OverrideExtraLengthWeeks.ToString() + TMP_Specials.clear);
 
             if (selectedInfo.TempOverrideCommonLength)
             {
@@ -150,7 +149,7 @@ public class CellInfoEditor : MonoBehaviour
         TimeSpan t = DayTimeManager.instance.GetCellStartTime(SelectedCellColumn, SelectedCellRow);
         StartTimeInput.text = DayTimeManager.instance.FormatTime(t);
 
-        StartTimeInput.interactable = !selectedInfo.CellUI.isbreak;
+        StartTimeInput.interactable = !selectedInfo.CellUI.IsMultirow;
 
         LengthInputHours.interactable = OverrideTimeToggle.isOn = selectedInfo.OverrideCommonLength;
         LengthInputMinutes.interactable = OverrideTimeToggle.isOn = selectedInfo.OverrideCommonLength;
@@ -468,10 +467,11 @@ public class CellInfoEditor : MonoBehaviour
 
         c.OverrideCommonLength = OverrideTimeToggle.isOn;
 
-        string lentext = LengthInputHours.text.Replace(TMP_Specials.clear, "") + ":" + LengthInputMinutes.text.Replace(TMP_Specials.clear, "");
-        if (DayTimeManager.TryParseLength(lentext, out DateTime len))
+        string hours = LengthInputHours.text.Replace(TMP_Specials.clear, "");
+        string mins = LengthInputMinutes.text.Replace(TMP_Specials.clear, "");
+        if (DayTimeManager.TryParseLength(hours, mins , out TimeSpan len))
         {
-            c.NewLength = len.TimeOfDay;
+            c.NewLength = len;
         }
 
         if (DayTimeManager.TryParseTime(StartTimeInput.text.Replace(TMP_Specials.clear, ""), out DateTime start))
@@ -480,7 +480,7 @@ public class CellInfoEditor : MonoBehaviour
             {
                 DayTimeManager.instance.WeekDays[SelectedCellRow].StartTime = start.TimeOfDay;
             }
-            else if (!c.CellUI.isbreak) // If it's a colspan, reducing all of the cells' lengths is probably not something you want to do.
+            else
             {
                 int childIndex = TimetableEditor.instance.Grid.ColumnsList[SelectedCellColumn - 1].IsMultirow ? 0 : SelectedCellRow;
                 CellInfo PrevInfo = TimetableEditor.instance.Grid.ColumnsList[SelectedCellColumn - 1].Children[childIndex].Info;
@@ -515,9 +515,9 @@ public class CellInfoEditor : MonoBehaviour
 
 
             if (int.TryParse(LengthInput.text.Replace(TMP_Specials.clear, ""), out int length))
-                c.ExtraOverrideLengthWeeks = length;
+                c.OverrideExtraLengthWeeks = length;
             else
-                c.ExtraOverrideLengthWeeks = 0;
+                c.OverrideExtraLengthWeeks = 0;
 
 
             WeekDay wd = DayTimeManager.instance.WeekDays[SelectedCellRow];
@@ -540,48 +540,56 @@ public class CellInfoEditor : MonoBehaviour
         }
         else
         {
-            c.ExtraOverrideLengthWeeks = -1;
+            c.OverrideExtraLengthWeeks = -1;
         }
 
-        string templentext = TempLengthInputHours.text.Replace(TMP_Specials.clear, "") + ":" + TempLengthInputMinutes.text.Replace(TMP_Specials.clear, "");
-        if (DayTimeManager.TryParseLength(templentext, out DateTime templen))
+        string temphours = TempLengthInputHours.text.Replace(TMP_Specials.clear, "");
+        string tempmins = TempLengthInputMinutes.text.Replace(TMP_Specials.clear, "");
+        if (DayTimeManager.TryParseLength(temphours, tempmins, out TimeSpan templen))
         {
-            c.TempNewLength = templen.TimeOfDay;
+            c.TempNewLength = templen;
         }
 
-        // IDK if I'll overwrite start time.
+        // Overwriting start time.
 
-        //if (DayTimeManager.TryParseTime(StartTimeInput.text.Replace(TMP_Specials.clear, ""), out DateTime tempstart))
-        //{
-        //    if (SelectedCellColumn == 0)
-        //    {
-        //        DayTimeManager.instance.WeekDays[SelectedCellRow].ExpirationDate = OverrideDate.AddDays(c.WeeksDelay*7 + c.WeeksLifetime*7);
-        //        DayTimeManager.instance.WeekDays[SelectedCellRow].TempStartTime = tempstart.TimeOfDay;
-                
-        //    }
-        //    else if (!c.cellUI.isbreak)
-        //    {
-        //        int childIndex = TimetableEditor.instance.Grid.ColumnsList[SelectedCellColumn - 1].isBreak ? 0 : SelectedCellRow;
-        //        CellInfo PrevInfo = TimetableEditor.instance.Grid.ColumnsList[SelectedCellColumn - 1].Children[childIndex].Info;
+        if (DayTimeManager.TryParseTime(StartTimeInput.text.Replace(TMP_Specials.clear, ""), out DateTime tempstart))
+        {
+            if (SelectedCellColumn == 0)
+            {
+                DayTimeManager.instance.WeekDays[SelectedCellRow].OverrideDate = OverrideDate;
+                DayTimeManager.instance.WeekDays[SelectedCellRow].OverrideDelayWeeks = c.OverrideDelayWeeks;
+                DayTimeManager.instance.WeekDays[SelectedCellRow].OverrideExtraLengthWeeks = c.OverrideExtraLengthWeeks;
+                DayTimeManager.instance.WeekDays[SelectedCellRow].TempStartTime = tempstart.TimeOfDay;
 
-        //        long ticks = DayTimeManager.instance.TimeDiff(start.TimeOfDay, SelectedCellColumn - 1, SelectedCellRow).Ticks;
+            }
+            else
+            {
+                int childIndex = TimetableEditor.instance.Grid.ColumnsList[SelectedCellColumn - 1].IsMultirow ? 0 : SelectedCellRow;
+                CellInfo PrevInfo = TimetableEditor.instance.Grid.ColumnsList[SelectedCellColumn - 1].Children[childIndex].Info;
 
-        //        // Instead of using Mathf.Abs, we manually make the value absolute to avoid losing any bytes, since this is a long.
-        //        if (ticks < 0) ticks = -ticks;
+                long ticks = DayTimeManager.instance.TimeDiff(start.TimeOfDay, SelectedCellColumn - 1, SelectedCellRow).Ticks;
 
-        //        PrevInfo.Length = new TimeSpan(ticks);
+                // Instead of using Mathf.Abs, we manually make the value absolute to avoid losing any bytes, since this is a long.
+                if (ticks < 0) ticks = -ticks;
 
-        //        PrevInfo.OverrideCommonLength = PrevInfo.Length != DayTimeManager.instance.GetCellCommonLength(SelectedCellRow);
-        //    }
-        //}
+                PrevInfo.TempNewLength = new TimeSpan(ticks);
 
+                PrevInfo.OverrideCommonLength = PrevInfo.TempNewLength != DayTimeManager.instance.GetCellCommonLength(SelectedCellRow);
+
+                PrevInfo.OverrideDate = OverrideDate;
+                PrevInfo.OverrideDelayWeeks = c.OverrideDelayWeeks;
+                PrevInfo.OverrideExtraLengthWeeks = c.OverrideExtraLengthWeeks;
+            }
+        }
+
+        SaveManager.ChangesMade();
 
         DayTimeManager.instance.UpdateTimeIndexes();
         c.UpdateUI();
 
         SelectedCellColumn = -1;
         SelectedCellRow = -1;
-
+        OverrideDate = DateTime.MinValue;
         gameObject.SetActive(false);
     }
 }

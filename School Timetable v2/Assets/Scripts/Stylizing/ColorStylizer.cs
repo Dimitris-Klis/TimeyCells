@@ -3,12 +3,10 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.SceneManagement;
-using UnityEditor.Build.Content;
 
 public class ColorStylizer : MonoBehaviour
 {
-    public int wantedIndex;
+    public int wantedPreset;
     
     [Space]
     public PaletteDropdown paletteDropdown;
@@ -20,11 +18,11 @@ public class ColorStylizer : MonoBehaviour
     public Image[] Buttons;
     public TMP_Text[] Texts;
 
-    private void Start()
+    public void Setup()
     {
         UpdateDropdown();
         GetElements();
-        ChangePreset(wantedIndex);
+        RefreshPreset();
     }
     public int GetIndex(ColorStylePreset preset)
     {
@@ -38,20 +36,22 @@ public class ColorStylizer : MonoBehaviour
     public void DeleteStyle(int index)
     {
         ColorStyles.RemoveAt(index);
-        if (wantedIndex > index) wantedIndex--;
-        if (wantedIndex >= ColorStyles.Count)
+        if (wantedPreset > index) wantedPreset--;
+        if (wantedPreset >= ColorStyles.Count)
         {
-            wantedIndex = 0;
+            wantedPreset = 0;
         }
-        ChangePreset(wantedIndex);
+        RefreshPreset();
         UpdateDropdown();
     }
 
-    [ContextMenu("Change Preset to wantedIndex")]
-    public void test()
+    public void ChangePreset(int index)
     {
-        ChangePreset(wantedIndex);
+        wantedPreset = index;
+        RefreshPreset();
+        SaveManager.instance.SaveSettings();
     }
+
     [ContextMenu("Get Relevant Elements")]
     public void GetElements()
     {
@@ -95,12 +95,17 @@ public class ColorStylizer : MonoBehaviour
     public void UpdateDropdown()
     {
         paletteDropdown.Setup(ColorStyles.ToArray());
-        paletteDropdown.value = wantedIndex;
+        paletteDropdown.SetValueWithoutNotify(wantedPreset);
+        GetElements();
+        RefreshPreset();
     }
-    public void ChangePreset(int index)
+    [ContextMenu("Refresh Preset")]
+    public void RefreshPreset()
     {
+        if (wantedPreset >= ColorStyles.Count) wantedPreset = 0;
+
         // The Selected Preset
-        ColorStylePreset preset = ColorStyles[index];
+        ColorStylePreset preset = ColorStyles[wantedPreset];
 
         // Background
         Camera.backgroundColor = preset.BackgroundColor;

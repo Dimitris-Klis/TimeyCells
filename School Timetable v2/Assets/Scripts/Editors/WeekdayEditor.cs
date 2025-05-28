@@ -42,7 +42,7 @@ public class WeekdayEditor : MonoBehaviour
         
         WeekDay SelectedWeekday = DayTimeManager.instance.WeekDays[index];
 
-        if (SelectedWeekday.ExtraOverrideLengthWeeks > -1)
+        if (SelectedWeekday.OverrideExtraLengthWeeks > -1)
         {
             TabHandler.SelectTab(1);
             Override.SetActive(true);
@@ -50,7 +50,7 @@ public class WeekdayEditor : MonoBehaviour
             Create.SetActive(false);
 
             DelaySlider.value = SelectedWeekday.OverrideDelayWeeks;
-            LengthSlider.value = SelectedWeekday.ExtraOverrideLengthWeeks;
+            LengthSlider.value = SelectedWeekday.OverrideExtraLengthWeeks;
             DelayInput.text = DelaySlider.value.ToString();
             LengthInput.text = LengthSlider.value.ToString();
 
@@ -252,6 +252,7 @@ public class WeekdayEditor : MonoBehaviour
 
     public void Confirm()
     {
+        SaveManager.ChangesMade();
         WeekDay wd = DayTimeManager.instance.WeekDays[WeekdayIndex];
 
         wd.DayName = WeekdayName.text;
@@ -260,10 +261,12 @@ public class WeekdayEditor : MonoBehaviour
         {
             wd.StartTime = result.TimeOfDay;
         }
-        string lentext = CommonLengthFieldHours.text.Replace(TMP_Specials.clear, "") + ":" + CommonLengthFieldMinutes.text.Replace(TMP_Specials.clear, "");
-        if (DayTimeManager.TryParseLength(lentext, out DateTime result2))
+
+        string hours = CommonLengthFieldHours.text.Replace(TMP_Specials.clear, "");
+        string mins = CommonLengthFieldMinutes.text.Replace(TMP_Specials.clear, "");
+        if (DayTimeManager.TryParseLength(hours, mins, out TimeSpan result2))
         {
-            wd.CommonLength = result2.TimeOfDay;
+            wd.CommonLength = result2;
         }
 
         int Sun = DayToggles[6].isOn ? 1 : 0;//* 1
@@ -306,13 +309,13 @@ public class WeekdayEditor : MonoBehaviour
 
 
             if (int.TryParse(LengthInput.text.Replace(TMP_Specials.clear, ""), out int length))
-                wd.ExtraOverrideLengthWeeks = length;
+                wd.OverrideExtraLengthWeeks = length;
             else
-                wd.ExtraOverrideLengthWeeks = 0;
+                wd.OverrideExtraLengthWeeks = 0;
         }
         else
         {
-            wd.ExtraOverrideLengthWeeks = -1;
+            wd.OverrideExtraLengthWeeks = -1;
         }
 
         gameObject.SetActive(false);

@@ -131,18 +131,29 @@ public class EventCreator : MonoBehaviour
             a.EventType = EventManager.Instance.EventTypes[EventTypeDropdown.value].ItemID;
             a.Favourite = FavouriteToggle.isOn;
         }
-
-        EventManager.Instance.UpdateEventPreviews();
+        SaveManager.ChangesMade();
+        EventManager.Instance.UpdateEventPreviews(true);
         EventManager.Instance.UpdateEventSelectors();
         TimetableEditor.instance.UpdateSelectorPreview();
         gameObject.SetActive(false);
     }
-    public void Delete()
+    public void Delete(bool confirm)
     {
+        if (!confirm)
+        {
+            ConfirmationManager.ButtonPrompt Cancel = new("Cancel", null);
+            ConfirmationManager.ButtonPrompt Confirm = new("Delete", delegate { Delete(true); });
+            ConfirmationManager.Instance.ShowConfirmation
+            (
+                "Are you sure?", $"Are you sure you want to delete the event '{EventNameInput.text.Replace(TMP_Specials.clear, "")}'?",
+                Cancel, Confirm
+            );
+            return;
+        }
         // Prevent deletion if we're deleting a new event.
         if (IDToModify < 0) return;
         EventManager.Instance.DeleteEvent(IDToModify);
-        EventManager.Instance.UpdateEventPreviews();
+        EventManager.Instance.UpdateEventPreviews(true);
         EventManager.Instance.UpdateEventSelectors();
         TimetableEditor.instance.UpdateSelectorPreview();
         gameObject.SetActive(false);
