@@ -381,7 +381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6e561e2c4272b749a47d748c47ec369, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isbreak: 0
+  IsMultirow: 0
   rect: {fileID: 3731379535731090925}
   BackgroundImage: {fileID: 598936586638701936}
   EventNameText: {fileID: 1195993538414302384}
@@ -543,8 +543,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 50, y: 50}
+  m_AnchoredPosition: {x: 0, y: -0.7778094}
+  m_SizeDelta: {x: 50, y: 24.306}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3840734750191959782
 CanvasRenderer:
@@ -601,7 +601,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 12
+  m_fontSize: 10.35
   m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -639,7 +639,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 4.05, y: 4.05, z: 4.05, w: 4.05}
+  m_margin: {x: 4.05, y: 0, z: 4.05, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -679,8 +679,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 8.75}
-  m_SizeDelta: {x: 42.0846, y: 9.75}
+  m_AnchoredPosition: {x: 0, y: 7.9721985}
+  m_SizeDelta: {x: 42.0846, y: 8.1944}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7848279984091832116
 CanvasRenderer:

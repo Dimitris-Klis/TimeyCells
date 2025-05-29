@@ -157,8 +157,8 @@ public class CellInfoEditor : MonoBehaviour
         TempLengthInputHours.interactable = OverrideTimeToggle.isOn = selectedInfo.OverrideCommonLength;
         TempLengthInputMinutes.interactable = OverrideTimeToggle.isOn = selectedInfo.OverrideCommonLength;
 
-        CreateButton.SetActive(DayTimeManager.instance.WeekDays[SelectedCellColumn].Days != 0);
-        ErrorText.SetActive(DayTimeManager.instance.WeekDays[SelectedCellColumn].Days == 0);
+        CreateButton.SetActive(DayTimeManager.instance.WeekDays[SelectedCellRow].Days != 0);
+        ErrorText.SetActive(DayTimeManager.instance.WeekDays[SelectedCellRow].Days == 0);
 
         UpdatePreviews();
     }
@@ -442,6 +442,30 @@ public class CellInfoEditor : MonoBehaviour
     {
         DelayInput.text = Delay.ToString();
     }
+
+    public void UpdateDelaySlider(string Delay)
+    {
+        if(int.TryParse(Delay.Replace(TMP_Specials.clear, ""), out int val))
+        {
+            DelaySlider.SetValueWithoutNotify(Mathf.Clamp(val, DelaySlider.minValue, DelaySlider.maxValue));
+        }
+        else
+        {
+            DelaySlider.SetValueWithoutNotify(0);
+        }
+    }
+    public void UpdateLengthSlider(string Length)
+    {
+        if (int.TryParse(Length.Replace(TMP_Specials.clear, ""), out int val))
+        {
+            LengthSlider.SetValueWithoutNotify(Mathf.Clamp(val, LengthSlider.minValue, LengthSlider.maxValue));
+        }
+        else
+        {
+            LengthSlider.SetValueWithoutNotify(0);
+        }
+    }
+
     public void SetLength(float Length)
     {
         LengthInput.text = Length.ToString();
@@ -482,17 +506,38 @@ public class CellInfoEditor : MonoBehaviour
             }
             else
             {
-                int childIndex = TimetableEditor.instance.Grid.ColumnsList[SelectedCellColumn - 1].IsMultirow ? 0 : SelectedCellRow;
-                CellInfo PrevInfo = TimetableEditor.instance.Grid.ColumnsList[SelectedCellColumn - 1].Children[childIndex].Info;
+                if (c.CellUI.IsMultirow)
+                {
+                    for (int i = 0; i < DayTimeManager.instance.Grid.ColumnsList[SelectedCellColumn].Children.Count; i++)
+                    {
+                        CellInfo PrevInfo = DayTimeManager.instance.Grid.ColumnsList[SelectedCellColumn-1].Children[i].Info;
+                        TimeSpan timeDiff = DayTimeManager.instance.TimeDiff(start.TimeOfDay, SelectedCellColumn - 1, i);
 
-                long ticks = DayTimeManager.instance.TimeDiff(start.TimeOfDay, SelectedCellColumn - 1, SelectedCellRow).Ticks;
+                        long ticks = timeDiff.Ticks;
 
-                // Instead of using Mathf.Abs, we manually make the value absolute to avoid losing any bits, since this is a long.
-                if (ticks < 0) ticks = -ticks;
+                        // Instead of using Mathf.Abs, we manually make the value absolute to avoid losing any bits, since this is a long.
+                        if (ticks < 0) ticks = -ticks;
 
-                PrevInfo.NewLength = new TimeSpan(ticks);
+                        PrevInfo.NewLength = new TimeSpan(ticks);
 
-                PrevInfo.OverrideCommonLength = PrevInfo.NewLength != DayTimeManager.instance.GetCellCommonLength(SelectedCellRow);
+                        PrevInfo.OverrideCommonLength = PrevInfo.NewLength != DayTimeManager.instance.GetCellCommonLength(SelectedCellRow);
+                    }
+                }
+                else
+                {
+                    int childIndex = TimetableEditor.instance.Grid.ColumnsList[SelectedCellColumn - 1].IsMultirow ? 0 : SelectedCellRow;
+                    CellInfo PrevInfo = TimetableEditor.instance.Grid.ColumnsList[SelectedCellColumn - 1].Children[childIndex].Info;
+
+                    TimeSpan timeDiff = DayTimeManager.instance.TimeDiff(start.TimeOfDay, SelectedCellColumn - 1, SelectedCellRow);
+                    long ticks = timeDiff.Ticks;
+
+                    // Instead of using Mathf.Abs, we manually make the value absolute to avoid losing any bits, since this is a long.
+                    if (ticks < 0) ticks = -ticks;
+
+                    PrevInfo.NewLength = new TimeSpan(ticks);
+
+                    PrevInfo.OverrideCommonLength = PrevInfo.NewLength != DayTimeManager.instance.GetCellCommonLength(SelectedCellRow);
+                }
             }
         }
 
@@ -564,21 +609,45 @@ public class CellInfoEditor : MonoBehaviour
             }
             else
             {
-                int childIndex = TimetableEditor.instance.Grid.ColumnsList[SelectedCellColumn - 1].IsMultirow ? 0 : SelectedCellRow;
-                CellInfo PrevInfo = TimetableEditor.instance.Grid.ColumnsList[SelectedCellColumn - 1].Children[childIndex].Info;
+                if (c.CellUI.IsMultirow)
+                {
+                    for (int i = 0; i < DayTimeManager.instance.Grid.ColumnsList[SelectedCellColumn].Children.Count; i++)
+                    {
+                        CellInfo PrevInfo = DayTimeManager.instance.Grid.ColumnsList[SelectedCellColumn-1].Children[i].Info;
+                        TimeSpan timeDiff = DayTimeManager.instance.TimeDiff(start.TimeOfDay, SelectedCellColumn - 1, i);
 
-                long ticks = DayTimeManager.instance.TimeDiff(start.TimeOfDay, SelectedCellColumn - 1, SelectedCellRow).Ticks;
+                        long ticks = timeDiff.Ticks;
 
-                // Instead of using Mathf.Abs, we manually make the value absolute to avoid losing any bytes, since this is a long.
-                if (ticks < 0) ticks = -ticks;
+                        // Instead of using Mathf.Abs, we manually make the value absolute to avoid losing any bits, since this is a long.
+                        if (ticks < 0) ticks = -ticks;
 
-                PrevInfo.TempNewLength = new TimeSpan(ticks);
+                        PrevInfo.NewLength = new TimeSpan(ticks);
 
-                PrevInfo.OverrideCommonLength = PrevInfo.TempNewLength != DayTimeManager.instance.GetCellCommonLength(SelectedCellRow);
+                        PrevInfo.OverrideCommonLength = PrevInfo.NewLength != DayTimeManager.instance.GetCellCommonLength(SelectedCellRow);
 
-                PrevInfo.OverrideDate = OverrideDate;
-                PrevInfo.OverrideDelayWeeks = c.OverrideDelayWeeks;
-                PrevInfo.OverrideExtraLengthWeeks = c.OverrideExtraLengthWeeks;
+                        PrevInfo.OverrideDate = OverrideDate;
+                        PrevInfo.OverrideDelayWeeks = c.OverrideDelayWeeks;
+                        PrevInfo.OverrideExtraLengthWeeks = c.OverrideExtraLengthWeeks;
+                    }
+                }
+                else
+                {
+                    int childIndex = TimetableEditor.instance.Grid.ColumnsList[SelectedCellColumn - 1].IsMultirow ? 0 : SelectedCellRow;
+                    CellInfo PrevInfo = TimetableEditor.instance.Grid.ColumnsList[SelectedCellColumn - 1].Children[childIndex].Info;
+
+                    long ticks = DayTimeManager.instance.TimeDiff(start.TimeOfDay, SelectedCellColumn - 1, SelectedCellRow).Ticks;
+
+                    // Instead of using Mathf.Abs, we manually make the value absolute to avoid losing any bytes, since this is a long.
+                    if (ticks < 0) ticks = -ticks;
+
+                    PrevInfo.TempNewLength = new TimeSpan(ticks);
+
+                    PrevInfo.OverrideCommonLength = PrevInfo.TempNewLength != DayTimeManager.instance.GetCellCommonLength(SelectedCellRow);
+
+                    PrevInfo.OverrideDate = OverrideDate;
+                    PrevInfo.OverrideDelayWeeks = c.OverrideDelayWeeks;
+                    PrevInfo.OverrideExtraLengthWeeks = c.OverrideExtraLengthWeeks;
+                }
             }
         }
 

@@ -75,7 +75,9 @@ public class DayTimeManager : MonoBehaviour
     public TimeSpan TimeDiff(TimeSpan newStartTime, int col, int weekday)
     {
         TimeSpan t = GetCellStartTime(col, weekday);
-        return newStartTime.Subtract(t);
+        int hours = newStartTime.Hours - t.Hours - (newStartTime.Minutes < t.Minutes ? 1 : 0);
+        int mins = newStartTime.Minutes - t.Minutes + (newStartTime.Minutes < t.Minutes ? 60 : 0);
+        return new(hours, mins, 0);
     }
     public TimeSpan GetCellStartTime(int col, int weekday)
     {
@@ -96,9 +98,8 @@ public class DayTimeManager : MonoBehaviour
             var c = Grid.ColumnsList[i].Children[index].Info;
 
             bool noText = c.Override.EventName == "" && c.Override.Info1 == "" && c.Override.Info2 == "";
-            bool noEventsOrFavs = c.Override.EventType < 0 && !c.Override.OverrideFavourite;
 
-            if (c.SelectedEventBase == 0 && noText && noEventsOrFavs) continue; // If the cell is 'None' and has no overrides, ignore it.
+            if (c.SelectedEventBase == 0 && noText && !c.Override.OverrideFavourite) continue; // If the cell is 'None' and has no overrides, ignore it.
 
             if (c.OverrideExtraLengthWeeks >= 0 && c.TempOverrideCommonLength)
                 t += c.TempNewLength;
@@ -107,7 +108,7 @@ public class DayTimeManager : MonoBehaviour
             else
                 t += wd.CommonLength;
         }
-        //Debug.Log($"{t.Hours}:{t.Minutes}");
+        
         return t;
     }
     public bool isEmpty(int col, int weekday)
@@ -234,7 +235,10 @@ public class DayTimeManager : MonoBehaviour
         {
             TimeLabels.Add(new());
         }
-
+        while (Grid.ColumnsList.Count < TimeLabels.Count)
+        {
+            TimeLabels.RemoveAt(TimeLabels.Count-1);
+        }
         for (int i = 0; i < TimeIndexPreviews.Count; i++)
         {
             Destroy(TimeIndexPreviews[i].gameObject);
@@ -347,15 +351,17 @@ public class DayTimeManager : MonoBehaviour
         else
         {
             int hours = t.Hours;
-            string tt = "AM";
+            string tt = hours < 12 ? "AM" : "PM";
             if (hours > 12)
             {
                 hours -= 12;
-                tt = "PM";
             }
 
             if (hours == 0) hours += 12;
-            tstring = $"{hours}{punctuation}{t.Minutes} {tt}";
+
+            string extraZero = t.Minutes < 10 ? "0" : "";
+
+            tstring = $"{hours}{punctuation}{extraZero}{t.Minutes} {tt}";
         }
         return tstring;
     }
@@ -367,13 +373,14 @@ public class DayTimeManager : MonoBehaviour
     public static bool TryParseTime(string text, out DateTime result)
     {
         return
-            DateTime.TryParseExact(text, "H:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out result) ||
+            // 12h Formats
             DateTime.TryParseExact(text, "h:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out result) ||
             DateTime.TryParseExact(text, "h:mmtt", CultureInfo.InvariantCulture, DateTimeStyles.None, out result) ||
-            // Supporting the british
-            DateTime.TryParseExact(text, "H.mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out result) ||
             DateTime.TryParseExact(text, "h.mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out result) ||
-            DateTime.TryParseExact(text, "h.mmtt", CultureInfo.InvariantCulture, DateTimeStyles.None, out result);
+            DateTime.TryParseExact(text, "h.mmtt", CultureInfo.InvariantCulture, DateTimeStyles.None, out result) ||
+            // 24h Formats
+            DateTime.TryParseExact(text, "H:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out result) ||
+            DateTime.TryParseExact(text, "H.mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out result);
     }
     public static bool TryParseLength(string hours, string minutes, out TimeSpan result)
     {

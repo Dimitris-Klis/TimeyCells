@@ -20,7 +20,7 @@ public class CenterAndFit : MonoBehaviour
         {
             int index = child.GetSiblingIndex();
 
-            if(index == 0)
+            if (index == 0)
             {
                 if (AlignmentMode == AlignmentModes.Horizontal)
                 {
@@ -30,22 +30,20 @@ public class CenterAndFit : MonoBehaviour
                 {
                     wantedPos -= child.sizeDelta.y / 2;
                 }
-                wantedPos -= Spacing;
             }
             else
             {
                 if (AlignmentMode == AlignmentModes.Horizontal)
                 {
-                    wantedPos += child.sizeDelta.x + (prevChild.sizeDelta.x-child.sizeDelta.x)/2;
+                    wantedPos += child.sizeDelta.x + (prevChild.sizeDelta.x - child.sizeDelta.x) / 2;
                 }
                 else
                 {
                     wantedPos -= child.sizeDelta.y + (prevChild.sizeDelta.y - child.sizeDelta.y) / 2;
                 }
-                wantedPos -= Spacing;
             }
-            
-            if(AlignmentMode == AlignmentModes.Horizontal)
+
+            if (AlignmentMode == AlignmentModes.Horizontal)
             {
                 child.localPosition = Vector2.right * wantedPos;
             }
@@ -54,6 +52,14 @@ public class CenterAndFit : MonoBehaviour
                 child.localPosition = Vector2.up * wantedPos;
             }
             prevChild = child;
+            if (AlignmentMode == AlignmentModes.Horizontal)
+            {
+                wantedPos += Spacing;
+            }
+            else
+            {
+                wantedPos -= Spacing;
+            }
         }
 
         // Centering

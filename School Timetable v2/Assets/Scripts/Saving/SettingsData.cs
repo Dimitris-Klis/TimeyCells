@@ -33,6 +33,12 @@ public class SettingsData
             BackgroundColor[2] = cs.BackgroundColor.b;
             BackgroundColor[3] = cs.BackgroundColor.a;
         }
+        public CustomThemeData()
+        {
+            PrimaryColor = new float[4] { 1, 1, 1, 0 };
+            SecondaryColor = new float[4] { 1, 1, 1, 0 };
+            BackgroundColor = new float[4] { 1, 1, 1, 0 };
+        }
     }
 
     public string LastOpenedTimetable;

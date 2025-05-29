@@ -201,6 +201,29 @@ public class WeekdayEditor : MonoBehaviour
     {
         LengthInput.text = text.ToString();
     }
+    public void UpdateDelaySlider(string Delay)
+    {
+        if (int.TryParse(Delay.Replace(TMP_Specials.clear, ""), out int val))
+        {
+            DelaySlider.SetValueWithoutNotify(Mathf.Clamp(val, DelaySlider.minValue, DelaySlider.maxValue));
+        }
+        else
+        {
+            DelaySlider.SetValueWithoutNotify(0);
+        }
+    }
+    public void UpdateLengthSlider(string Length)
+    {
+        if (int.TryParse(Length.Replace(TMP_Specials.clear, ""), out int val))
+        {
+            LengthSlider.SetValueWithoutNotify(Mathf.Clamp(val, LengthSlider.minValue, LengthSlider.maxValue));
+        }
+        else
+        {
+            LengthSlider.SetValueWithoutNotify(0);
+        }
+    }
+
 
     public void SetStartTimeInteractable(bool enabled)
     {

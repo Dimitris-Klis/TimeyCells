@@ -368,7 +368,6 @@ public class TimetableGrid : MonoBehaviour
     }
     public void AddColumn(int columnIndex)
     {
-        
         originalPivot = rect.pivot;
         rect.pivot = PivotFix;
 

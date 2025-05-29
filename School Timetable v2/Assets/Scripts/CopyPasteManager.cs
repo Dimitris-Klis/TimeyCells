@@ -8,6 +8,10 @@ public class CopyPasteManager : MonoBehaviour
 {
     public SaveManager SaveManager;
     public CellInfoEditor CellInfoEditor;
+    public EventCreator EventCreator;
+    public EventTypeCreator EventTypeCreator;
+    public PaletteCreator ThemeCreator;
+
     public void CopyCellInfo()
     {
         TimetableData.ExtraCellInfoData cellData = new();
@@ -181,5 +185,138 @@ public class CopyPasteManager : MonoBehaviour
             TimeSpan t = DayTimeManager.instance.GetCellStartTime(CellInfoEditor.SelectedCellColumn, CellInfoEditor.SelectedCellRow);
             CellInfoEditor.TempStartTimeInput.text = DayTimeManager.instance.FormatTime(t);
         }
+    }
+
+    public void CopyEvent()
+    {
+        EventItem eventData = new EventItem();
+
+        eventData.EventName = EventCreator.EventNameInput.text.Replace(TMP_Specials.clear, "");
+        eventData.Info1 = EventCreator.Info1Input.text.Replace(TMP_Specials.clear, "");
+        eventData.Info2 = EventCreator.Info2Input.text.Replace(TMP_Specials.clear, "");
+
+        eventData.EventType = EventManager.Instance.EventTypes[EventCreator.EventTypeDropdown.value].ItemID;
+        eventData.Favourite = EventCreator.FavouriteToggle.isOn;
+
+        GUIUtility.systemCopyBuffer = JsonUtility.ToJson(eventData, false);
+    }
+
+    public void PasteEvent()
+    {
+        EventItem eventData = JsonUtility.FromJson<EventItem>(GUIUtility.systemCopyBuffer);
+
+        EventCreator.EventNameInput.text = eventData.EventName + (eventData.EventName != "" ? TMP_Specials.clear : "");
+        EventCreator.Info1Input.text = eventData.Info1 + (eventData.EventName != "" ? TMP_Specials.clear : "");
+        EventCreator.Info2Input.text = eventData.Info2 + (eventData.EventName != "" ? TMP_Specials.clear : "");
+
+        EventCreator.EventTypeDropdown.value = eventData.EventType;
+        EventCreator.FavouriteToggle.isOn = eventData.Favourite;
+
+        EventCreator.ChangeEventType(EventCreator.EventTypeDropdown.value);
+
+        EventCreator.ChangeIsFavourite(EventCreator.FavouriteToggle.isOn);
+    }
+
+    public void CopyEventType()
+    {
+        TimetableData.EventTypeData eventTypeData = new();
+
+        eventTypeData.TypeName = EventTypeCreator.EventTypeNameInput.text.Replace(TMP_Specials.clear, "");
+
+        eventTypeData.BackgroundColor[0] = EventTypeCreator.ChangeBackgroundColor.color.r;
+        eventTypeData.BackgroundColor[1] = EventTypeCreator.ChangeBackgroundColor.color.g;
+        eventTypeData.BackgroundColor[2] = EventTypeCreator.ChangeBackgroundColor.color.b;
+        eventTypeData.BackgroundColor[3] = EventTypeCreator.ChangeBackgroundColor.color.a;
+
+        eventTypeData.TextColor[0] = EventTypeCreator.ChangeTextColor.color.r;
+        eventTypeData.TextColor[1] = EventTypeCreator.ChangeTextColor.color.g;
+        eventTypeData.TextColor[2] = EventTypeCreator.ChangeTextColor.color.b;
+        eventTypeData.TextColor[3] = EventTypeCreator.ChangeTextColor.color.a;
+
+        GUIUtility.systemCopyBuffer = JsonUtility.ToJson(eventTypeData, false);
+    }
+
+    public void PasteEventType()
+    {
+        TimetableData.EventTypeData eventTypeData = JsonUtility.FromJson<TimetableData.EventTypeData>(GUIUtility.systemCopyBuffer);
+
+        EventTypeCreator.EventTypeNameInput.text = eventTypeData.TypeName + (eventTypeData.TypeName != "" ? TMP_Specials.clear : "");
+
+        EventTypeCreator.ChangeBackgroundColor.color =
+        EventTypeCreator.PreviewCell.BackgroundImage.color = new
+        (
+            eventTypeData.BackgroundColor[0],
+            eventTypeData.BackgroundColor[1],
+            eventTypeData.BackgroundColor[2],
+            eventTypeData.BackgroundColor[3]
+        );
+
+        
+        EventTypeCreator.ChangeTextColor.color = 
+        EventTypeCreator.PreviewCell.EventNameText.color =
+        EventTypeCreator.PreviewCell.Info1Text.color = 
+        EventTypeCreator.PreviewCell.Info2Text.color = new
+        (
+            eventTypeData.TextColor[0],
+            eventTypeData.TextColor[1],
+            eventTypeData.TextColor[2],
+            eventTypeData.TextColor[3]
+        );
+    }
+
+    public void CopyColorTheme()
+    {
+        SettingsData.CustomThemeData ThemeData = new();
+
+        ThemeData.ThemeName = ThemeCreator.PaletteNameInput.text.Replace(TMP_Specials.clear, "");
+
+        ThemeData.PrimaryColor[0] = ThemeCreator.PrimaryColorImage.color.r;
+        ThemeData.PrimaryColor[1] = ThemeCreator.PrimaryColorImage.color.g;
+        ThemeData.PrimaryColor[2] = ThemeCreator.PrimaryColorImage.color.b;
+        ThemeData.PrimaryColor[3] = ThemeCreator.PrimaryColorImage.color.a;
+
+        ThemeData.SecondaryColor[0] = ThemeCreator.SecondaryColorImage.color.r;
+        ThemeData.SecondaryColor[1] = ThemeCreator.SecondaryColorImage.color.g;
+        ThemeData.SecondaryColor[2] = ThemeCreator.SecondaryColorImage.color.b;
+        ThemeData.SecondaryColor[3] = ThemeCreator.SecondaryColorImage.color.a;
+
+        ThemeData.BackgroundColor[0] = ThemeCreator.BackgroundColorImage.color.r;
+        ThemeData.BackgroundColor[1] = ThemeCreator.BackgroundColorImage.color.g;
+        ThemeData.BackgroundColor[2] = ThemeCreator.BackgroundColorImage.color.b;
+        ThemeData.BackgroundColor[3] = ThemeCreator.BackgroundColorImage.color.a;
+
+        GUIUtility.systemCopyBuffer = JsonUtility.ToJson(ThemeData, false);
+    }
+
+    public void PasteColorTheme()
+    {
+        SettingsData.CustomThemeData ThemeData = JsonUtility.FromJson<SettingsData.CustomThemeData>(GUIUtility.systemCopyBuffer);
+
+        ThemeCreator.PaletteNameInput.text = ThemeData.ThemeName + (ThemeData.ThemeName != "" ? TMP_Specials.clear : "");
+        ThemeCreator.PalettePreview.PaletteNameText.text = ThemeData.ThemeName;
+
+        ThemeCreator.PalettePreview.PrimaryColorImage.color = ThemeCreator.PrimaryColorImage.color = new
+        (
+            ThemeData.PrimaryColor[0],
+            ThemeData.PrimaryColor[1],
+            ThemeData.PrimaryColor[2],
+            ThemeData.PrimaryColor[3]
+        );
+
+        ThemeCreator.PalettePreview.SecondaryColorImage.color = ThemeCreator.SecondaryColorImage.color = new
+        (
+            ThemeData.SecondaryColor[0],
+            ThemeData.SecondaryColor[1],
+            ThemeData.SecondaryColor[2],
+            ThemeData.SecondaryColor[3]
+        );
+
+        ThemeCreator.PalettePreview.BackgroundColorImage.color = ThemeCreator.BackgroundColorImage.color = new
+        (
+            ThemeData.BackgroundColor[0],
+            ThemeData.BackgroundColor[1],
+            ThemeData.BackgroundColor[2],
+            ThemeData.BackgroundColor[3]
+        );
     }
 }

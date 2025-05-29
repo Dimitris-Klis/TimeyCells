@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using System;
 
 [System.Serializable]
 public class SerializableList<T> // This makes it 10 times easier to store lists. Thank you c8theino!
@@ -62,6 +63,33 @@ public class TimetableData
                 TempCommonLength[0] = Weekday.TempCommonLength.Hours;
                 TempCommonLength[1] = Weekday.TempCommonLength.Minutes;
             }
+        }
+        public WeekDayData()
+        {
+            WeekDayName = "";
+            Days = 0;
+
+            StartTime[0] = 7;
+            StartTime[1] = 30;
+
+            CommonLength[0] = 1;
+            CommonLength[1] = 0;
+
+            ExtraOverrideLengthWeeks = -1;
+
+            OverrideDate[0] = DateTime.Today.Year;
+            OverrideDate[1] = DateTime.Today.Month;
+            OverrideDate[2] = DateTime.Today.Day;
+
+            OverrideLength = 0;
+            OverrideDelayWeeks = 0;
+            OverrideMode = 0;
+
+            TempStartTime[0] = 7;
+            TempStartTime[1] = 30;
+
+            TempCommonLength[0] = 1;
+            TempCommonLength[1] = 0;
         }
     }
 
@@ -247,6 +275,12 @@ public class TimetableData
                 children.list.Add(new(c.Children[i].Info));
             }
         }
+        public ColumnData()
+        {
+            children = new();
+            children.list = new();
+            IsMultirow = false;
+        }
     }
 
     [System.Serializable]
@@ -270,6 +304,13 @@ public class TimetableData
             BackgroundColor[1] = et.BackgroundColor.g;
             BackgroundColor[2] = et.BackgroundColor.b;
             BackgroundColor[3] = et.BackgroundColor.a;
+        }
+        public EventTypeData()
+        {
+            ItemID =0;
+            TypeName = "";
+            TextColor = new float[4] { 0, 0, 0, 1 };
+            BackgroundColor = new float[4] { 1, 1, 1, 1 };
         }
     }
 

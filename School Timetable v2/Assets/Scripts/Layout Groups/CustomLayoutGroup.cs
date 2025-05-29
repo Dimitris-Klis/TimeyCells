@@ -16,7 +16,7 @@ public class CustomLayoutGroup : MonoBehaviour
     public float CellSizeY;
     [Space]
     public float Spacing;
-    [ContextMenu("TryLayoutGroup")]
+    [ContextMenu("UpdateLayout")]
     public void UpdateLayout()
     {
         float wantedPos = 0;
@@ -47,7 +47,6 @@ public class CustomLayoutGroup : MonoBehaviour
                 {
                     wantedPos -= child.sizeDelta.y / 2;
                 }
-                wantedPos -= Spacing;
             }
             else
             {
@@ -59,7 +58,6 @@ public class CustomLayoutGroup : MonoBehaviour
                 {
                     wantedPos -= child.sizeDelta.y + (prevChild.sizeDelta.y - child.sizeDelta.y) / 2;
                 }
-                wantedPos -= Spacing;
             }
 
             if (AlignmentMode == AlignmentModes.Horizontal)
@@ -71,6 +69,14 @@ public class CustomLayoutGroup : MonoBehaviour
                 child.localPosition = Vector2.up * wantedPos;
             }
             prevChild = child;
+            if (AlignmentMode == AlignmentModes.Horizontal)
+            {
+                wantedPos += Spacing;
+            }
+            else
+            {
+                wantedPos -= Spacing;
+            }
         }
 
         // Centering
