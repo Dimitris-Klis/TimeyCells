@@ -4,6 +4,7 @@ using UnityEngine;
 using System.IO;
 using System.Linq;
 using System;
+using UnityEngine.UI;
 
 public class SaveManager : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class SaveManager : MonoBehaviour
     public DayTimeManager DayTimeManager;
     public EventManager EventManager;
     public ColorStylizer Stylizer;
+    public LocalizationSystem LocalizationSystem;
     [Space]
     public GameObject OpenOverlay;
     public TimetableButton TimetableButtonPrefab;
@@ -29,12 +31,14 @@ public class SaveManager : MonoBehaviour
     public S_ProgramData debug_olddata;
     public TimetableData debug_newdata;
     string LastTimetable;
+    public Image UnsavedIndicator;
 
     static bool saved;
 
-    public static void ChangesMade()
+    public void ChangesMade()
     {
         saved = false;
+        UnsavedIndicator.enabled = true;
     }
 
     char[] reservedChars =
@@ -482,6 +486,7 @@ public class SaveManager : MonoBehaviour
         fwrite.Close();
 
         saved = true;
+        UnsavedIndicator.enabled=false;
         LoadButtons();
     }
 
@@ -572,7 +577,10 @@ public class SaveManager : MonoBehaviour
         DayTimeManager.UpdateTimeIndexes();
 
         DayTimeManager.begin = true;
+        
         saved = true;
+        UnsavedIndicator.enabled = false;
+
         Stylizer.Setup();
     }
 
@@ -593,7 +601,11 @@ public class SaveManager : MonoBehaviour
 
         File.Delete(path);
 
-        if (timetable == TimetableEditor.TimetableNameText.text) saved = false;
+        if (timetable == TimetableEditor.TimetableNameText.text)
+        {
+            saved = false;
+            UnsavedIndicator.enabled = true;
+        }
         LoadButtons();
     }
 
@@ -634,7 +646,9 @@ public class SaveManager : MonoBehaviour
         DayTimeManager.UpdateWeekDays();
         DayTimeManager.UpdateTimeIndexes();
         DayTimeManager.begin = true;
+
         saved = true;
+        UnsavedIndicator.enabled = false;
 
         SaveSettings();
         Stylizer.Setup();
@@ -647,6 +661,7 @@ public class SaveManager : MonoBehaviour
         settingsData.UseEnglishFormat = DayTimeManager.EnglishFormat;
 
         settingsData.CurrentTheme = Stylizer.wantedPreset;
+        settingsData.SelectedLanguage = LocalizationSystem.SelectedLanguage;
 
         for (int i = 0; i < Stylizer.ColorStyles.Count; i++)
         {
@@ -705,6 +720,8 @@ public class SaveManager : MonoBehaviour
         
         Stylizer.wantedPreset = settingsData.CurrentTheme;
         Stylizer.Setup();
+        LocalizationSystem.Setup();
+        LocalizationSystem.SetLanguage(settingsData.SelectedLanguage);
     }
 
     void ensureDirectoryExists(string dir)

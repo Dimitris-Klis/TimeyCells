@@ -197,7 +197,7 @@ public class DayTimeManager : MonoBehaviour
             Highlight.SetActive(!TimetableEditor.instance.Editing);
             Highlight.transform.position = CurrentInfo.transform.position;
             HighlightRect.sizeDelta = CurrentInfo.GetComponent<RectTransform>().sizeDelta + (Vector2.one * 6.2f);
-            TimeLeftText.text = !TimetableEditor.instance.Editing ? "Next event in:" + timeUntilNextLesson.ToString(@"mm\:ss") : "";
+            TimeLeftText.text = !TimetableEditor.instance.Editing ? LocalizationSystem.instance.GetText(gameObject.name, "NEXT_EVENT")+ " " + timeUntilNextLesson.ToString(@"mm\:ss") : "";
         }
     }
 

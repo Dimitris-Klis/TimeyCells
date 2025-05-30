@@ -275,7 +275,7 @@ public class WeekdayEditor : MonoBehaviour
 
     public void Confirm()
     {
-        SaveManager.ChangesMade();
+        SaveManager.instance.ChangesMade();
         WeekDay wd = DayTimeManager.instance.WeekDays[WeekdayIndex];
 
         wd.DayName = WeekdayName.text;

@@ -41,8 +41,7 @@ public class PaletteCreator : MonoBehaviour
     public int ColorToChange = 0;
     public void OpenCreator(int ID)
     {
-        string verb = ID >= 0 ? "Edit" : "Create new";
-        TitleText.text = $"{verb} Theme";
+        TitleText.text = ID >= 0 ? LocalizationSystem.instance.GetText(gameObject.name, "EDIT_THEME") : LocalizationSystem.instance.GetText(gameObject.name, "CREATE_THEME");
 
         IDToModify = ID;
         DeleteButton.interactable = ID >= 0;
@@ -76,15 +75,18 @@ public class PaletteCreator : MonoBehaviour
         {
             case 0:
                 currentColor = BackgroundColorImage.color;
-                ColorEditor.instance.Open("Edit Background Color", currentColor, BackgroundColorImage, PalettePreview.BackgroundColorImage);
+                ColorEditor.instance.Open(
+                    LocalizationSystem.instance.GetText(gameObject.name, "COLOREDITOR_PROMPT_BACKGROUND"), currentColor, BackgroundColorImage, PalettePreview.BackgroundColorImage);
                 break;
             case 1:
                 currentColor = SecondaryColorImage.color;
-                ColorEditor.instance.Open("Edit Secondary Color", currentColor, SecondaryColorImage, PalettePreview.SecondaryColorImage);
+                ColorEditor.instance.Open(
+                    LocalizationSystem.instance.GetText(gameObject.name, "COLOREDITOR_PROMPT_SECONDARY"), currentColor, SecondaryColorImage, PalettePreview.SecondaryColorImage);
                 break;
             case 2:
                 currentColor = PrimaryColorImage.color;
-                ColorEditor.instance.Open("Edit Primary Color", currentColor, PrimaryColorImage, PalettePreview.PrimaryColorImage);
+                ColorEditor.instance.Open(
+                    LocalizationSystem.instance.GetText(gameObject.name, "COLOREDITOR_PROMPT_PRIMARY"), currentColor, PrimaryColorImage, PalettePreview.PrimaryColorImage);
                 break;
             default:
                 Debug.Log("Index out of range!");
@@ -99,11 +101,12 @@ public class PaletteCreator : MonoBehaviour
     {
         if (!confirm)
         {
-            ConfirmationManager.ButtonPrompt Cancel = new("Cancel", null);
-            ConfirmationManager.ButtonPrompt Confirm = new("Delete", delegate { Delete(true); });
+            ConfirmationManager.ButtonPrompt Cancel = new(LocalizationSystem.instance.GetText(gameObject.name, "BUTTONS_CANCEL"), null);
+            ConfirmationManager.ButtonPrompt Confirm = new(LocalizationSystem.instance.GetText(gameObject.name, "BUTTONS_DELETE"), delegate { Delete(true); });
             ConfirmationManager.Instance.ShowConfirmation
             (
-                "Are you sure?", $"Are you sure you want to delete the theme '{PaletteNameInput.text.Replace(TMP_Specials.clear, "")}'?",
+                LocalizationSystem.instance.GetText(gameObject.name, "PROMPT_TITLE_AREYOUSURE"),
+                LocalizationSystem.instance.GetText(gameObject.name, "PROMPT_DESC_THEME").Replace("{x}", PaletteNameInput.text.Replace(TMP_Specials.clear, "")),
                 Cancel, Confirm
             );
             return;

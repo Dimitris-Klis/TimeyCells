@@ -28,8 +28,7 @@ public class EventCreator : MonoBehaviour
     {
         DeleteButton.interactable = ID >= 0;
 
-        string verb = ID >= 0 ? "Edit" : "Create new";
-        TitleText.text = $"{verb} Event";
+        TitleText.text = ID >= 0 ? LocalizationSystem.instance.GetText(gameObject.name, "EDIT_EVENT") : LocalizationSystem.instance.GetText(gameObject.name, "CREATE_EVENT");
 
         IDToModify = ID;
 
@@ -131,7 +130,7 @@ public class EventCreator : MonoBehaviour
             a.EventType = EventManager.Instance.EventTypes[EventTypeDropdown.value].ItemID;
             a.Favourite = FavouriteToggle.isOn;
         }
-        SaveManager.ChangesMade();
+        SaveManager.instance.ChangesMade();
         EventManager.Instance.UpdateEventPreviews(true);
         EventManager.Instance.UpdateEventSelectors();
         TimetableEditor.instance.UpdateSelectorPreview();
@@ -141,11 +140,12 @@ public class EventCreator : MonoBehaviour
     {
         if (!confirm)
         {
-            ConfirmationManager.ButtonPrompt Cancel = new("Cancel", null);
-            ConfirmationManager.ButtonPrompt Confirm = new("Delete", delegate { Delete(true); });
+            ConfirmationManager.ButtonPrompt Cancel = new(LocalizationSystem.instance.GetText(gameObject.name, "BUTTONS_CANCEL"), null);
+            ConfirmationManager.ButtonPrompt Confirm = new(LocalizationSystem.instance.GetText(gameObject.name, "BUTTONS_DELETE"), delegate { Delete(true); });
             ConfirmationManager.Instance.ShowConfirmation
             (
-                "Are you sure?", $"Are you sure you want to delete the event '{EventNameInput.text.Replace(TMP_Specials.clear, "")}'?",
+                LocalizationSystem.instance.GetText(gameObject.name, "PROMPT_TITLE_AREYOUSURE"),
+                LocalizationSystem.instance.GetText(gameObject.name, "PROMPT_DESC_EVENT").Replace("{x}", EventNameInput.text.Replace(TMP_Specials.clear, "")),
                 Cancel, Confirm
             );
             return;

@@ -80,7 +80,7 @@ public class CellInfoEditor : MonoBehaviour
         TypeOverride.ClearOptions();
         TempTypeOverride.ClearOptions();
         TMP_Dropdown.OptionData[] dropdownOptions = new TMP_Dropdown.OptionData[EventManager.Instance.EventTypes.Count + 1];
-        dropdownOptions[0] = new("Don't Override");
+        dropdownOptions[0] = new($"{LocalizationSystem.instance.GetText(gameObject.name, "PROPERTIES_DONTOVERRIDE")}");
         for (int i = 1; i < dropdownOptions.Length; i++)
         {
             dropdownOptions[i] = new(EventManager.Instance.EventTypes[i - 1].TypeName);
@@ -651,7 +651,7 @@ public class CellInfoEditor : MonoBehaviour
             }
         }
 
-        SaveManager.ChangesMade();
+        SaveManager.instance.ChangesMade();
 
         DayTimeManager.instance.UpdateTimeIndexes();
         c.UpdateUI();

@@ -97,7 +97,7 @@ public class TimetableEditor : MonoBehaviour
     }
     public void EndEdit()
     {
-        SaveManager.ChangesMade();
+        SaveManager.instance.ChangesMade();
         Editing = false;
         TimetableNameText.gameObject.SetActive(!Editing);
         TimetableNameInput.gameObject.SetActive(Editing);

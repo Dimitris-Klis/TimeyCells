@@ -48,6 +48,7 @@ public class SettingsData
     
     public SerializableList<CustomThemeData> CustomThemes = new();
     public int CurrentTheme;
+    public int SelectedLanguage;
 
     public SettingsData()
     {

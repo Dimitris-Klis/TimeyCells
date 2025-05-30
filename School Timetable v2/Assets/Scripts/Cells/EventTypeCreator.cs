@@ -37,8 +37,7 @@ public class EventTypeCreator : MonoBehaviour
         DeleteButton.interactable = ID > 0; // Prevent the user from deleting the new or the default event type.
         EventTypeNameInput.interactable = ID != 0; // Prevent the user from changing the default event name.
 
-        string verb = ID >= 0 ? "Edit" : "Create new";
-        TitleText.text = $"{verb} Event Type";
+        TitleText.text = ID >= 0 ? LocalizationSystem.instance.GetText(gameObject.name, "EDIT_EVENT") : LocalizationSystem.instance.GetText(gameObject.name, "CREATE_EVENT");
 
         IDToModify = ID;
 
@@ -102,16 +101,20 @@ public class EventTypeCreator : MonoBehaviour
 
     public void ActivateColorEditor(bool ChangeBackground) // If it's not background, it's text.
     {
-        //ChangeTextButton.interactable = ChangeBackgroundButton.interactable = false;
         if (ChangeBackground)
         {
             Color currentColor = ChangeBackgroundColor.color;
-            ColorEditor.instance.Open("Edit Background Color", currentColor, ChangeBackgroundColor, PreviewCell.BackgroundImage);
+
+            ColorEditor.instance.Open(LocalizationSystem.instance.GetText(gameObject.name, "COLOREDITOR_PROMPT_BACKGROUND"), 
+                currentColor, ChangeBackgroundColor, PreviewCell.BackgroundImage);
         }
         else
         {
             Color currentColor = ChangeTextColor.color;
-            ColorEditor.instance.Open("Edit Text Color", currentColor, PreviewCell.EventNameText, PreviewCell.Info1Text, PreviewCell.Info2Text);
+
+            ColorEditor.instance.Open(LocalizationSystem.instance.GetText(gameObject.name, "COLOREDITOR_PROMPT_TEXT"), 
+                currentColor, PreviewCell.EventNameText, PreviewCell.Info1Text, PreviewCell.Info2Text);
+
             ColorEditor.instance.AssignNewImages(ChangeTextColor);
         }
     }
@@ -137,7 +140,7 @@ public class EventTypeCreator : MonoBehaviour
             EventManager.Instance.UpdateEventSelectors();
             TimetableEditor.instance.UpdateSelectorPreview();
         }
-        SaveManager.ChangesMade();
+        SaveManager.instance.ChangesMade();
         EventManager.Instance.UpdateEventTypePreviews(true);
         CloseCreator();
     }
@@ -147,11 +150,12 @@ public class EventTypeCreator : MonoBehaviour
         {
             if (!confirm)
             {
-                ConfirmationManager.ButtonPrompt Cancel = new("Cancel", null);
-                ConfirmationManager.ButtonPrompt Confirm = new("Delete", delegate { Delete(true); });
+                ConfirmationManager.ButtonPrompt Cancel = new(LocalizationSystem.instance.GetText(gameObject.name, "BUTTONS_CANCEL"), null);
+                ConfirmationManager.ButtonPrompt Confirm = new(LocalizationSystem.instance.GetText(gameObject.name, "BUTTONS_DELETE"), delegate { Delete(true); });
                 ConfirmationManager.Instance.ShowConfirmation
                 (
-                    "Are you sure?", $"Are you sure you want to delete the event type '{EventTypeNameInput.text.Replace(TMP_Specials.clear, "")}'?",
+                    LocalizationSystem.instance.GetText(gameObject.name, "PROMPT_TITLE_AREYOUSURE"),
+                    LocalizationSystem.instance.GetText(gameObject.name, "PROMPT_DESC_EVENTTYPE").Replace("{x}", EventTypeNameInput.text.Replace(TMP_Specials.clear, "")),
                     Cancel, Confirm
                 );
                 return;

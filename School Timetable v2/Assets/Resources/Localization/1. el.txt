@@ -1,0 +1,330 @@
+Language Name: Ελληνικά
+
+TABS_TITLES_TIMETABLE
+Πρόγραμμα
+
+TITLES_OPEN
+Άνοιγμα
+
+TABS_TITLES_EDIT_EVENTS
+Προβολή / Επεξεργασία: συμβάν
+
+TABS_TITLES_EDIT_EVENTTYPES
+View or edit: είδη συμβάν
+
+
+
+SUBTABS_TITLES_EDIT_EVENTS
+Συμβάν
+
+SUBTABS_TITLES_EDIT_EVENT_TYPES
+Είδη Συμβάν
+
+
+TABS_TITLES_SETTINGS
+Ρυθμίσεις
+
+TABS_TITLES_HELP
+Βοήθεια
+
+EDIT_THEMES
+Επεξεργασία χρωματοθεμάτων
+
+CUSTOMTHEMES_PROMPT
+Δημιουργήστε ένα ειδικό χρωματοθέμα, πατώντας το κουμπί '+'.
+
+
+CREATE_THEME
+Δημιουργία χρωματοθέματος
+
+EDIT_THEME
+Επεξεργασία χρωματοθέματος
+
+PROPERTIES_THEME_THEMENAME
+Όνομα χρωματοθέματος
+
+PROPERTIES_THEME_PRIMARYCOLOR
+Κύριο Χρώμα:
+
+PROPERTIES_THEME_SECONDARYCOLOR
+Δευτερεύων Χρώμα:
+
+PROPERTIES_THEME_BACKGROUNDCOLOR
+Χρώμα Φόντου:
+
+
+
+
+
+CREATE_EVENT
+Δημιουργία νέου Συμβάν
+
+EDIT_EVENT
+Επεξεργασία Συμβάν
+
+PROPERTIES_EVENT_EVENTNAME
+Όνομα Συμβάν
+
+PROPERTIES_EVENT_INFO1
+Λεπτομέριες 1
+
+PROPERTIES_EVENT_INFO2
+Λεπτομέριες 2
+
+PROPERTIES_EVENT_EVENTTYPE
+Είδος Συμβάν
+
+PROPERTIES_EVENT_FAVOURITE
+Αγαπημένο
+
+
+
+
+
+CREATE_EVENTTYPE
+Δημιουργία νέου Είδους συμβάν
+
+EDIT_EVENTTYPE
+Επεξεργασία Είδους συμβάν
+
+PROPERTIES_EVENTTYPE_EVENTTYPENAME
+Όνομα Είδους συμβάν
+
+PROPERTIES_EVENTTYPE_TEXTCOLOR
+Χρώμα Κειμένου:
+
+PROPERTIES_EVENTTYPE_BGCOLOR
+Χρώμα Φόντου:
+
+
+
+TITLES_EDIT_CELLINFO
+Επεξεργασία Κελιού
+
+
+PROPERTIES_CELLINFO_BASE
+Βάση:
+
+PROPERTIES_CELLINFO_TITLE_OVERRIDES
+Αντικαταστάσεις:
+
+PROPERTIES_DONTOVERRIDE
+Να μην αντικατασταθεί
+
+PROPERTIES_CELLINFO_FAVOURITE_OPTION2
+Όχι
+
+PROPERTIES_CELLINFO_FAVOURITE_OPTION3
+Ναι
+
+PROPERTIES_CELLINFO_STARTTIME
+Ώρα Έναρξης:
+
+PROPERTIES_CELLINFO_OVERRIDELENGTH
+Αντικατάσταση Διάρκειας:
+
+PROPERTIES_CELLINFO_LENGTH
+Διάρκεια:
+
+
+
+NORMALTAB
+Κανονικές Αλλαγές
+
+TEMPORARYTAB
+Προσωρινές Αλλαγές
+
+
+PROPERTIES_CELLINFO_TEMPORARYPROMPT
+Δημιουργία προσωρινού συμβάν:
+
+PROPERTIES_CELLINFO_TEMPORARYERROR
+Αυτή η γραμμή δεν έχει προσδιωρισμένη ημέρα!
+
+PROPERTIES_CELLINFO_OVERRIDEWEEKDELAY
+Καθυστέρηση προσωρινού συμβάν (Εβδομάδες):
+
+PROPERTIES_CELLINFO_OVERRIDEWEEKLENGTH
+Διάρκεια προσωρινού συμβάν (Εβδομάδες):
+
+
+
+
+TITLES_EDIT_WEEKDAY
+Επεξεργασία Ημέρας
+
+PROPERTIES_WEEKDAY_WEEKDAYNAME
+Όνομα Ημέρας
+
+PROPERTIES_WEEKDAY_DAYS
+Ημέρες:
+
+PROPERTIES_COMMON_LENGTH
+Κοινή Διάρκεια:
+
+PROPERTIES_WEEKDAY_TEMPORARYPROMPT
+Δημιουργία προσωρινής αντικατάστασης χρόνου:
+
+PROPERTIES_WEEKDAY_TEMPORARYERROR
+Αυτή η ημέρα δεν έχει προσδιωρισμένη ημέρα!
+
+PROPERTIES_WEEKDAY_TEMPSTARTTIME
+Προσωρινή Ώρα Έναρξης:
+
+PROPERTIES_WEEKDAY_OVERRIDESTARTTIME
+Αντικατάσταση Ώρας Έναρξης:
+
+PROPERTIES_WEEKDAY_TEMPCOMMONLENGTH
+Προσωρινή Κοινή Διάρκεια:
+
+PROPERTIES_WEEKDAY_OVERRIDECOMMONLENGTH
+Αντικατάσταση Κοινής Διάρκειας:
+
+DAYS_MON
+Δευ
+
+DAYS_TUE
+Τρι
+
+DAYS_WED
+Τετ
+
+DAYS_THU
+Πεμ
+
+DAYS_FRI
+Παρ
+
+DAYS_SAT
+Σαβ
+
+DAYS_SUN
+Κυρ
+
+
+
+TITLES_EDIT_LABEL
+Επεξεργασία Ετικέτας
+
+PROPERTIES_LABEL_CUSTOMLABEL
+Ειδική Ετικέτα:
+
+PROPERTIES_LABEL_NEWLABEL
+Ετικέτα
+
+PROPERTIES_LABEL_COUNTASINDEX
+Μετρά ως δείκτης:
+
+
+
+TITLES_TIMETABLE_SETTINGS
+Ρυθμίσεις Προγράμματος
+
+PROPERTIES_TIMETABLE_ADDCOLUMNS
+Πρόσθεση Στήλων
+
+PROPERTIES_TIMETABLE_ADDMULTIROWS
+Πρόσθεση Στήλων πολλαπλής γραμμής
+
+PROPERTIES_TIMETABLE_DELETECOLUMNS
+Διαγραφή Στήλων
+
+PROPERTIES_TIMETABLE_SWAPCOLUMNS
+Ανταλλαγή Στήλων
+
+
+
+PROPERTIES_TIMETABLE_ADDROWS
+Πρόσθεση Γραμμών
+
+PROPERTIES_TIMETABLE_DELETEROWS
+Διαγραφή Γραμμών
+
+PROPERTIES_TIMETABLE_SWAPROWS
+Ανταλλαγή Γραμμών
+
+
+
+TITLES_SELECT_EVENT
+Επιλογή Συμβάν:
+
+TITLES_EDIT
+Επεξεργασία
+
+
+WORDS_COLUMNS
+Στήλες
+
+WORDS_ROWS
+Γραμμές
+
+WORDS_THEME
+Χρωματοθέμα
+
+WORDS_TIME
+Χρόνος
+
+WORDS_LANGUAGE
+Γλώσσα
+
+WORDS_24H_FORMAT
+24ωρη Μορφή
+
+WORDS_ENGLISH_FORMAT
+Αγγλική Μορφή
+
+
+
+BUTTONS_CONFIRM
+Επιβεβαίωση
+
+BUTTONS_CANCEL
+Ακύρωση
+
+BUTTONS_BACK
+Πίσω
+
+BUTTONS_CREATE
+Δημιουργία
+
+BUTTONS_SAVE
+Save
+
+BUTTONS_DELETE
+Διαγραφή
+
+BUTTONS_SAVE_CONTINUE
+Αποθήκευση & Συνέχεια
+
+
+
+PROMPT_TITLE_AREYOUSURE
+Είστε σίγουροι;
+
+PROMPT_DESC_EVENT
+Είστε σίγουροι ότι θέλετε να διαγράψετε το συμβάν '{x}';
+
+PROMPT_DESC_EVENTTYPE
+Είστε σίγουροι ότι θέλετε να διαγράψετε το είδος συμβάν '{x}';
+
+PROMPT_DESC_THEME
+Είστε σίγουροι ότι θέλετε να διαγράψετε το χρωματοθέμα '{x}';
+
+
+
+COLOREDITOR_PROMPT_BACKGROUND
+Αλλαγή Χρώματος Φόντου:
+
+COLOREDITOR_PROMPT_TEXT
+Αλλαγή Χρώματος Κειμένου:
+
+COLOREDITOR_PROMPT_PRIMARY
+Αλλαγή Κύριου Χρώματος:
+
+COLOREDITOR_PROMPT_SECONDARY
+Αλλαγή Δευτερεύων Χρώματος:
+
+
+
+NEXT_EVENT
+Επόμενο συμβάν σε:
