@@ -114,6 +114,8 @@ public class WeekdayEditor : MonoBehaviour
             DayToggles[4].interactable = DayToggles[4].interactable && Fri == 0;
             DayToggles[5].interactable = DayToggles[5].interactable && Sat == 0;
             DayToggles[6].interactable = DayToggles[6].interactable && Sun == 0;
+
+            OverrideDate = wd.OverrideDate;
         }
     }
     public void ParseStartTime(string text)

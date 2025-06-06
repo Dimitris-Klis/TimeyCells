@@ -165,7 +165,10 @@ public class DayTimeManager : MonoBehaviour
             int weekdayindex = GetWeekDayIndex((int)DateTime.Now.DayOfWeek);
 
             Grid.CheckCellTempEvents();
-
+            for (int i = 0; i < WeekDays.Count; i++)
+            {
+                WeekDays[i].CheckExpirationDate();
+            }
             // If today has no events
             if (weekdayindex < 0)
             {
@@ -217,6 +220,10 @@ public class DayTimeManager : MonoBehaviour
         for (int i = 0; i < WeekDays.Count; i++)
         {
             WeekDayObject w = Instantiate(WeekDayPrefab, WeekDaysParent);
+
+            // Making sure that we're not editing.
+            w.selfButton.interactable = !TimetableEditor.instance.Editing;
+
             WeekDayPreviews.Add(w);
 
             w.WeekDayName.text = WeekDays[i].DayName;
@@ -250,8 +257,11 @@ public class DayTimeManager : MonoBehaviour
         int ColumnIndex = 1;
         for (int i = 0; i < Grid.ColumnsList.Count; i++)
         {
-            // TO DO: ADD A BUTTON TO THE OBJECT THAT ON CLICK: OPENS THE LABEL EDITOR AT THE INDEX OF i.
             TimeIndexObject ti = Instantiate(TimeIndexPrefab, TimeIndexesParent);
+            
+            // Making sure that we're not editing.
+            ti.button.interactable = !TimetableEditor.instance.Editing;
+
             TimeIndexPreviews.Add(ti);
             int LabelIndex = i;
             ti.button.onClick.AddListener(delegate { labelEditor.gameObject.SetActive(true); labelEditor.ActivateEditor(LabelIndex); });

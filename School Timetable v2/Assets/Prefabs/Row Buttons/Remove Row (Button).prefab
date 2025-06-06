@@ -204,7 +204,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_Colors.m_HighlightedColor.a
-      value: 0.4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_Colors.m_HighlightedColor.b
@@ -324,7 +324,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7530360307765310901, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_Name
-      value: Remove (Button)
+      value: Remove Row (Button)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:

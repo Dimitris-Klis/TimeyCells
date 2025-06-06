@@ -9,11 +9,11 @@ public class TMPLocalizer : MonoBehaviour
     public string key;
     public string extraText;
     // Start is called before the first frame update
-    IEnumerator Start()
-    {
-        yield return new WaitForSeconds(0.01f);
-        UpdateText();
-    }
+    //IEnumerator Start()
+    //{
+    //    yield return new WaitForSeconds(0.01f);
+    //    UpdateText();
+    //}
 
     public void UpdateText()
     {

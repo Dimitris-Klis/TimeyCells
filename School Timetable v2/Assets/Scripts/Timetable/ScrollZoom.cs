@@ -68,7 +68,7 @@ public class ScrollZoom : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         if (Input.mouseScrollDelta.y > 0)
         {
             Table.localScale += Vector3.one * ScrollSensitivity;
-            if(Table.localScale.x > MaxScale)
+            if (Table.localScale.x > MaxScale)
             {
                 Table.localScale = Vector3.one * MaxScale;
             }
@@ -77,11 +77,40 @@ public class ScrollZoom : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 Table.localPosition -= (Vector3)mousepos;
             }
         }
-        else if(Input.mouseScrollDelta.y < 0)
+        else if (Input.mouseScrollDelta.y < 0)
         {
             Table.localScale -= Vector3.one * ScrollSensitivity;
             if (Table.localScale.x < MinScale)
                 Table.localScale = Vector3.one * MinScale;
+        }
+        if (Input.touchCount != 2) return;
+        Touch touchZero = Input.GetTouch(0);
+        Touch touchOne = Input.GetTouch(1);
+
+        // Find the position in the previous frame of each touch
+        Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
+        Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
+
+        // Find the magnitude of the vector (distance) between the touches in each frame
+        float prevTouchDeltaMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
+        float touchDeltaMag = (touchZero.position - touchOne.position).magnitude;
+
+        // Find the difference in the distances between each frame
+        float deltaMagnitudeDiff = touchDeltaMag - prevTouchDeltaMag;
+
+        // Adjust the scale based on the pinch distance change
+        float scaleChange = deltaMagnitudeDiff * ScrollSensitivity * 0.01f; // scale it down for smoothness
+
+        Table.localScale += Vector3.one * scaleChange;
+
+        // Clamp the scale between min and max
+        if (Table.localScale.x > MaxScale)
+        {
+            Table.localScale = Vector3.one * MaxScale;
+        }
+        else if (Table.localScale.x < MinScale)
+        {
+            Table.localScale = Vector3.one * MinScale;
         }
     }
 }

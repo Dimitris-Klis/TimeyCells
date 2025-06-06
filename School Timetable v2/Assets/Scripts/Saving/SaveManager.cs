@@ -63,6 +63,7 @@ public class SaveManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        FilePath = Application.persistentDataPath + Path.AltDirectorySeparatorChar + "Save Data";
         if (!Application.isMobilePlatform)
         {
             StreamReader fread = new StreamReader(Application.streamingAssetsPath + Path.AltDirectorySeparatorChar + "ExtraProperties.json");
@@ -73,10 +74,8 @@ public class SaveManager : MonoBehaviour
             if (saveProperties.IsPortable)
             {
                 FilePath = System.AppDomain.CurrentDomain.BaseDirectory + Path.AltDirectorySeparatorChar + "Save Data";
-                return;
             }
         }
-        FilePath = Application.persistentDataPath + Path.AltDirectorySeparatorChar + "Save Data";
 
         // Load last opened timetable. If non exist, create a new timetable.
 
@@ -147,12 +146,13 @@ public class SaveManager : MonoBehaviour
         DayTimeManager.begin = false;
         if (!saved && checkSave)
         {
-            ConfirmationManager.ButtonPrompt Cancel = new("Cancel", null);
-            ConfirmationManager.ButtonPrompt Continue = new("Don't Save", delegate { PasteJsonAsTimetable(false); });
-            ConfirmationManager.ButtonPrompt Save = new("Save & Continue", delegate { SaveTimetable(); PasteJsonAsTimetable(false); });
+            ConfirmationManager.ButtonPrompt Cancel = new(LocalizationSystem.GetText(gameObject.name, "BUTTONS_CANCEL"), null);
+            ConfirmationManager.ButtonPrompt Continue = new(LocalizationSystem.GetText(gameObject.name, "BUTTONS_DONTSAVE"), delegate { PasteJsonAsTimetable(false); });
+            ConfirmationManager.ButtonPrompt Save = new(LocalizationSystem.GetText(gameObject.name, "BUTTONS_SAVECONTINUE"), delegate { SaveTimetable(); PasteJsonAsTimetable(false); });
 
 
-            ConfirmationManager.Instance.ShowConfirmation("Unsaved work!", "You have unsaved work! Would you like to save first?",
+            ConfirmationManager.Instance.ShowConfirmation(LocalizationSystem.GetText(gameObject.name, "WARNING_UNSAVED_TITLE"),
+                LocalizationSystem.GetText(gameObject.name, "WARNING_UNSAVED_DESC"),
                 Cancel, Continue, Save);
             return;
         }
@@ -492,16 +492,17 @@ public class SaveManager : MonoBehaviour
 
     public void LoadTimetable(string timetable, bool checkSave)
     {
-        ensureDirectoryExists(FilePath + TimetablesPath);
+        ensureDirectoryExists(FilePath + TimetablesPath + Path.AltDirectorySeparatorChar);
         DayTimeManager.begin = false;
         if (!saved && checkSave)
         {
-            ConfirmationManager.ButtonPrompt Cancel = new("Cancel", null);
-            ConfirmationManager.ButtonPrompt Continue = new("Don't Save", delegate { LoadTimetable(timetable, false); });
-            ConfirmationManager.ButtonPrompt Save = new("Save & Continue", delegate { SaveTimetable(); LoadTimetable(timetable, false); });
+            ConfirmationManager.ButtonPrompt Cancel = new(LocalizationSystem.GetText(gameObject.name, "BUTTONS_CANCEL"), null);
+            ConfirmationManager.ButtonPrompt Continue = new(LocalizationSystem.GetText(gameObject.name, "BUTTONS_DONTSAVE"), delegate { LoadTimetable(timetable, false); });
+            ConfirmationManager.ButtonPrompt Save = new(LocalizationSystem.GetText(gameObject.name, "BUTTONS_SAVECONTINUE"), delegate { SaveTimetable(); LoadTimetable(timetable, false); });
 
 
-            ConfirmationManager.Instance.ShowConfirmation("Unsaved work!", "You have unsaved work! Would you like to save first?",
+            ConfirmationManager.Instance.ShowConfirmation(LocalizationSystem.GetText(gameObject.name, "WARNING_UNSAVED_TITLE"),
+                LocalizationSystem.GetText(gameObject.name, "WARNING_UNSAVED_DESC"),
                 Cancel, Continue, Save);
             return;
         }
@@ -616,12 +617,13 @@ public class SaveManager : MonoBehaviour
         DayTimeManager.begin = false;
         if (!saved && checkSave)
         {
-            ConfirmationManager.ButtonPrompt Cancel = new("Cancel", null);
-            ConfirmationManager.ButtonPrompt Continue = new("Don't Save", delegate { LoadNewTimetable(false); });
-            ConfirmationManager.ButtonPrompt Save = new("Save and Continue", delegate { SaveTimetable(); LoadNewTimetable(false); });
-            
-            
-            ConfirmationManager.Instance.ShowConfirmation("Unsaved work!", "You have unsaved work! Would you like to save first?",
+            ConfirmationManager.ButtonPrompt Cancel = new(LocalizationSystem.GetText(gameObject.name, "BUTTONS_CANCEL"), null);
+            ConfirmationManager.ButtonPrompt Continue = new(LocalizationSystem.GetText(gameObject.name, "BUTTONS_DONTSAVE"), delegate { LoadNewTimetable(false); });
+            ConfirmationManager.ButtonPrompt Save = new(LocalizationSystem.GetText(gameObject.name, "BUTTONS_SAVECONTINUE"), delegate { SaveTimetable(); LoadNewTimetable(false); });
+
+
+            ConfirmationManager.Instance.ShowConfirmation(LocalizationSystem.GetText(gameObject.name, "WARNING_UNSAVED_TITLE"),
+                LocalizationSystem.GetText(gameObject.name, "WARNING_UNSAVED_DESC"),
                 Cancel, Continue, Save);
             return;
         }
@@ -656,6 +658,8 @@ public class SaveManager : MonoBehaviour
 
     public void SaveSettings()
     {
+        ensureDirectoryExists(FilePath);
+
         SettingsData settingsData = new SettingsData();
         settingsData.Use24HFormat = DayTimeManager._24hFormat;
         settingsData.UseEnglishFormat = DayTimeManager.EnglishFormat;
@@ -726,8 +730,7 @@ public class SaveManager : MonoBehaviour
 
     void ensureDirectoryExists(string dir)
     {
-        FileInfo fi = new FileInfo(dir);
-        if (!fi.Directory.Exists)
+        if (!Directory.Exists(dir))
         {
             Directory.CreateDirectory(dir);
         }

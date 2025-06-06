@@ -66,12 +66,15 @@ public class CellInfoEditor : MonoBehaviour
             tabs.SelectTab(0);
             TempPropertiesLayout.SetActive(false);
             TempPromptLayout.SetActive(true);
+            DeleteButton.SetActive(false);
         }
         else
         {
             tabs.SelectTab(1);
             TempPropertiesLayout.SetActive(true);
             TempPromptLayout.SetActive(false);
+            DeleteButton.SetActive(true);
+            OverrideDate = selectedInfo.OverrideDate;
         }
         originalEvent = selectedInfo.SelectedEventBase;
         //EventManager.Instance.ZoomHandler.enabled = false;
@@ -108,7 +111,7 @@ public class CellInfoEditor : MonoBehaviour
             LengthInputMinutes.text = commonLen.Minutes.ToString();
         }
 
-        if (selectedInfo.OverrideExtraLengthWeeks > -1)
+        if (selectedInfo.OverrideExtraLengthWeeks >= 0)
         {
             TempTypeOverride.SetValueWithoutNotify(selectedInfo.TemporaryOverride.EventType + 1);
             TempEventNameOverride.SetTextWithoutNotify(selectedInfo.TemporaryOverride.EventName);
@@ -284,7 +287,8 @@ public class CellInfoEditor : MonoBehaviour
         EventItem temp_e = EventManager.Instance.GetEvent(c.TemporaryBase);
         EventTypeItem temp_et = EventManager.Instance.GetEventType(temp_e.EventType);
 
-        BasePreview.EventNameText.text =  e.EventName;
+        // Base Preview
+        BasePreview.EventNameText.text = e.EventName;
         BasePreview.Info1Text.text = e.Info1;
         BasePreview.Info2Text.text = e.Info2;
 
@@ -298,20 +302,21 @@ public class CellInfoEditor : MonoBehaviour
 
         BasePreview.FavouriteImage.gameObject.SetActive(e.Favourite);
 
-        // Temp Override
-        TempBasePreview.EventNameText.text = MainPreview.EventNameText.text = e.EventName;
-        TempBasePreview.Info1Text.text = MainPreview.Info1Text.text = e.Info1;
-        TempBasePreview.Info2Text.text = MainPreview.Info2Text.text = e.Info2;
+
+        // Temp Base Preview
+        TempBasePreview.EventNameText.text = temp_e.EventName;
+        TempBasePreview.Info1Text.text = temp_e.Info1;
+        TempBasePreview.Info2Text.text = temp_e.Info2;
 
         if (temp_e.ItemID == 0) TempBasePreview.EventNameText.text = "None";
 
-        TempBasePreview.BackgroundImage.color = et.BackgroundColor;
+        TempBasePreview.BackgroundImage.color = temp_et.BackgroundColor;
 
-        TempBasePreview.EventNameText.color = et.TextColor;
-        TempBasePreview.Info1Text.color = et.TextColor;
-        TempBasePreview.Info2Text.color = et.TextColor;
+        TempBasePreview.EventNameText.color = temp_et.TextColor;
+        TempBasePreview.Info1Text.color = temp_et.TextColor;
+        TempBasePreview.Info2Text.color = temp_et.TextColor;
 
-        TempBasePreview.FavouriteImage.gameObject.SetActive(e.Favourite);
+        TempBasePreview.FavouriteImage.gameObject.SetActive(temp_e.Favourite);
 
 
         // Main Preview
@@ -354,6 +359,7 @@ public class CellInfoEditor : MonoBehaviour
         }
         else
         {
+
             MainPreview.EventNameText.text = temp_e.EventName;
             MainPreview.Info1Text.text = temp_e.Info1;
             MainPreview.Info2Text.text = temp_e.Info2;
@@ -362,6 +368,7 @@ public class CellInfoEditor : MonoBehaviour
             MainPreview.EventNameText.color = temp_et.TextColor;
             MainPreview.Info1Text.color = temp_et.TextColor;
             MainPreview.Info2Text.color = temp_et.TextColor;
+
             if(temp_e.ItemID != 0)
                 MainPreview.FavouriteImage.gameObject.SetActive(temp_e.Favourite);
             else
@@ -399,7 +406,7 @@ public class CellInfoEditor : MonoBehaviour
 
             if (TempTypeOverride.value - 1 >= 0)
             {
-                EventTypeItem etOverride = EventManager.Instance.EventTypes[TypeOverride.value - 1];
+                EventTypeItem etOverride = EventManager.Instance.EventTypes[TempTypeOverride.value - 1];
                 MainPreview.BackgroundImage.color = etOverride.BackgroundColor;
 
                 MainPreview.EventNameText.color = etOverride.TextColor;
@@ -560,13 +567,16 @@ public class CellInfoEditor : MonoBehaviour
 
 
             if (int.TryParse(LengthInput.text.Replace(TMP_Specials.clear, ""), out int length))
+            {
                 c.OverrideExtraLengthWeeks = length;
+            }
             else
+            {
                 c.OverrideExtraLengthWeeks = 0;
-
+            }
 
             WeekDay wd = DayTimeManager.instance.WeekDays[SelectedCellRow];
-            int dayOfWeek=6; // The cell info's day of week
+            int dayOfWeek = 6; // The cell info's day of week
             for (int i = 64; i > 1; i/=2)
             {
                 if (wd.Days / i % 2 == 1) break;

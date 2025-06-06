@@ -10,7 +10,7 @@ TABS_TITLES_EDIT_EVENTS
 Προβολή / Επεξεργασία: συμβάν
 
 TABS_TITLES_EDIT_EVENTTYPES
-View or edit: είδη συμβάν
+Προβολή / Επεξεργασία: είδη συμβάν
 
 
 
@@ -135,6 +135,7 @@ TEMPORARYTAB
 Προσωρινές Αλλαγές
 
 
+
 PROPERTIES_CELLINFO_TEMPORARYPROMPT
 Δημιουργία προσωρινού συμβάν:
 
@@ -166,7 +167,7 @@ PROPERTIES_WEEKDAY_TEMPORARYPROMPT
 Δημιουργία προσωρινής αντικατάστασης χρόνου:
 
 PROPERTIES_WEEKDAY_TEMPORARYERROR
-Αυτή η ημέρα δεν έχει προσδιωρισμένη ημέρα!
+Αυτή η ημέρα δεν έχει προσδιωρισμένες μέρες!
 
 PROPERTIES_WEEKDAY_TEMPSTARTTIME
 Προσωρινή Ώρα Έναρξης:
@@ -274,7 +275,6 @@ WORDS_ENGLISH_FORMAT
 Αγγλική Μορφή
 
 
-
 BUTTONS_CONFIRM
 Επιβεβαίωση
 
@@ -288,7 +288,13 @@ BUTTONS_CREATE
 Δημιουργία
 
 BUTTONS_SAVE
-Save
+Αποθήκευση
+
+BUTTONS_DONTSAVE
+Να μην αποθηκευθούν
+
+BUTTONS_SAVECONTINUE
+Αποθήκευση & Συνέχεια
 
 BUTTONS_DELETE
 Διαγραφή
@@ -310,8 +316,6 @@ PROMPT_DESC_EVENTTYPE
 PROMPT_DESC_THEME
 Είστε σίγουροι ότι θέλετε να διαγράψετε το χρωματοθέμα '{x}';
 
-
-
 COLOREDITOR_PROMPT_BACKGROUND
 Αλλαγή Χρώματος Φόντου:
 
@@ -325,6 +329,29 @@ COLOREDITOR_PROMPT_SECONDARY
 Αλλαγή Δευτερεύων Χρώματος:
 
 
+WORDS_NO
+Όχι
+
+WORDS_YES
+Ναι
 
 NEXT_EVENT
 Επόμενο συμβάν σε:
+
+WARNING_UNSAVED_TITLE
+Μη αποθηκευμένα δεδομένα!
+
+WARNING_UNSAVED_DESC
+Έχετε μη αποθηκευμένα δεδομένα! Θέλετε να τα αποθηκεύσετε;
+
+PHOTO_FORMATSTITLE
+Μορφή Προγράμματος:
+
+PHOTO_FORMATS_TIME
+Ωράριο
+
+PHOTO_FORMATS_INFO
+Λεπτομέριες
+
+TITLES_SHAREPHOTO
+Κοινοποίηση Εικόνας

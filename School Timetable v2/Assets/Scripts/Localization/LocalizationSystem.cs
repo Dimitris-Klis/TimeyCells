@@ -41,8 +41,8 @@ public class LocalizationSystem : MonoBehaviour
         {
             LanguageDropdown.ClearOptions();
             LanguageDropdown.AddOptions(Languages);
-            LanguageDropdown.RefreshShownValue();
             LanguageDropdown.SetValueWithoutNotify(0);
+            LanguageDropdown.RefreshShownValue();
         }
         else
         {
@@ -57,11 +57,6 @@ public class LocalizationSystem : MonoBehaviour
         int startIndex = 0;
         int endIndex;
 
-        //Unity is known to crash with infinite while loops. The failsafe is there to prevent this.
-        //Messing up the txt key-value formatting could also cause an infinite while loop, which is why I've kept the failsafe.
-        //If you feel confident, you can remove it.
-        int failsafe = 0;
-
         string key = "";
         string text = "";
 
@@ -69,7 +64,7 @@ public class LocalizationSystem : MonoBehaviour
         endIndex = language.IndexOf("\r\n");
         language = language.Remove(startIndex, endIndex + 2);
 
-        while (failsafe < 99 && language.Length > 0)
+        while (language.Length > 0)
         {
             //Obtaining Key
             endIndex = language.IndexOf("\r\n");
@@ -94,7 +89,8 @@ public class LocalizationSystem : MonoBehaviour
             //Add new keyValuePair to dictionary.
             stringPairs.Add(key, text);
 
-            failsafe++;
+            LanguageDropdown.SetValueWithoutNotify(langIndex);
+            LanguageDropdown.RefreshShownValue();
         }
         SelectedLanguage = langIndex;
         UpdateLocalizers();

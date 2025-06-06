@@ -126,7 +126,11 @@ Override Length:
 PROPERTIES_CELLINFO_LENGTH
 Length:
 
+WORDS_NO
+No
 
+WORDS_YES
+Yes
 
 NORMALTAB
 Normal
@@ -281,6 +285,12 @@ Confirm
 BUTTONS_CANCEL
 Cancel
 
+BUTTONS_DONTSAVE
+Don't Save
+
+BUTTONS_SAVECONTINUE
+Save & Continue
+
 BUTTONS_BACK
 Back
 
@@ -326,3 +336,21 @@ Change Secondary Color:
 
 NEXT_EVENT
 Next event in:
+
+WARNING_UNSAVED_TITLE
+Unsaved Work!
+
+WARNING_UNSAVED_DESC
+You have unsaved work! Would you like to save first?
+
+PHOTO_FORMATSTITLE
+Timetable Format:
+
+PHOTO_FORMATS_TIME
+Time
+
+PHOTO_FORMATS_INFO
+Info
+
+TITLES_SHAREPHOTO
+Share Photo

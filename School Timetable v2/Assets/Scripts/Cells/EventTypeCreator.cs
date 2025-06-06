@@ -37,7 +37,7 @@ public class EventTypeCreator : MonoBehaviour
         DeleteButton.interactable = ID > 0; // Prevent the user from deleting the new or the default event type.
         EventTypeNameInput.interactable = ID != 0; // Prevent the user from changing the default event name.
 
-        TitleText.text = ID >= 0 ? LocalizationSystem.instance.GetText(gameObject.name, "EDIT_EVENT") : LocalizationSystem.instance.GetText(gameObject.name, "CREATE_EVENT");
+        TitleText.text = ID >= 0 ? LocalizationSystem.instance.GetText(gameObject.name, "EDIT_EVENTTYPE") : LocalizationSystem.instance.GetText(gameObject.name, "CREATE_EVENTTYPE");
 
         IDToModify = ID;
 
