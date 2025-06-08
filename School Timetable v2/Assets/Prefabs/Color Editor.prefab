@@ -2541,8 +2541,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1614095318640174372}
-  - component: {fileID: 4059702102635282134}
   - component: {fileID: 4386824524189868308}
+  - component: {fileID: 3434167833015933200}
   m_Layer: 5
   m_Name: Cancel/Apply Buttons
   m_TagString: Untagged
@@ -2569,9 +2569,17 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 201.0175, y: 32.7973}
+  m_SizeDelta: {x: 201.01752, y: 32.797302}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &4059702102635282134
+--- !u!222 &4386824524189868308
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8522902807459305665}
+  m_CullTransparentMesh: 1
+--- !u!114 &3434167833015933200
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2597,14 +2605,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!222 &4386824524189868308
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8522902807459305665}
-  m_CullTransparentMesh: 1
 --- !u!1 &9175908244036847667
 GameObject:
   m_ObjectHideFlags: 0
@@ -3253,7 +3253,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7090316276618494025, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 82.9846
+      value: 82.984604
       objectReference: {fileID: 0}
     - target: {fileID: 7090316276618494025, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_SizeDelta.y

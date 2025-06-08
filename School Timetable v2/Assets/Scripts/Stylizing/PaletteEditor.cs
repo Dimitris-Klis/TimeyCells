@@ -54,6 +54,11 @@ public class PaletteEditor : MonoBehaviour
             p.PrimaryColorImage.color = presets[i].PrimaryColor;
         }
         Template.gameObject.SetActive(false);
+        StartCoroutine(RefreshMessage());
+    }
+    public IEnumerator RefreshMessage()
+    {
+        yield return new WaitForEndOfFrame();
         Message.SetActive(PalettesParent.childCount <= 2);
     }
 }

@@ -30,7 +30,7 @@ public class LabelEditor : MonoBehaviour
         }
         else
         {
-            CustomLabelInput.text = TMP_Specials.clear;
+            CustomLabelInput.text = "";
         }
     }
     public void IsCustomLabel(bool isTrue)

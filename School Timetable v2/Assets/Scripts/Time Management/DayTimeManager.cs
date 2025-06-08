@@ -113,6 +113,7 @@ public class DayTimeManager : MonoBehaviour
     }
     public bool isEmpty(int col, int weekday)
     {
+        if (weekday < 0) return true;
         int wantedIndex = weekday;
         if (Grid.ColumnsList[col].IsMultirow) wantedIndex = 0;
 
@@ -158,7 +159,9 @@ public class DayTimeManager : MonoBehaviour
     private void Update()
     {
         if (!begin) return;
-        if (DateTime.Now >= wantedTime) // Updating content every 1 system second.
+        long diff = (DateTime.Now - wantedTime).Ticks;
+        if (diff < 0) diff = -diff;
+        if (DateTime.Now >= wantedTime || diff > 30000000) // Updating content every 1 system second or if the difference is too big
         {
             wantedTime = DateTime.Now;
             wantedTime = wantedTime.AddTicks(-(wantedTime.Ticks % TimeSpan.TicksPerSecond)) + new TimeSpan(0, 0, 0, 0, 500);

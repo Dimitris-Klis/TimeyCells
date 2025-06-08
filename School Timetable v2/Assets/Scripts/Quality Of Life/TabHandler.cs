@@ -6,6 +6,7 @@ using UnityEngine.Events;
 
 public class TabHandler : MonoBehaviour
 {
+    public bool DefaultToZero = true;
     [System.Serializable]
     public class Tab
     {
@@ -16,6 +17,7 @@ public class TabHandler : MonoBehaviour
     public UnityEvent OnSelectTab;
     public void SelectTab(int index)
     {
+        
         if (index < 0 || index >= tabs.Length) return;
         for (int i = 0; i < tabs.Length; i++)
         {
@@ -26,7 +28,8 @@ public class TabHandler : MonoBehaviour
     }
     private void Start()
     {
-        SelectTab(0);
+        if(DefaultToZero)
+            SelectTab(0);
         for (int i = 0; i < tabs.Length; i++)
         {
             tabs[i].TabButton.onClick.RemoveAllListeners();

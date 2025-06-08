@@ -11,6 +11,7 @@ public class CellInfoEditor : MonoBehaviour
     public int SelectedCellColumn =-1;
     public int SelectedCellRow =-1;
     int originalEvent;
+    int originalTempEvent;
     public TimetableCell MainPreview;
     public TimetableCell BasePreview;
     [Space]
@@ -113,6 +114,7 @@ public class CellInfoEditor : MonoBehaviour
 
         if (selectedInfo.OverrideExtraLengthWeeks >= 0)
         {
+            originalTempEvent = selectedInfo.TemporaryBase;
             TempTypeOverride.SetValueWithoutNotify(selectedInfo.TemporaryOverride.EventType + 1);
             TempEventNameOverride.SetTextWithoutNotify(selectedInfo.TemporaryOverride.EventName);
             TempInfo1Override.SetTextWithoutNotify(selectedInfo.TemporaryOverride.Info1);
@@ -126,6 +128,9 @@ public class CellInfoEditor : MonoBehaviour
 
             DelayInput.SetTextWithoutNotify(selectedInfo.OverrideDelayWeeks.ToString() + TMP_Specials.clear);
             LengthInput.SetTextWithoutNotify(selectedInfo.OverrideExtraLengthWeeks.ToString() + TMP_Specials.clear);
+
+            TimeSpan temp_t = DayTimeManager.instance.GetCellStartTime(SelectedCellColumn, SelectedCellRow);
+            TempStartTimeInput.text = DayTimeManager.instance.FormatTime(temp_t);
 
             if (selectedInfo.TempOverrideCommonLength)
             {
@@ -178,21 +183,35 @@ public class CellInfoEditor : MonoBehaviour
         DelayInput.text = DelaySlider.value.ToString();
         LengthInput.text = LengthSlider.value.ToString();
 
-        TempLengthInputHours.text = "";
-        TempLengthInputMinutes.text = "";
+        GetSelectedInfo().TemporaryBase = 0;
+        
+        TimeSpan tempCommonLen = DayTimeManager.instance.GetCellCommonLength(SelectedCellRow);
+
+        TempLengthInputHours.text = tempCommonLen.Hours.ToString();
+        TempLengthInputMinutes.text = tempCommonLen.Minutes.ToString();
+
         TempTypeOverride.SetValueWithoutNotify(0);
         TempEventNameOverride.SetTextWithoutNotify("");
         TempInfo1Override.SetTextWithoutNotify("");
         TempInfo2Override.SetTextWithoutNotify("");
+
+        TimeSpan temp_t = DayTimeManager.instance.GetCellStartTime(SelectedCellColumn, SelectedCellRow);
+        TempStartTimeInput.text = DayTimeManager.instance.FormatTime(temp_t);
+
         TempFavouriteOverride.value = 0;
 
         TempOverrideTimeToggle.isOn = false;
+
+        UpdatePreviews();
     }
     public void DeleteTempOverride()
     {
         TempPromptLayout.SetActive(true);
         TempPropertiesLayout.SetActive(false);
         DeleteButton.SetActive(false);
+
+        GetSelectedInfo().TemporaryBase = 0;
+        UpdatePreviews();
     }
     public CellInfo GetSelectedInfo()
     {
@@ -278,6 +297,18 @@ public class CellInfoEditor : MonoBehaviour
 
         UpdatePreviews();
     }
+    public void ChangeInfoBase(int EventID, int TempEventID)
+    {
+        CellInfo c = GetSelectedInfo();
+
+        c.SelectedEventBase = EventID;
+        c.TemporaryBase = TempEventID;
+
+        c.UpdateUI();
+        TimetableEditor.instance.EventSelectorOverlay.SetActive(false);
+
+        UpdatePreviews();
+    }
     public void UpdatePreviews()
     {
         CellInfo c = GetSelectedInfo();
@@ -333,14 +364,14 @@ public class CellInfoEditor : MonoBehaviour
 
             MainPreview.FavouriteImage.gameObject.SetActive(e.Favourite);
 
-            if (!isNothing(EventNameOverride.text))
-                MainPreview.EventNameText.text = EventNameOverride.text;
+            if (!isNothing(EventNameOverride.text.Replace(TMP_Specials.clear, "")))
+                MainPreview.EventNameText.text = EventNameOverride.text.Replace(TMP_Specials.clear, "");
 
-            if (!isNothing(Info1Override.text))
-                MainPreview.Info1Text.text = Info1Override.text;
+            if (!isNothing(Info1Override.text.Replace(TMP_Specials.clear, "")))
+                MainPreview.Info1Text.text = Info1Override.text.Replace(TMP_Specials.clear, "");
 
-            if (!isNothing(Info2Override.text))
-                MainPreview.Info2Text.text = Info2Override.text;
+            if (!isNothing(Info2Override.text.Replace(TMP_Specials.clear, "")))
+                MainPreview.Info2Text.text = Info2Override.text.Replace(TMP_Specials.clear, "");
 
             if (TypeOverride.value - 1 >= 0)
             {
@@ -359,7 +390,6 @@ public class CellInfoEditor : MonoBehaviour
         }
         else
         {
-
             MainPreview.EventNameText.text = temp_e.EventName;
             MainPreview.Info1Text.text = temp_e.Info1;
             MainPreview.Info2Text.text = temp_e.Info2;
@@ -374,34 +404,34 @@ public class CellInfoEditor : MonoBehaviour
             else
                 MainPreview.FavouriteImage.gameObject.SetActive(e.Favourite);
 
-            if (!isNothing(TempEventNameOverride.text))
+            if (!isNothing(TempEventNameOverride.text.Replace(TMP_Specials.clear, "")))
             {
                 MainPreview.EventNameText.text = TempEventNameOverride.text;
             }
             else
             {
-                if (!isNothing(EventNameOverride.text))
-                    MainPreview.EventNameText.text = EventNameOverride.text;
+                if (!isNothing(EventNameOverride.text.Replace(TMP_Specials.clear, "")))
+                    MainPreview.EventNameText.text = EventNameOverride.text.Replace(TMP_Specials.clear, "");
             }
 
-            if (!isNothing(TempInfo1Override.text))
+            if (!isNothing(TempInfo1Override.text.Replace(TMP_Specials.clear, "")))
             {
-                    MainPreview.Info1Text.text = TempInfo1Override.text;
+                    MainPreview.Info1Text.text = TempInfo1Override.text.Replace(TMP_Specials.clear, "");
             }
             else
             {
-                if (!isNothing(Info1Override.text))
-                    MainPreview.Info1Text.text = Info1Override.text;
+                if (!isNothing(Info1Override.text.Replace(TMP_Specials.clear, "")))
+                    MainPreview.Info1Text.text = Info1Override.text.Replace(TMP_Specials.clear, "");
             }   
 
-            if (!isNothing(TempInfo2Override.text))
+            if (!isNothing(TempInfo2Override.text.Replace(TMP_Specials.clear, "")))
             {
-                MainPreview.Info2Text.text = TempInfo2Override.text;
+                MainPreview.Info2Text.text = TempInfo2Override.text.Replace(TMP_Specials.clear, "");
             }
             else
             {
-                if (!isNothing(Info2Override.text))
-                    MainPreview.Info2Text.text = Info2Override.text;
+                if (!isNothing(Info2Override.text.Replace(TMP_Specials.clear, "")))
+                    MainPreview.Info2Text.text = Info2Override.text.Replace(TMP_Specials.clear, "");
             }
 
             if (TempTypeOverride.value - 1 >= 0)
@@ -480,8 +510,7 @@ public class CellInfoEditor : MonoBehaviour
 
     public void Cancel()
     {
-        ChangeInfoBase(originalEvent);
-        //EventManager.Instance.ZoomHandler.enabled = true;
+        ChangeInfoBase(originalEvent, originalTempEvent);
         gameObject.SetActive(false);
     }
     public void Confirm()
@@ -505,6 +534,7 @@ public class CellInfoEditor : MonoBehaviour
             c.NewLength = len;
         }
 
+        // Overwriting start time.
         if (DayTimeManager.TryParseTime(StartTimeInput.text.Replace(TMP_Specials.clear, ""), out DateTime start))
         {
             if (SelectedCellColumn == 0)
@@ -605,17 +635,21 @@ public class CellInfoEditor : MonoBehaviour
             c.TempNewLength = templen;
         }
 
-        // Overwriting start time.
+        // Overwriting temp start time.
 
-        if (DayTimeManager.TryParseTime(StartTimeInput.text.Replace(TMP_Specials.clear, ""), out DateTime tempstart))
+        if (DayTimeManager.TryParseTime(TempStartTimeInput.text.Replace(TMP_Specials.clear, ""), out DateTime tempstart))
         {
             if (SelectedCellColumn == 0)
             {
                 DayTimeManager.instance.WeekDays[SelectedCellRow].OverrideDate = OverrideDate;
                 DayTimeManager.instance.WeekDays[SelectedCellRow].OverrideDelayWeeks = c.OverrideDelayWeeks;
                 DayTimeManager.instance.WeekDays[SelectedCellRow].OverrideExtraLengthWeeks = c.OverrideExtraLengthWeeks;
-                DayTimeManager.instance.WeekDays[SelectedCellRow].TempStartTime = tempstart.TimeOfDay;
+                
+                if(DayTimeManager.instance.WeekDays[SelectedCellRow].OverrideMode == 0 ||
+                    DayTimeManager.instance.WeekDays[SelectedCellRow].OverrideMode == 2)
+                    DayTimeManager.instance.WeekDays[SelectedCellRow].OverrideMode++;
 
+                DayTimeManager.instance.WeekDays[SelectedCellRow].TempStartTime = tempstart.TimeOfDay;
             }
             else
             {
@@ -631,9 +665,9 @@ public class CellInfoEditor : MonoBehaviour
                         // Instead of using Mathf.Abs, we manually make the value absolute to avoid losing any bits, since this is a long.
                         if (ticks < 0) ticks = -ticks;
 
-                        PrevInfo.NewLength = new TimeSpan(ticks);
+                        PrevInfo.TempNewLength = new TimeSpan(ticks);
 
-                        PrevInfo.OverrideCommonLength = PrevInfo.NewLength != DayTimeManager.instance.GetCellCommonLength(SelectedCellRow);
+                        PrevInfo.OverrideCommonLength = PrevInfo.TempNewLength != DayTimeManager.instance.GetCellCommonLength(SelectedCellRow);
 
                         PrevInfo.OverrideDate = OverrideDate;
                         PrevInfo.OverrideDelayWeeks = c.OverrideDelayWeeks;
@@ -652,11 +686,15 @@ public class CellInfoEditor : MonoBehaviour
 
                     PrevInfo.TempNewLength = new TimeSpan(ticks);
 
-                    PrevInfo.OverrideCommonLength = PrevInfo.TempNewLength != DayTimeManager.instance.GetCellCommonLength(SelectedCellRow);
 
-                    PrevInfo.OverrideDate = OverrideDate;
-                    PrevInfo.OverrideDelayWeeks = c.OverrideDelayWeeks;
-                    PrevInfo.OverrideExtraLengthWeeks = c.OverrideExtraLengthWeeks;
+                    PrevInfo.TempOverrideCommonLength = PrevInfo.TempNewLength != DayTimeManager.instance.GetCellCommonLength(SelectedCellRow);
+
+                    if (PrevInfo.TempNewLength != DayTimeManager.instance.GetCellCommonLength(SelectedCellRow))
+                    {
+                        PrevInfo.OverrideDate = OverrideDate;
+                        PrevInfo.OverrideDelayWeeks = c.OverrideDelayWeeks;
+                        PrevInfo.OverrideExtraLengthWeeks = c.OverrideExtraLengthWeeks;
+                    }
                 }
             }
         }

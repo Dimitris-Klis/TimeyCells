@@ -246,7 +246,7 @@ public class PhotoManager : MonoBehaviour
     {
         #if UNITY_ANDROID
             Setup();
-
+            
             // Temporarily storing the Texture2D as a png in the cache path.
             string imagePath = Path.Combine(Application.temporaryCachePath, "capture.png");
             File.WriteAllBytes(imagePath, PhotoTex.EncodeToPNG());

@@ -108,7 +108,7 @@ public class SaveManager : MonoBehaviour
             b.Text.text = filename;
 
             string f = filename;
-            b.Self.onClick.AddListener(delegate {LoadTimetable(f, true); OpenOverlay.gameObject.SetActive(false); });
+            b.Self.onClick.AddListener(delegate {LoadTimetable(f, true); });
             b.DeleteButton.onClick.AddListener(delegate { DeleteTimetable(f, false); });
             Buttons.Add(b);
         }
@@ -532,6 +532,7 @@ public class SaveManager : MonoBehaviour
         DayTimeManager.instance.WeekDays.Clear();
         DayTimeManager.instance.TimeLabels.Clear();
         EventManager.EventTypes.Clear();
+        EventManager.Events.Clear();
 
         // We also store the colors of the Default event, so we call this before IntializingLists.
         for (int i = 0; i < data.EventTypes.list.Count; i++)
@@ -545,7 +546,6 @@ public class SaveManager : MonoBehaviour
         {
             EventManager.Events.Add(data.Events.list[i]);
         }
-
 
         DayTimeManager.Grid.Columns = data.Columns.list.Count;
         DayTimeManager.Grid.Rows = data.Weekdays.list.Count;
@@ -583,6 +583,11 @@ public class SaveManager : MonoBehaviour
         UnsavedIndicator.enabled = false;
 
         Stylizer.Setup();
+
+        EventManager.UpdateEventPreviews(false);
+        EventManager.UpdateEventTypePreviews(true);
+
+        OpenOverlay.gameObject.SetActive(false);
     }
 
     public void DeleteTimetable(string timetable, bool confirm)
@@ -627,8 +632,11 @@ public class SaveManager : MonoBehaviour
                 Cancel, Continue, Save);
             return;
         }
+        DayTimeManager.instance.WeekDays.Clear();
+        DayTimeManager.instance.TimeLabels.Clear();
+        EventManager.EventTypes.Clear();
+        EventManager.Events.Clear();
         EventManager.InitializeLists();
-        DayTimeManager.WeekDays.Clear();
 
         // Default week days:                 SFTWTMS
         // 0000001 = 01 Sun -> Since DateTime.DayOfWeek uses Sunday as 0, I too have to use sunday as 0.
@@ -666,6 +674,8 @@ public class SaveManager : MonoBehaviour
 
         settingsData.CurrentTheme = Stylizer.wantedPreset;
         settingsData.SelectedLanguage = LocalizationSystem.SelectedLanguage;
+
+        settingsData.LastOpenedTimetable = LastTimetable;
 
         for (int i = 0; i < Stylizer.ColorStyles.Count; i++)
         {
@@ -755,5 +765,21 @@ public class SaveManager : MonoBehaviour
             }
         }
         return newString;
+    }
+
+    public void Quit(bool checkSave)
+    {
+        if (!saved && checkSave)
+        {
+            ConfirmationManager.ButtonPrompt Cancel = new(LocalizationSystem.GetText(gameObject.name, "BUTTONS_CANCEL"), null);
+            ConfirmationManager.ButtonPrompt Continue = new(LocalizationSystem.GetText(gameObject.name, "BUTTONS_DONTSAVE"), delegate { Quit(false); });
+            ConfirmationManager.ButtonPrompt Save = new(LocalizationSystem.GetText(gameObject.name, "BUTTONS_SAVEQUIT"), delegate { SaveTimetable(); Quit(false); });
+
+            ConfirmationManager.Instance.ShowConfirmation(LocalizationSystem.GetText(gameObject.name, "WARNING_UNSAVED_TITLE"),
+                LocalizationSystem.GetText(gameObject.name, "WARNING_UNSAVED_DESC"),
+                Cancel, Continue, Save);
+            return;
+        }
+        Application.Quit();
     }
 }

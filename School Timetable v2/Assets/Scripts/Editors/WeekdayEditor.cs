@@ -42,9 +42,11 @@ public class WeekdayEditor : MonoBehaviour
         
         WeekDay SelectedWeekday = DayTimeManager.instance.WeekDays[index];
 
-        if (SelectedWeekday.OverrideExtraLengthWeeks > -1)
+        OverrideDate = SelectedWeekday.OverrideDate;
+
+        TabHandler.SelectTab(SelectedWeekday.OverrideExtraLengthWeeks >= 0 ? 1 : 0);
+        if (SelectedWeekday.OverrideExtraLengthWeeks >=0)
         {
-            TabHandler.SelectTab(1);
             Override.SetActive(true);
             DeleteOverrideButton.SetActive(true);
             Create.SetActive(false);
@@ -63,10 +65,13 @@ public class WeekdayEditor : MonoBehaviour
         }
         else
         {
-            TabHandler.SelectTab(0);
+            Override.SetActive(false);
+            DeleteOverrideButton.SetActive(false);
+            Create.SetActive(true);
+            CreateButton.SetActive(SelectedWeekday.Days != 0);
+            ErrorText.SetActive(SelectedWeekday.Days == 0);
         }
-        CreateButton.SetActive(SelectedWeekday.Days != 0);
-        ErrorText.SetActive(SelectedWeekday.Days == 0);
+        
 
         WeekdayName.text = WeekdayPreview.WeekDayName.text = SelectedWeekday.DayName;
         StartTimeField.text = DayTimeManager.instance.FormatTime(SelectedWeekday.StartTime);
@@ -82,6 +87,7 @@ public class WeekdayEditor : MonoBehaviour
         DayToggles[5].interactable = true;
         DayToggles[6].interactable = true;
 
+        // Checking which days are taken by other weekdays.
         for (int i = 0; i < DayTimeManager.instance.WeekDays.Count; i++)
         {
             WeekDay wd = DayTimeManager.instance.WeekDays[i];
@@ -114,8 +120,6 @@ public class WeekdayEditor : MonoBehaviour
             DayToggles[4].interactable = DayToggles[4].interactable && Fri == 0;
             DayToggles[5].interactable = DayToggles[5].interactable && Sat == 0;
             DayToggles[6].interactable = DayToggles[6].interactable && Sun == 0;
-
-            OverrideDate = wd.OverrideDate;
         }
     }
     public void ParseStartTime(string text)
@@ -257,7 +261,9 @@ public class WeekdayEditor : MonoBehaviour
         DeleteOverrideButton.SetActive(true);
         Create.SetActive(false);
         OverrideDate = DateTime.Today;
-        
+
+        TempCommonLengthToggle.isOn = false;
+        TempStartTimeToggle.isOn = false;
 
         WeekDay wd = DayTimeManager.instance.WeekDays[WeekdayIndex];
 
@@ -306,8 +312,13 @@ public class WeekdayEditor : MonoBehaviour
 
         if (Override.activeSelf && (TempCommonLengthToggle.isOn || TempStartTimeToggle.isOn))
         {
+            wd.OverrideMode = 0;
+
             if (TempStartTimeToggle.isOn) wd.OverrideMode++;
-            if (TempCommonLengthToggle.isOn) wd.OverrideMode++;
+            if (TempCommonLengthToggle.isOn) wd.OverrideMode+=2;
+
+            
+            wd.OverrideDate = OverrideDate;
 
             int dayOfWeek = 6; // The cell info's day of week
             for (int i = 64; i > 1; i /= 2)
@@ -315,8 +326,6 @@ public class WeekdayEditor : MonoBehaviour
                 if (wd.Days / i % 2 == 1) break;
                 dayOfWeek--;
             }
-
-            wd.OverrideDate = OverrideDate;
             
             if (dayOfWeek >= (int)wd.OverrideDate.DayOfWeek)
             {
@@ -334,14 +343,37 @@ public class WeekdayEditor : MonoBehaviour
 
 
             if (int.TryParse(LengthInput.text.Replace(TMP_Specials.clear, ""), out int length))
+            {
                 wd.OverrideExtraLengthWeeks = length;
+            }
+                
             else
                 wd.OverrideExtraLengthWeeks = 0;
+
+            if (TempStartTimeToggle.isOn)
+            {
+                if (DayTimeManager.TryParseTime(TempStartTimeField.text.Replace(TMP_Specials.clear, ""), out DateTime tempresult))
+                {
+                    wd.TempStartTime = tempresult.TimeOfDay;
+                }
+            }
+
+            if (TempCommonLengthToggle.isOn)
+            {
+                string temphours = TempCommonLengthFieldHours.text.Replace(TMP_Specials.clear, "");
+                string tempmins = TempCommonLengthFieldMinutes.text.Replace(TMP_Specials.clear, "");
+                if (DayTimeManager.TryParseLength(temphours, tempmins, out TimeSpan tempresult2))
+                {
+                    wd.TempCommonLength = tempresult2;
+                }
+            }
         }
         else
         {
             wd.OverrideExtraLengthWeeks = -1;
         }
+
+        DayTimeManager.instance.UpdateWeekDays();
 
         gameObject.SetActive(false);
     }

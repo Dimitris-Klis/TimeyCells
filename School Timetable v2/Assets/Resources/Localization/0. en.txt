@@ -291,6 +291,9 @@ Don't Save
 BUTTONS_SAVECONTINUE
 Save & Continue
 
+BUTTONS_SAVEQUIT
+Save & Quit
+
 BUTTONS_BACK
 Back
 

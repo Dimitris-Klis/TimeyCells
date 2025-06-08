@@ -60,6 +60,8 @@ public class WeekDay
     {
         if (OverrideExtraLengthWeeks >= 0 && DateTime.Now > OverrideDate.AddDays(OverrideDelayWeeks * 7 + OverrideExtraLengthWeeks * 7 + OverrideLength).AddHours(23).AddMinutes(59))
         {
+            
+            Debug.Log(DayName + ": " + OverrideDate.AddDays(OverrideDelayWeeks * 7 + OverrideExtraLengthWeeks * 7 + OverrideLength).AddHours(23).AddMinutes(59).Date);
             OverrideExtraLengthWeeks = -1;
         }
     }

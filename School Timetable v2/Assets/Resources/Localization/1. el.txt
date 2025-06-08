@@ -296,6 +296,9 @@ BUTTONS_DONTSAVE
 BUTTONS_SAVECONTINUE
 Αποθήκευση & Συνέχεια
 
+BUTTONS_SAVEQUIT
+Αποθήκευση & Έξοδος
+
 BUTTONS_DELETE
 Διαγραφή
 
