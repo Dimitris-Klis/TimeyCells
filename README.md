@@ -1,10 +1,11 @@
-# TimeyCells Documentation
+# TimeyCells
 ### By Dimitrios Klis (aka. Jimm)
-
+---
+# User Manual
 ## Table of Contents
 - 01: [Introduction](#introduction)<br/>
 
-- 02: [Events, Event Types](#events,-event-types)<br/>
+- 02: [Events, Event Types](#events-event-types)<br/>
   - [Creating Event Types](#creating-event-types)<br/>
   - [Editing Event Types](#editing-event-types)<br/>
   - [Creating Events](#creating-events)<br/>
@@ -12,8 +13,8 @@
 
 - 03: [Editing your timetable](#editing-your-timetable)<br/>
   - [Renaming your timetable](#renaming-your-timetable)<br/>
-  - [Adding/Deleting Columns & Multirows](#adding/deleting-columns-&-multirows)<br/>
-  - [Adding/Deleting Rows](#adding/deleting-rows)<br/>
+  - [Adding/Deleting Columns & Multirows](#addingdeleting-columns--multirows)<br/>
+  - [Adding/Deleting Rows](#addingdeleting-rows)<br/>
   - [Assigning events to your timetable](#assigning-events-to-your-timetable)<br/>
   - [Swapping Columns](#swapping-columns)<br/>
   - [Swapping Rows](#swapping-rows)<br/>
@@ -27,12 +28,12 @@
   - [Creating Temporary Cells](#creating-temporary-cells)<br/>
   - [Deleting Temporary Overrides](#deleting-temporary-overrides)<br/>
 
-- 05: [Saving, Loading & Creating Timetables](#saving,-loading-&-creating-timetables)<br/>
+- 05: [Saving, Loading & Creating Timetables](#saving-loading--creating-timetables)<br/>
   - [Saving your work](#saving-your-work)<br/>
   - [Loading a timetable](#loading-a-timetable)<br/>
   - [Creating a new timetable](#creating-a-new-timetable)<br/>
 
-- 06: [Copying & Pasting Data](#copying-&-pasting-data)<br/>
+- 06: [Copying & Pasting Data](#copying--pasting-data)<br/>
 
 - 07: [Backwards Compatibility](#backwards-compatibility)<br/>
 
@@ -45,7 +46,7 @@
   - [Language](#language)<br/>
   - [Themes](#themes)<br/>
 
-- 10: [Portable Mode (PC Only)](#portable-mode-(pc-only))<br/><br/>
+- 10: [Portable Mode (PC Only)](#portable-mode-pc-only)<br/><br/>
 
 ---
 ## Introduction:
