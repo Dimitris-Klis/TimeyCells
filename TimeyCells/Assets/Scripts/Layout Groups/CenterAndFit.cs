@@ -10,6 +10,7 @@ public class CenterAndFit : MonoBehaviour
     public RectTransform SelfRect;
     [Space]
     public float Spacing;
+    public bool Center = true;
     [ContextMenu("UpdateLayout")]
     public void UpdateLayout()
     {
@@ -74,13 +75,7 @@ public class CenterAndFit : MonoBehaviour
         }
         totalSize += Spacing * (transform.childCount - 1);
 
-        foreach (RectTransform child in transform)
-        {
-            if (AlignmentMode == AlignmentModes.Horizontal)
-                child.localPosition -= Vector3.right * totalSize / 2;
-            else
-                child.localPosition += Vector3.up * totalSize / 2;
-        }
+        
 
         // Fit to content
         if (AlignmentMode == AlignmentModes.Horizontal)
@@ -91,5 +86,25 @@ public class CenterAndFit : MonoBehaviour
         {
             SelfRect.sizeDelta = new(SelfRect.sizeDelta.x, totalSize);
         }
+
+        if (!Center) return;
+
+        foreach (RectTransform child in transform)
+        {
+            if (AlignmentMode == AlignmentModes.Horizontal)
+                child.localPosition -= Vector3.right * totalSize / 2;
+            else
+                child.localPosition += Vector3.up * totalSize / 2;
+        }
+    }
+    public void UpdateLayoutLate()
+    {
+        StartCoroutine(UpdateLayoutAtLastFrame());
+    }
+    // This doesn't work! We need to implement a special layout group for the help section!
+    IEnumerator UpdateLayoutAtLastFrame()
+    {
+        yield return new WaitForSeconds(.01f);
+        UpdateLayout();
     }
 }
