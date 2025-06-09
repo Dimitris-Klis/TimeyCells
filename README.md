@@ -55,7 +55,7 @@ _TimeyCells_ is a new version of my previous app, _School Timetable_. The origin
 You can create events, event types, cells which span across multiple rows and swap rows and columns. You can even change the colors of the application to one of the predefined palettes or make your own color palette! You can specify the length or the start time of a specific lesson or event. Finally,  you can temporarily overwrite the event that will occur on a specific day of the week! You're also informed of the current event that is taking place and how much time is left for the next event to occur.
 <br/><br/>
 ## Events, Event Types:
-In order to create events and event types, you need to swap to the 'Edit Events' tab:<br/>
+In order to create events and event types, you need to swap to the `Edit Events` tab:<br/>
 ![01  Burger menu - create event type (with transition)](https://github.com/user-attachments/assets/6b38371b-b96c-4b45-a96b-239f1610bc73)
 <br/><br/>
 ### Creating Event Types:
@@ -205,6 +205,7 @@ This button will activate android's share sheet, which will look something like 
 ![Android Share Sheet](https://github.com/user-attachments/assets/0b038864-84f6-47aa-b176-0271eef34abe)
 <br/><br/>
 ## Settings
+![02  Burger menu - Settings](https://github.com/user-attachments/assets/2f70b3b6-e246-4fa0-8705-1423c7ef4a73)
 ### Time Format:
 You can set the time to a 24 hour format with this toggle:<br/>
 ![24h Toggle](https://github.com/user-attachments/assets/59c68a20-9a86-44e3-8db7-1e9e9b19713d)
@@ -228,3 +229,7 @@ To enable Portable Mode, you must modify `ExtraProperties.json`, which is locate
 `"IsPortable": false` with `"IsPortable": true`.
 <br/><br/>
 When Portable Mode is enabled, all files will be stored in the application's directory instead of the PC's `%AppData%`. This is useful if you prefer to store the app inside a USB or a hard drive that you connect to multiple computers.
+<br/><br/>
+## Help
+The app has a similar user manual built in. To access it, you need to swap to the `Help` tab:<br/>
+![03  Burger menu - Help](https://github.com/user-attachments/assets/48549294-ea8c-424b-a61a-bdcd9f1e4836)
