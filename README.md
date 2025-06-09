@@ -1,10 +1,11 @@
-# TimeyCells Documentation
+# TimeyCells
 ### By Dimitrios Klis (aka. Jimm)
-
+---
+# User Manual
 ## Table of Contents
 - 01: [Introduction](#introduction)<br/>
 
-- 02: [Events, Event Types](#events,-event-types)<br/>
+- 02: [Events, Event Types](#events-event-types)<br/>
   - [Creating Event Types](#creating-event-types)<br/>
   - [Editing Event Types](#editing-event-types)<br/>
   - [Creating Events](#creating-events)<br/>
@@ -12,8 +13,8 @@
 
 - 03: [Editing your timetable](#editing-your-timetable)<br/>
   - [Renaming your timetable](#renaming-your-timetable)<br/>
-  - [Adding/Deleting Columns & Multirows](#adding/deleting-columns-&-multirows)<br/>
-  - [Adding/Deleting Rows](#adding/deleting-rows)<br/>
+  - [Adding/Deleting Columns & Multirows](#addingdeleting-columns--multirows)<br/>
+  - [Adding/Deleting Rows](#addingdeleting-rows)<br/>
   - [Assigning events to your timetable](#assigning-events-to-your-timetable)<br/>
   - [Swapping Columns](#swapping-columns)<br/>
   - [Swapping Rows](#swapping-rows)<br/>
@@ -27,12 +28,12 @@
   - [Creating Temporary Cells](#creating-temporary-cells)<br/>
   - [Deleting Temporary Overrides](#deleting-temporary-overrides)<br/>
 
-- 05: [Saving, Loading & Creating Timetables](#saving,-loading-&-creating-timetables)<br/>
+- 05: [Saving, Loading & Creating Timetables](#saving-loading--creating-timetables)<br/>
   - [Saving your work](#saving-your-work)<br/>
   - [Loading a timetable](#loading-a-timetable)<br/>
   - [Creating a new timetable](#creating-a-new-timetable)<br/>
 
-- 06: [Copying & Pasting Data](#copying-&-pasting-data)<br/>
+- 06: [Copying & Pasting Data](#copying--pasting-data)<br/>
 
 - 07: [Backwards Compatibility](#backwards-compatibility)<br/>
 
@@ -45,7 +46,7 @@
   - [Language](#language)<br/>
   - [Themes](#themes)<br/>
 
-- 10: [Portable Mode (PC Only)](#portable-mode-(pc-only))<br/><br/>
+- 10: [Portable Mode (PC Only)](#portable-mode-pc-only)<br/><br/>
 
 ---
 ## Introduction:
@@ -54,8 +55,8 @@ _TimeyCells_ is a new version of my previous app, _School Timetable_. The origin
 You can create events, event types, cells which span across multiple rows and swap rows and columns. You can even change the colors of the application to one of the predefined palettes or make your own color palette! You can specify the length or the start time of a specific lesson or event. Finally,  you can temporarily overwrite the event that will occur on a specific day of the week! You're also informed of the current event that is taking place and how much time is left for the next event to occur.
 <br/><br/>
 ## Events, Event Types:
-In order to create events and event types, you need to swap to the 'Edit Events' tab:<br/>
-![01  Burger menu - create event type (small)](https://github.com/user-attachments/assets/a22f1710-9b26-49c7-b052-6e9a481d754f)
+In order to create events and event types, you need to swap to the `Edit Events` tab:<br/>
+![01  Burger menu - create event type (with transition)](https://github.com/user-attachments/assets/6b38371b-b96c-4b45-a96b-239f1610bc73)
 <br/><br/>
 ### Creating Event Types:
 Event Types are used to categorize the events that happen throughout the week. You can change the colors of the text and background. Event Types also need a name.<br/>
@@ -204,6 +205,7 @@ This button will activate android's share sheet, which will look something like 
 ![Android Share Sheet](https://github.com/user-attachments/assets/0b038864-84f6-47aa-b176-0271eef34abe)
 <br/><br/>
 ## Settings
+![02  Burger menu - Settings](https://github.com/user-attachments/assets/2f70b3b6-e246-4fa0-8705-1423c7ef4a73)
 ### Time Format:
 You can set the time to a 24 hour format with this toggle:<br/>
 ![24h Toggle](https://github.com/user-attachments/assets/59c68a20-9a86-44e3-8db7-1e9e9b19713d)
@@ -227,3 +229,7 @@ To enable Portable Mode, you must modify `ExtraProperties.json`, which is locate
 `"IsPortable": false` with `"IsPortable": true`.
 <br/><br/>
 When Portable Mode is enabled, all files will be stored in the application's directory instead of the PC's `%AppData%`. This is useful if you prefer to store the app inside a USB or a hard drive that you connect to multiple computers.
+<br/><br/>
+## Help
+The app has a similar user manual built in. To access it, you need to swap to the `Help` tab:<br/>
+![03  Burger menu - Help](https://github.com/user-attachments/assets/48549294-ea8c-424b-a61a-bdcd9f1e4836)
