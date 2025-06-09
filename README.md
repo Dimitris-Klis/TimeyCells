@@ -56,7 +56,7 @@ You can create events, event types, cells which span across multiple rows and sw
 <br/><br/>
 ## Events, Event Types:
 In order to create events and event types, you need to swap to the 'Edit Events' tab:<br/>
-![01  Burger menu - create event type (small)](https://github.com/user-attachments/assets/a22f1710-9b26-49c7-b052-6e9a481d754f)
+![01  Burger menu - create event type (with transition)](https://github.com/user-attachments/assets/6b38371b-b96c-4b45-a96b-239f1610bc73)
 <br/><br/>
 ### Creating Event Types:
 Event Types are used to categorize the events that happen throughout the week. You can change the colors of the text and background. Event Types also need a name.<br/>
