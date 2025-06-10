@@ -16,26 +16,29 @@ public class PaletteDropdown : MonoBehaviour
     public UnityEvent<int> onValueChanged;
     public int value;
 
+    public List<PaletteObject> paletteChildren = new();
     public void Setup(ColorStylePreset[] presets)
     {
-        foreach(Transform child in PalettesParent)
+        for (int i = 0; i < paletteChildren.Count; i++)
         {
-            if (child.name.Contains("Template")) continue;
-            Destroy(child.gameObject);
+            Destroy(paletteChildren[i].gameObject);
         }
+        paletteChildren.Clear();
+
         Template.gameObject.SetActive(true);
         for (int i = 0; i < presets.Length; i++)
         {
             PaletteObject p = Instantiate(Template, PalettesParent);
             p.transform.name = $"Palette Object ({i})";
 
-            p.paletteIndex = Stylizer.GetIndex(presets[i]);
+            p.paletteIndex = i;
             
             p.PaletteNameText.text = presets[i].PaletteName;
             p.BackgroundColorImage.color = presets[i].BackgroundColor;
             p.SecondaryColorImage.color = presets[i].SecondaryColor;
             p.PrimaryColorImage.color = presets[i].PrimaryColor;
-            p.toggle.isOn = value == i;
+            p.toggle.SetIsOnWithoutNotify(value == i);
+            paletteChildren.Add(p);
         }
         Template.gameObject.SetActive(false);
     }
@@ -47,14 +50,34 @@ public class PaletteDropdown : MonoBehaviour
 
     public void ChangeValue(int newvalue)
     {
-        value= newvalue;
+        
+        if (newvalue < 0 || newvalue >= Stylizer.ColorStyles.Count)
+        {
+            Debug.LogWarning($"Invalid value {newvalue} in ChangeValue. Resetting to 0.");
+            newvalue = 0;
+        }
+        value = newvalue;
+
         onValueChanged.Invoke(value);
+
+        for (int i = 0; i < paletteChildren.Count; i++)
+        {
+            paletteChildren[i].toggle.SetIsOnWithoutNotify(paletteChildren[i].paletteIndex == newvalue);
+        }
     }
     public void SetValueWithoutNotify(int newvalue)
     {
+        
+        if (newvalue < 0 || newvalue >= Stylizer.ColorStyles.Count)
+        {
+            Debug.LogWarning($"Invalid value {newvalue} in ChangeValue. Resetting to 0.");
+            newvalue = 0;
+        }
         value = newvalue;
-        if (value >= PalettesParent.childCount) value = 0;
-        onValueChanged.Invoke(value);
-        PalettesParent.GetChild(newvalue + 1).GetComponent<PaletteObject>().toggle.isOn = true;
+
+        for (int i = 0; i < paletteChildren.Count; i++)
+        {
+            paletteChildren[i].toggle.SetIsOnWithoutNotify(paletteChildren[i].paletteIndex == newvalue);
+        }
     }
 }

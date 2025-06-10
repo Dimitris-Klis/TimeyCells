@@ -19,10 +19,12 @@ public class TableOfContents : MonoBehaviour
     {
         public string name;
         public int level;
-        public HeaderShortcut(string _name, int _level)
+        public RectTransform wantedChild;
+        public HeaderShortcut(string _name, int _level, RectTransform _child)
         {
             name = _name;
             level = _level;
+            wantedChild = _child;
         }
     }
     public List<HeaderShortcut> headers = new List<HeaderShortcut>();
@@ -58,14 +60,25 @@ public class TableOfContents : MonoBehaviour
                     headerSize = $"            <size={H3Size}%>\u25E6 <indent=31%>";
                     break;
             }
-
-            b.text.text = headerSize + headers[i].name + "</size>";
+            RectTransform c = headers[i].wantedChild;
+            b.button.onClick.AddListener(delegate { helpSection.ScrollToTarget(c); });
+            b.text.text = headerSize + "<u>" + headers[i].name + " </size>";
         }
 
         UpdateLayout();
     }
     [ContextMenu("UpdateLayout")]
     public void UpdateLayout()
+    {
+        StartCoroutine(Wait());
+    }
+    IEnumerator Wait()
+    {
+        Canvas.ForceUpdateCanvases();
+        yield return new WaitForEndOfFrame();
+        DelayedUpdateLayout();
+    }
+    public void DelayedUpdateLayout()
     {
         float wantedPos = 0;
         RectTransform prevChild = SelfRect; // Temporary assignment to avoid errors.

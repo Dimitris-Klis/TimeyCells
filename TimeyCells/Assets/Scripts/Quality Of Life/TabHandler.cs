@@ -12,6 +12,7 @@ public class TabHandler : MonoBehaviour
     {
         public Button TabButton;
         public GameObject TabObject;
+        public UnityEvent TabSpecificEvent;
     }
     public Tab[] tabs;
     public UnityEvent OnSelectTab;
@@ -23,6 +24,7 @@ public class TabHandler : MonoBehaviour
         {
             tabs[i].TabObject.SetActive(index == i);
             tabs[i].TabButton.interactable = index != i;
+            if(index == i) tabs[i].TabSpecificEvent.Invoke();
         }
         OnSelectTab.Invoke();
     }

@@ -376,164 +376,178 @@ Table of Contents
 
 HELP_SECTION
 # Introduction:
-_TimeyCells_ is a new version of my previous app, _School Timetable_. The original _School Timetable_ application had very little customizability and was only meant to be used by Cypriot students. In contrast, _TimeyCells_ was built from the ground up with one goal in mind: Making organization as dynamic and customizable as possible.
-<br/><br/>
+_TimeyCells_ is a new version of my previous app, _School Timetable_. The original _School Timetable_ application had very little customizability and was only meant to be used by Cypriot students. In contrast, _TimeyCells_ was built from the ground up with one goal in mind: Making organization as dynamic and customizable as possible.<br/><br/>
 You can create events, event types, cells which span across multiple rows and swap rows and columns. You can even change the colors of the application to one of the predefined palettes or make your own color palette! You can specify the length or the start time of a specific lesson or event. Finally,  you can temporarily overwrite the event that will occur on a specific day of the week! You're also informed of the current event that is taking place and how much time is left for the next event to occur.
-## Events, Event Types:
+<br/>
+# Events, Event Types:
 In order to create events and event types, you need to swap to the 'Edit Events' tab:
 !GIF[BurgerEvents]
+<br/>
 ## Creating Event Types:
 Event Types are used to categorize the events that happen throughout the week. You can change the colors of the text and background. Event Types also need a name.
 !GIF[EventTypeCreate]
+<br/>
 ## Editing Event Types:
 To edit an event type, simply click the one you want to edit. You can also edit the colors of the default event.
 !GIF[EventTypeEdit]
+<br/>
 ## Creating Events:
 Events have 5 properties:
-- **Name:** The name of the event
-- **Info1:** Meant for extra details like the place in which the event will happen, or the name of the person organizing the event.
-- **Info2:** Also meant for extra details.
-- **Event Type:** Meant to categorize your event, which helps with figuring out how important the lesson/event is.
-- **Favourite:** A simple toggle to classify an event as something you really enjoy.
+- <indent=5%>**Name:** The name of the event</indent>
+- <indent=5%>**Info1:** Meant for extra details like the place in which the event will happen, or the name of the person organizing the event.</indent>
+- <indent=5%>**Info2:** Also meant for extra details.</indent>
+- <indent=5%>**Event Type:** Meant to categorize your event, which helps with figuring out how important the lesson/event is.</indent>
+- <indent=5%>**Favourite:** A simple toggle to classify an event as something you really enjoy.</indent>
 !GIF[EventCreate]
+<br/>
 ## Editing Events
 You can edit events by simply clicking on them.
-# Editing your timetable
+<br/>
+# Editing your timetable<br/>
 To begin editing your timetable, click the pencil icon.
 !GIF[TimetableEdit]
+<br/>
 ## Renaming your timetable:
 !GIF[TimetableRename]
+<br/>
 ## Adding/Deleting Columns & Multirows:
 You can add up to 40 columns, which should be more than enough to satisfy the busiest of schedules. You can also add Multirows, which are columns that use the same event for each weekday.
 !GIF[ColumnsAddOrDel]
+<br/>
 ## Adding/Deleting Rows:
 Rows represent weekdays. You can add up to 7 rows, one for each day of the week.
 !GIF[RowsAddOrDel]
+<br/>
 ## Assigning events to your timetable:
-While editing, select the event you want to assign. Then, simply click the cell you want to change for a quick assignment.<br/>
+While editing, select the event you want to assign. Then, simply click the cell you want to change for a quick assignment.
 !GIF[AssigningEvents]
+<br/>
 ## Swapping Columns:
 !GIF[SwappingCols]
+<br/>
 ## Swapping Rows:
 !GIF[SwappingRows]<br/>
-# Manual Editing
+<br/>
+# Manual Editing<br/>
 ## Editing Weekdays:
 Weekdays have the following properties:
-- **Name:** The name of your weekday
-- **Start Time:** The time when the first event of the day begins.
-- **Common Length:** The default length for each cell.
-- **Days:** The days when the weekday will take place.
+- <indent=5%>**Name:** The name of your weekday</indent>
+- <indent=5%>**Start Time:** The time when the first event of the day begins.</indent>
+- <indent=5%>**Common Length:** The default length for each cell.</indent>
+- <indent=5%>**Days:** The days when the weekday will take place.</indent>
 !GIF[WeekdayEdit]
+<br/>
 ## Editing Cells:
 While not editing, clicking on a cell will bring up the cell editor. There you can manually change the assigned event, or override some of the properties. You can also override the length and start time. If not overridden, the length will be defaulted into the row's weekday common length.
 !GIF[CellEdit]
+<br/>
 ## Editing Labels
 Labels are the cells on top of the column. They're displayed if the current day corresponds to a weekday's assigned days. A label will not be displayed if the cell of the current day is empty.
-<br/><br/>
+<br/>
 You can edit the labels on top to always display text.
 !GIF[CustomLabels]
-You can also edit them to count as an index, which means that the labels will get displayed as:<br/>
-`1, 2, 3, 4, TEXT, 6, 7, 8`<br/>
-Instead of:<br/>
-`1, 2, 3, 4, TEXT, 5, 6, 7, 8`
-<br/><br/>
+<br/>
+You can also edit them to count as an index, which means that the labels will get displayed as:
+`1, 2, 3, 4, TEXT, 6, 7, 8`
+Instead of:
+`1, 2, 3, 4, TEXT, 5, 6, 7, 8`<br/>
 Here's how the labels would look on a Tuesday:
 !IMG[Tuesdays]
 _* The final label is blank, since the final cell of Tuesday is also blank._
+<br/>
 ## Temporary Overrides:
 Temporary Overrides replace a weekday's or cell's default properties with new ones for a specified number of weeks. You can also delay the override for a specified number of weeks. If the override length slider is set to 0, the temporary override will expire the next time that the weekday occurs. _NOTE: If a weekday has multiple days assigned to it, the override will expire on the furthest day_
+<br/>
 ### Creating Temporary Weekdays:
 !GIF[WeekdayTemp]
+<br/>
 ### Creating Temporary Cells:
 !GIF[CellTemp]
-<br/><br/>
+<br/>
 ### Deleting Temporary Overrides:
 To delete a temporary override, simply click the trash icon and confirm your changes.<br/>
 !GIF[TempDelete]
-<br/><br/>
-# Saving, Loading & Creating Timetables
+<br/>
+# Saving, Loading & Creating Timetables<br/>
 ## Saving your work:
-This is the `Save` button:<br/>
+This is the ` Save ` button:
 !OBJ[Save]
-When you have unsaved changes, the `Save` button will get highlighted. Make sure to save often!<br/>
+When you have unsaved changes, the ` Save ` button will get highlighted. Make sure to save often!
 !OBJ[HighlightedSave]
-<br/><br/>
+<br/>
 ## Loading a timetable:
-This is the `Load` button:<br/>
+This is the ` Load ` button:
 !OBJ[Load]
-<br/><br/>
-When you click it, you'll be able to load or delete one of your saved timetables:<br/>
+When you click it, you'll be able to load or delete one of your saved timetables:
 !IMG[OpenTimetable]
-<br/><br/>
-When deleting anything a confirmation prompt will always appear:<br/>
+<br/>
+When deleting anything a confirmation prompt will always appear:
 !IMG[DeletePrompt]
-<br/><br/>
+<br/>
 ## Creating a new timetable:
-This is the `Create New` button. When clicked, a new blank timetable is created.<br/>
+This is the ` Create New ` button. When clicked, a new blank timetable is created.<br/>
 !OBJ[CreateNew]
-<br/><br/>
 If you want to use an already existing timetable as a template, you can simply rename and save it:<br/>
 !GIF[TimetableNew]
-<br/><br/>
+<br/>
 # Copying & Pasting Data
-This is the `Copy` Button:<br/>
+This is the `Copy` Button:
 !OBJ[Copy]
-<br/><br/>
-And this is the `Paste` Button:<br/>
+<br/>
+And this is the ` Paste ` Button:
 !OBJ[Paste]
-<br/><br/>
+<br/>
 With the use of these 2 buttons, repetitive events can be edited much more quickly. 
-<br/><br/>
+<br/>
 We can also use these buttons to share our timetable with other people. When copying, the timetable data is copied as text. The text can then be sent to anyone.
-<br/><br/>
-When the other person receives the text, if they own the application, they can copy the text you sent and click the `Paste` button to paste the timetable.
-<br/><br/>
+<br/>
+When the other person receives the text, if they own the application, they can copy the text you sent and click the ` Paste ` button to paste the timetable.
+<br/>
 # Backwards Compatibility
 _School Timetable_, the predecessor of _TimeyCells_ also has this Copy-Paste sharing feature. Therefore, in the event that a user of the old application wants to convert to the new one, they can simply copy their timetable from _School Timetable_ and paste it directly into _TimeyCells_!
-<br/><br/>
+<br/>
 # Sharing a Photo
 _TimeyCells_ also allows you to share your timetable to a person without the app by just sharing a photo instead.
-<br/><br/>
-You can share the detailed info of the timetable:<br/>
-!IMG[ShareInfo]
-<br/><br/>
-Or you can share the times instead:<br/>
-!IMG[ShareTime]
-<br/><br/>
-## Sharing photos on Windows:
-On Windows, you'll get the option to copy the photo with the `Copy` button.<br/>
-!OBJ[Copy]
-<br/>This button simply copies the image to the clipboard.
-<br/><br/>
-## Sharing photos on Android:
-On android, you'll instead get the option to share the photo with the `Share` button.<br/>
-!OBJ[Share]
 <br/>
-This button will activate android's share sheet, which will look something like this:<br/>
+You can share the detailed info of the timetable:
+!IMG[ShareInfo]
+<br/>
+Or you can share the times instead:
+!IMG[ShareTime]
+<br/>
+## Sharing photos on Windows:
+On Windows, you'll get the option to copy the photo with the ` Copy ` button.
+!OBJ[Copy]
+This button simply copies the image to the clipboard.
+<br/>
+## Sharing photos on Android:
+On android, you'll instead get the option to share the photo with the ` Share ` button.
+!OBJ[Share]
+This button will activate android's share sheet, which will look something like this:
 !IMG[ShareSheet]
-<br/><br/>
+<br/>
 # Settings
 !GIF[BurgerSettings]
+<br/>
 ## Time Format:
-You can set the time to a 24 hour format with this toggle:<br/>
+You can set the time to a 24 hour format with this toggle:
 !OBJ[24hToggle]
-<br/><br/>
-If you're an English user, you may want your time to look like:<br/>
-`12.00` instead of `12:00`. There's a toggle for that too:<br/>
+<br/>If you're an English user, you may want your time to look like:
+` 12.00 ` instead of ` 12:00 `. There's a toggle for that too:
 !OBJ[EnglishToggle]
-<br/><br/>
+<br/>
 ## Language:
-At the moment, there are only 2 supported languages: English and Greek (ÅëëçíéêÜ), the only languages I know.
-<br/><br/>
+At the moment, there are only 2 supported languages: English and Greek (Î•Î»Î»Î·Î½Î¹ÎºÎ¬), the only languages I know.
+<br/>
 ## Themes:
-Themes are used to change the app's colors. There are currently 11 pre-defined themes. 
-<br/><br/>
-You can also create your own themes:<br/>
+Themes are used to change the app's colors. There are currently !{THEMECOUNT} pre-defined themes. 
+<br/>
+You can also create your own themes:
 !GIF[ColorThemes]
-<br/><br/>
+<br/>
 # Portable Mode (PC Only)
-To enable Portable Mode, you must modify `ExtraProperties.json`, which is located in<br/>
-`APPFOLDER\TimeyCells_Data\StreamingAssets\` with a text editor and replace <br/>
-`"IsPortable": false` with `"IsPortable": true`.
-<br/><br/>
-When Portable Mode is enabled, all files will be stored in the application's directory instead of the PC's `%AppData%`. This is useful if you prefer to store the app inside a USB or a hard drive that you connect to multiple computers.
+To enable Portable Mode, you must modify ` ExtraProperties.json `, which is located in
+<size=80%>` APPFOLDER\TimeyCells\_Data\StreamingAssets\ `</size>,
+with a text editor and replace ` "IsPortable": false ` with ` "IsPortable": true `.
+<br/>
+When Portable Mode is enabled, all files will be stored in the application's directory instead of the PC's ` %AppData% `. This is useful if you prefer to store the app inside a USB or a hard drive that you connect to multiple computers.

@@ -17,12 +17,11 @@ public class ColorStylizer : MonoBehaviour
     public Image[] Backgrounds;
     public Image[] Buttons;
     public TMP_Text[] Texts;
-
     public void Setup()
     {
         UpdateDropdown();
-        GetElements();
-        RefreshPreset();
+        paletteDropdown.SetValueWithoutNotify(wantedPreset);
+        ApplyCurrentTheme();
     }
     public int GetIndex(ColorStylePreset preset)
     {
@@ -41,14 +40,14 @@ public class ColorStylizer : MonoBehaviour
         {
             wantedPreset = 0;
         }
-        RefreshPreset();
+        ApplyCurrentTheme();
         UpdateDropdown();
     }
 
     public void ChangePreset(int index)
     {
         wantedPreset = index;
-        RefreshPreset();
+        ApplyCurrentTheme();
         SaveManager.instance.SaveSettings();
     }
 
@@ -87,7 +86,7 @@ public class ColorStylizer : MonoBehaviour
             Texts[i] = TextObjects[i].GetComponent<TMP_Text>();
         }
 
-        foreach(GameObject o in InactiveObjects)
+        foreach (GameObject o in InactiveObjects)
         {
             o.SetActive(false);
         }
@@ -97,10 +96,9 @@ public class ColorStylizer : MonoBehaviour
         paletteDropdown.Setup(ColorStyles.ToArray());
         paletteDropdown.SetValueWithoutNotify(wantedPreset);
         GetElements();
-        RefreshPreset();
     }
     [ContextMenu("Refresh Preset")]
-    public void RefreshPreset()
+    public void ApplyCurrentTheme()
     {
         if (wantedPreset >= ColorStyles.Count) wantedPreset = 0;
 
@@ -130,5 +128,14 @@ public class ColorStylizer : MonoBehaviour
             if (Buttons[i] == null) continue;
             Buttons[i].color = preset.PrimaryColor;
         }
+    }
+    public int CountBuiltInThemes()
+    {
+        int count = 0;
+        for(int i =0; i< ColorStyles.Count; i++)
+        {
+            if (!ColorStyles[i].IsCustomPreset) count++;
+        }
+        return count;
     }
 }

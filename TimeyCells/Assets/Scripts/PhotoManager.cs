@@ -171,8 +171,7 @@ public class PhotoManager : MonoBehaviour
                 }
             }
         }
-        SaveManager.instance.Stylizer.GetElements();
-        SaveManager.instance.Stylizer.RefreshPreset();
+        SaveManager.instance.Stylizer.Setup();
         Grid.UpdateLayout();
         Snap();
     }

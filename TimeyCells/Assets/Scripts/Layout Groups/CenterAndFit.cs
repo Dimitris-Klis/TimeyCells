@@ -97,14 +97,4 @@ public class CenterAndFit : MonoBehaviour
                 child.localPosition += Vector3.up * totalSize / 2;
         }
     }
-    public void UpdateLayoutLate()
-    {
-        StartCoroutine(UpdateLayoutAtLastFrame());
-    }
-    // This doesn't work! We need to implement a special layout group for the help section!
-    IEnumerator UpdateLayoutAtLastFrame()
-    {
-        yield return new WaitForSeconds(.01f);
-        UpdateLayout();
-    }
 }
