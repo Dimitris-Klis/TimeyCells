@@ -403,11 +403,11 @@ Events have 5 properties:
 ## Editing Events
 You can edit events by simply clicking on them.
 <br/>
-# Editing your timetable<br/>
+# Editing your Timetable<br/>
 To begin editing your timetable, click the pencil icon.
 !GIF[TimetableEdit]
 <br/>
-## Renaming your timetable:
+## Renaming your Timetable:
 !GIF[TimetableRename]
 <br/>
 ## Adding/Deleting Columns & Multirows:
@@ -418,7 +418,7 @@ You can add up to 40 columns, which should be more than enough to satisfy the bu
 Rows represent weekdays. You can add up to 7 rows, one for each day of the week.
 !GIF[RowsAddOrDel]
 <br/>
-## Assigning events to your timetable:
+## Assigning events to your Timetable:
 While editing, select the event you want to assign. Then, simply click the cell you want to change for a quick assignment.
 !GIF[AssigningEvents]
 <br/>
@@ -431,7 +431,7 @@ While editing, select the event you want to assign. Then, simply click the cell 
 # Manual Editing<br/>
 ## Editing Weekdays:
 Weekdays have the following properties:
-- <indent=5%>**Name:** The name of your weekday</indent>
+- <indent=5%>**Name:** The name of your weekday.</indent>
 - <indent=5%>**Start Time:** The time when the first event of the day begins.</indent>
 - <indent=5%>**Common Length:** The default length for each cell.</indent>
 - <indent=5%>**Days:** The days when the weekday will take place.</indent>
@@ -453,7 +453,7 @@ Instead of:
 `1, 2, 3, 4, TEXT, 5, 6, 7, 8`<br/>
 Here's how thιs timetable's labels would look on a Tuesday:
 !IMG[Tuesdays]
-_* The final label is blank, since the final cell of Tuesday is blank._
+_* The final label is blank because the final cell of Tuesday is blank._
 <br/>
 ## Temporary Overrides:
 Temporary Overrides replace a weekday's or cell's default properties with new ones for a specified number of weeks. You can also delay the override for a specified number of weeks. If the override length is set to 0, the temporary override will expire the next time that the weekday or the weekday of that cell occurs.
