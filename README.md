@@ -52,8 +52,8 @@
 ## Introduction:
 _TimeyCells_ is a new version of my previous app, _School Timetable_. The original _School Timetable_ application had very little customizability and was only meant to be used by Cypriot students. In contrast, _TimeyCells_ was built from the ground up with one goal in mind: Making organization as dynamic and customizable as possible.
 <br/><br/>
-You can create events, event types, cells which span across multiple rows and swap rows and columns. You can even change the colors of the application to one of the predefined palettes or make your own color palette! You can specify the length or the start time of a specific lesson or event. Finally,  you can temporarily overwrite the event that will occur on a specific day of the week! You're also informed of the current event that is taking place and how much time is left for the next event to occur.
-<br/><br/>
+You can create events, event types, cells which span across multiple rows and swap rows and columns. You can even change the colors of the application to one of the predefined palettes or make your own color palette! You can specify the length or the start time of a specific lesson or event. Finally, you can temporarily overwrite events and you're also informed of the current event that is taking place and how much time is left for the next event to occur.
+<br/>
 ## Events, Event Types:
 In order to create events and event types, you need to swap to the `Edit Events` tab:<br/>
 ![01  Burger menu - create event type (with transition)](https://github.com/user-attachments/assets/6b38371b-b96c-4b45-a96b-239f1610bc73)
@@ -68,7 +68,7 @@ To edit an event type, simply click the one you want to edit. You can also edit 
 <br/><br/>
 ### Creating Events:
 Events have 5 properties:
-- **Name:** The name of the event
+- **Name:** The name of the event.
 - **Info1:** Meant for extra details like the place in which the event will happen, or the name of the person organizing the event.
 - **Info2:** Also meant for extra details.
 - **Event Type:** Meant to categorize your event, which helps with figuring out how important the lesson/event is.
@@ -78,11 +78,11 @@ Events have 5 properties:
 ### Editing Events
 You can edit events by simply clicking on them.
 <br/><br/>
-## Editing your timetable
+## Editing your Timetable
 To begin editing your timetable, click the pencil icon.<br/>
 ![07  Edit Timetable](https://github.com/user-attachments/assets/56df73dc-d037-433b-81db-fb6d1e908251)
 <br/><br/>
-### Renaming your timetable:
+### Renaming your Timetable:
 ![08  Renaming your Timetable](https://github.com/user-attachments/assets/7bf022fe-9c76-4ef0-a31a-fe6ddaef236a)
 <br/><br/>
 ### Adding/Deleting Columns & Multirows:
@@ -93,7 +93,7 @@ You can add up to 40 columns, which should be more than enough to satisfy the bu
 Rows represent weekdays. You can add up to 7 rows, one for each day of the week.<br/>
 ![10  Adding, Deleting Rows](https://github.com/user-attachments/assets/052a726a-2b4d-470f-954f-102e2994f3ab)
 <br/><br/>
-### Assigning events to your timetable:
+### Assigning Events to your Timetable:
 While editing, select the event you want to assign. Then, simply click the cell you want to change for a quick assignment.<br/>
 ![11  Assigning Events](https://github.com/user-attachments/assets/d2a75d36-1032-48cc-9c40-5cba2fc613b8)
 <br/><br/>
@@ -106,32 +106,33 @@ While editing, select the event you want to assign. Then, simply click the cell 
 ## Manual Editing
 ### Editing Weekdays:
 Weekdays have the following properties:
-- **Name:** The name of your weekday
+- **Name:** The name of your weekday.
 - **Start Time:** The time when the first event of the day begins.
 - **Common Length:** The default length for each cell.
 - **Days:** The days when the weekday will take place.
 ![14  Editing Weekdays](https://github.com/user-attachments/assets/b39817c8-8c5f-411f-837a-6cc56336e4c2)
 <br/><br/>
 ### Editing Cells:
-While not editing, clicking on a cell will bring up the cell editor. There you can manually change the assigned event, or override some of the properties. You can also override the length and start time. If not overridden, the length will be defaulted into the row's weekday common length.
+While not editing, clicking on a cell will bring up the cell editor. There you can manually change the assigned event or override some of the properties. You can also override the length and start time. If not overridden, the length will be defaulted into the row's weekday common length.
 <br/>![15  Manually Editing Cells](https://github.com/user-attachments/assets/52ac2787-f8e7-4213-a256-8f3c080747bb)
 <br/><br/>
 ### Editing Labels
-Labels are the cells on top of the column. They're displayed if the current day corresponds to a weekday's assigned days. A label will not be displayed if the cell of the current day is empty.<br/><br/>
-
-You can edit the labels on top to always display text.<br/>
+Labels are the smaller cells located at the top of the column. They display the start time and an index for each cell of the current day. A label will not be displayed if the cell of the current day is empty or the current day doesn't correspond to a weekday.
+<br/><br/>
+You can edit the labels to always display text.<br/>
 ![20  Custom Labels](https://github.com/user-attachments/assets/a4a4fe29-52a3-4b9c-99b3-47d9f21b2a13)<br/>
-You can also edit them to count as an index, which means that the labels will get displayed as:<br/>
+You can also edit them to count as an index, which means that the rest of the indexes will be displayed as:
 `1, 2, 3, 4, TEXT, 6, 7, 8`<br/>
 Instead of:<br/>
 `1, 2, 3, 4, TEXT, 5, 6, 7, 8`
 <br/><br/>
-Here's how the labels would look on a Tuesday:<br/>
+Here's how thιs timetable's labels would look on a Tuesday:
 ![Tuesday Labels](https://github.com/user-attachments/assets/ca47b3b5-dbfa-45fe-a295-4ca3693fe524)<br/>
-_* The final label is blank, since the final cell of Tuesday is also blank._
+_* The final label is blank because the final cell of Tuesday is blank._
 <br/><br/>
 ### Temporary Overrides:
-Temporary Overrides replace a weekday's or cell's default properties with new ones for a specified number of weeks. You can also delay the override for a specified number of weeks. If the override length slider is set to 0, the temporary override will expire the next time that the weekday occurs. _NOTE: If a weekday has multiple days assigned to it, the override will expire on the furthest day_
+Temporary Overrides replace a weekday's or cell's default properties with new ones for a specified number of weeks. You can also delay the override for a specified number of weeks. If the override length is set to 0, the temporary override will expire the next time that the weekday or the weekday of that cell occurs.</br>
+_NOTE: If a weekday has multiple days assigned to it, the override will expire on the furthest day_
 <br/><br/>
 #### Creating Temporary Weekdays:
 ![16  Temp Weekday](https://github.com/user-attachments/assets/6118355e-fe8d-4629-b00d-806ccf90a7f3)
@@ -174,11 +175,11 @@ This is the `Copy` Button:<br/>
 And this is the `Paste` Button:<br/>
 ![Paste Button](https://github.com/user-attachments/assets/511d8269-98d4-4ee6-a602-b33534b54432)
 <br/><br/>
-With the use of these 2 buttons, repetitive events can be edited much more quickly. 
+With the use of these 2 buttons, repetitive parts of the timetable can be edited much more quickly.
 <br/><br/>
-We can also use these buttons to share our timetable with other people. When copying, the timetable data is copied as text. The text can then be sent to anyone.
+You can also use these buttons to share your timetable with other people. When copying, the timetable data is copied as text. The text can then be sent to anyone.
 <br/><br/>
-When the other person receives the text, if they own the application, they can copy the text you sent and click the `Paste` button to paste the timetable.
+When the other person receives the text, if they own the application, they can copy the text you sent and click the ` Paste ` button to paste the timetable.
 <br/><br/>
 ## Backwards Compatibility
 _School Timetable_, the predecessor of _TimeyCells_ also has this Copy-Paste sharing feature. Therefore, in the event that a user of the old application wants to convert to the new one, they can simply copy their timetable from _School Timetable_ and paste it directly into _TimeyCells_!
@@ -186,7 +187,9 @@ _School Timetable_, the predecessor of _TimeyCells_ also has this Copy-Paste sha
 ## Sharing a Photo
 _TimeyCells_ also allows you to share your timetable to a person without the app by just sharing a photo instead.
 <br/><br/>
-You can share the detailed info of the timetable:<br/>
+By pressing the ` camera ` button:<br/>
+![photoIcon](https://github.com/user-attachments/assets/73656b45-7d0e-4621-8e1b-f137868efa2f)
+<br/>You can share the detailed info of the timetable:<br/>
 ![Share Photo Info](https://github.com/user-attachments/assets/2e42eebc-893e-481c-aa6c-71056e132f6d)
 <br/><br/>
 Or you can share the times instead:<br/>
@@ -225,10 +228,10 @@ You can also create your own themes:<br/>
 <br/><br/>
 ## Portable Mode (PC Only)
 To enable Portable Mode, you must modify `ExtraProperties.json`, which is located in<br/>
-`APPFOLDER\TimeyCells_Data\StreamingAssets\` with a text editor and replace <br/>
+`APPFOLDER\TimeyCells_Data\StreamingAssets\`, with a text editor and replace <br/>
 `"IsPortable": false` with `"IsPortable": true`.
 <br/><br/>
-When Portable Mode is enabled, all files will be stored in the application's directory instead of the PC's `%AppData%`. This is useful if you prefer to store the app inside a USB or a hard drive that you connect to multiple computers.
+When Portable Mode is enabled, all files will be stored in the application's directory instead of the PC's `%AppData%`. This is useful if you prefer to store the app inside a USB or any other storage device that you connect to multiple computers.
 <br/><br/>
 ## Help
 The app has a similar user manual built in. To access it, you need to swap to the `Help` tab:<br/>
