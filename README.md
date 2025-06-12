@@ -24,9 +24,9 @@
   - [Editing Cells](#editing-cells)<br/>
   - [Editing Labels](#editing-labels)<br/>
   - [Temporary Overrides](#temporary-overrides)<br/>
-  - [Creating Temporary Weekdays](#creating-temporary-weekdays)<br/>
-  - [Creating Temporary Cells](#creating-temporary-cells)<br/>
-  - [Deleting Temporary Overrides](#deleting-temporary-overrides)<br/>
+    - [Creating Temporary Weekdays](#creating-temporary-weekdays)<br/>
+    - [Creating Temporary Cells](#creating-temporary-cells)<br/>
+    - [Deleting Temporary Overrides](#deleting-temporary-overrides)<br/>
 
 - 05: [Saving, Loading & Creating Timetables](#saving-loading--creating-timetables)<br/>
   - [Saving your work](#saving-your-work)<br/>
