@@ -14,6 +14,7 @@ public class HamburgerButton : MonoBehaviour
     public string ContentCloseAnim = "SlideOut";
 
     bool isOpen;
+    public bool CloseMenuOnDisable;
     public void OpenOrClose()
     {
         isOpen = !isOpen;
@@ -31,6 +32,7 @@ public class HamburgerButton : MonoBehaviour
 
     public void SetOpenState(bool open)
     {
+        if (isOpen == open) return;
         isOpen = open;
         if (isOpen)
         {
@@ -41,6 +43,23 @@ public class HamburgerButton : MonoBehaviour
         {
             buttonAnimator.ChangeState(ButtonCloseAnim);
             contentAnimator.ChangeState(ContentCloseAnim);
+        }
+    }
+    private void OnEnable()
+    {
+        
+        if(CloseMenuOnDisable) isOpen = false;
+
+        // A simple fix for the animators resetting when getting disabled.
+        if (isOpen)
+        {
+            buttonAnimator.SetState(ButtonOpenAnim, 0, 1);
+            contentAnimator.SetState(ContentOpenAnim, 0, 1);
+        }
+        else
+        {
+            buttonAnimator.SetState(ButtonCloseAnim, 0, 1);
+            contentAnimator.SetState(ContentCloseAnim, 0, 1);
         }
     }
 }

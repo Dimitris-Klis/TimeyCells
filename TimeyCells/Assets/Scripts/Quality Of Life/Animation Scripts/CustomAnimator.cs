@@ -12,4 +12,10 @@ public class CustomAnimator : MonoBehaviour
         Animator.Play(newstate);
         currState = newstate;
     }
+    public void SetState(string newstate,int layer ,float progress)
+    {
+        Animator.Play(newstate, layer, progress);
+        currState = newstate;
+        Animator.Update(0f);
+    }
 }
