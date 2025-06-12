@@ -33,6 +33,7 @@ public class TableOfContents : MonoBehaviour
     {
         for (int i = 0; i < buttons.Count; i++)
         {
+            if (buttons[i] == null) continue;
             if(!Application.isPlaying)
                 DestroyImmediate(buttons[i].gameObject);
             else

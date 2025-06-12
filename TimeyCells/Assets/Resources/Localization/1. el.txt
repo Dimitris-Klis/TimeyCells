@@ -227,7 +227,7 @@ PROPERTIES_TIMETABLE_ADDCOLUMNS
 Πρόσθεση Στήλων
 
 PROPERTIES_TIMETABLE_ADDMULTIROWS
-Πρόσθεση Στήλων πολλαπλής γραμμής
+Πρόσθεση Κελιών πολλαπλής γραμμής
 
 PROPERTIES_TIMETABLE_DELETECOLUMNS
 Διαγραφή Στήλων
@@ -375,179 +375,182 @@ HELP_TABLEOFCONTENTS
 Περιεχόμενο
 
 HELP_SECTION
-# Introduction:
-_TimeyCells_ is a new version of my previous app, _School Timetable_. The original _School Timetable_ application had very little customizability and was only meant to be used by Cypriot students. In contrast, _TimeyCells_ was built from the ground up with one goal in mind: Making organization as dynamic and customizable as possible.<br/><br/>
-You can create events, event types, cells which span across multiple rows and swap rows and columns. You can even change the colors of the application to one of the predefined palettes or make your own color palette! You can specify the length or the start time of a specific lesson or event. Finally,  you can temporarily overwrite the event that will occur on a specific day of the week! You're also informed of the current event that is taking place and how much time is left for the next event to occur.
+# Εισαγωγή:
+Το _TimeyCells_ είναι μια νέα έκδωση της προηγούμενής μου εφαρμογής, _School Timetable_. Η προηγούμενη εφαρμογή _School Timetable_ δεν είχε πολλή προσαρμοστικότητα και δημιουργήθηκε για να χρησιμοποιηθεί μόνο από Κύπριους μαθητές. Αντίθετα, η _TimeyCells_ χτίστηκε από την αρχή με έναν στόχο: Η οργάνωση να γίνει όσο το δυνατόν περισσότερο εύκολη και αποτελεσματική.<br/><br/>
+Μπορείτε να δημιουργήσετε συμβάν, είδη συμβάν, κελιά πολλαπλών γραμμών και μπορείτε να ανταλλάξετε γραμμές και στήλες. Μπορείτε ακόμη να αλλάξετε τα χρώματα της εφαρμογής σε μία από τις προκαθωρισμένες επιλογές ή να δημιουργήσετε το δικό σας χρωματοθέμα! Επιπλέον, μπορείτε να αλλάξετε τη διάρκεια ή την ώρα έναρξης ενός συγκεκριμένου μαθήματος ή συμβάν. Τέλος, μπορείτε να αντικαταστήσετε πρωσωρινά τα συμβάν και θα ενημερώνεστε για το πιο συμβάν συμβαίνει εκείνη την στιγμή και σε πόση ώρα τελειώνει.
 <br/>
-# Events, Event Types:
-In order to create events and event types, you need to swap to the 'Edit Events' tab:
+# Συμβάν, Είδη Συμβάν:
+Για να δημιουργήσετε συμβάν και είδη συμβάν, πρέπει να πάτε στην καρτέλα 'Επεξεργασία Συμβάν':
 !GIF[BurgerEvents]
 <br/>
-## Creating Event Types:
-Event Types are used to categorize the events that happen throughout the week. You can change the colors of the text and background. Event Types also need a name.
+## Δημιουργία Ειδών Συμβάν:
+Τα είδη συμβάν χρησιμοποιούνται για την κατηγοριοποίηση των συμβάν της εβδομάδας. Μπορείτε να αλλάξετε τα χρώματα του κειμένου και του φόντου. Τα είδη συμβάν επίσης χρειάζονται ένα όνομα.
 !GIF[EventTypeCreate]
 <br/>
-## Editing Event Types:
-To edit an event type, simply click the one you want to edit. You can also edit the colors of the default event.
+## Επεξεργασία Ειδών Συμβάν:
+Για να επξεργαστείτε ένα είδος συμβάν, απλά πατήστε πάνω σ' αυτό που θέλετε να αλλάξετε. Μπορείτε επίσης να αλλάξετε τα χρώματα του default είδους συμβάν.
 !GIF[EventTypeEdit]
 <br/>
-## Creating Events:
-Events have 5 properties:
-- <indent=5%>**Name:** The name of the event</indent>
-- <indent=5%>**Info1:** Meant for extra details like the place in which the event will happen, or the name of the person organizing the event.</indent>
-- <indent=5%>**Info2:** Also meant for extra details.</indent>
-- <indent=5%>**Event Type:** Meant to categorize your event, which helps with figuring out how important the lesson/event is.</indent>
-- <indent=5%>**Favourite:** A simple toggle to classify an event as something you really enjoy.</indent>
+## Δημιουργία Συμβάν:
+Τα συμβάν έχουν 5 ιδιότητες:
+- <indent=5%>**Όνομα:** Το όνομα του συμβάν.</indent>
+- <indent=5%>**Λεπτομέριες 1:** Χρήσιμο για επιπρόσθετες λεπτομέριες, όπως η τοποθεσία του συμβάν, ή το όνομα του οργανωτή του συμβάν.</indent>
+- <indent=5%>**Λεπτομέριες 2:** Χρησιμοποιείται επίσης για επιπρόσθετες λεπτομέριες.</indent>
+- <indent=5%>**Είδος Συμβάν:** Χρήσιμο για την κατηγοριοποίηση του συμβάν, το οποίο σας βοηθάει να καταλάβετε πόσο σημαντικό είναι το μάθημα/συμβάν.</indent>
+- <indent=5%>**Αγαπημένο:** Μία απλή ιδιότητα που δείχνει πόσο σας αρέσει ένα συμβάν.</indent>
 !GIF[EventCreate]
 <br/>
-## Editing Events
-You can edit events by simply clicking on them.
+## Επεξεργασία Συμβάν
+Για να επξεργαστείτε ένα συμβάν, απλά πατήστε πάνω σ' αυτό που θέλετε να αλλάξετε.
 <br/>
-# Editing your timetable<br/>
-To begin editing your timetable, click the pencil icon.
+# Επεξεργασία του Πίνακα<br/>
+Για να ξεκινήσετε να επεξεργάζεστε τον πίνακα, πατήστε το κουμπί με το εικονίδιο του μολυβίου.
 !GIF[TimetableEdit]
 <br/>
-## Renaming your timetable:
+## Ονομάζοντας τον πίνακά σας:
 !GIF[TimetableRename]
 <br/>
-## Adding/Deleting Columns & Multirows:
-You can add up to 40 columns, which should be more than enough to satisfy the busiest of schedules. You can also add Multirows, which are columns that use the same event for each weekday.
+## Πρόσθεση/Αφαίρεση Στήλων & Κελιών Πολλαπλής Γραμμής:
+Μπορείτε να προσθέσετε μέχρι 40 στήλες, οι οποίες είναι αρκετές για τα πιο γεμάτα προγράμματα. Μπορείτε επίσης να προσθέσετε κελιά πολλαπλής γραμμής, τα οποία χρησιμοποιούν το ίδιο συμβάν για όλη την εβδομάδα.
 !GIF[ColumnsAddOrDel]
 <br/>
-## Adding/Deleting Rows:
-Rows represent weekdays. You can add up to 7 rows, one for each day of the week.
+## Πρόσθεση/Αφαίρεση Γραμμών:
+Οι γραμμές αναπαριστούν τις ημέρες της εβδομάδας. Μπορείτε να προσθέσετε μέχρι 7 γραμμές, μία για κάθε ημέρα της εβδομάδας.
 !GIF[RowsAddOrDel]
 <br/>
-## Assigning events to your timetable:
-While editing, select the event you want to assign. Then, simply click the cell you want to change for a quick assignment.
+## Ανάθεση Συμβάν στον Πίνακα:
+Καθώς επεξεργάζεστε τον πίνακα, επιλέξτε το συμβάν που θέλετε. Έπειτα, απλά πατήστε πάνω στο κελί που θέλετε να αλλάξετε για γρήγορη ανάθεση.
 !GIF[AssigningEvents]
 <br/>
-## Swapping Columns:
+## Ανταλλαγή Στήλων:
 !GIF[SwappingCols]
 <br/>
-## Swapping Rows:
+## Ανταλλαγή Γραμμών:
 !GIF[SwappingRows]<br/>
 <br/>
-# Manual Editing<br/>
-## Editing Weekdays:
-Weekdays have the following properties:
-- <indent=5%>**Name:** The name of your weekday</indent>
-- <indent=5%>**Start Time:** The time when the first event of the day begins.</indent>
-- <indent=5%>**Common Length:** The default length for each cell.</indent>
-- <indent=5%>**Days:** The days when the weekday will take place.</indent>
+# Χειροκίνητη Επεξεργασία<br/>
+## Επεξεργασία Ημέρας:
+Οι ημέρες έχουν τις εξής ιδιότητες:
+- <indent=5%>**Όνομα:** Το όνομα της ημέρας.</indent>
+- <indent=5%>**Ώρα Έναρξης:** Η ώρα στην οποία ξεκινά η ημέρα.</indent>
+- <indent=5%>**Κοινή Διάρκεια:** Η κοινή διάρκεια για κάθε κελί.</indent>
+- <indent=5%>**Ημέρες:** Ποιες μέρες θα συμβαίνει η ημέρα.</indent>
 !GIF[WeekdayEdit]
 <br/>
-## Editing Cells:
-While not editing, clicking on a cell will bring up the cell editor. There you can manually change the assigned event, or override some of the properties. You can also override the length and start time. If not overridden, the length will be defaulted into the row's weekday common length.
+## Επεξεργασία Κελιών:
+Όταν δεν επεξεργάζεστε τον πίνακα, πατώντας πάνω σ' ένα κελί θα εμφανίστει ο επεξεργαστής κελιού. Εδώ, μπορείτε να επεξεργαστήτε χειροκίνητα το επιλεγμένο συμβάν ή να αντικαταστήσετε μερικές από τις ιδιότητες του συμβάν. Μπορείτε επίσης να αντικαταστήσετε την διάρκεια του κελιού ή/και την ώρα έναρξης. Αν δεν αντικατασταθούν, η διάρκεια θα έιναι ίση με την κοινή διάρκεια της γραμμής/ημέρας.
 !GIF[CellEdit]
 <br/>
-## Editing Labels
-Labels are the cells on top of the column. They're displayed if the current day corresponds to a weekday's assigned days. A label will not be displayed if the cell of the current day is empty.
+## Επεξεργασία Ετικετών:
+Οι ετικέτες είναι τα μικρά κελιά που βρίσκονται πάνω από τον πίνακα. Δείχνουν την ώρα έναρξης και έναν δείκτη για κάθε κελί της σημερινής ημέρας. Μία ετικέτα μπορεί να είναι άδεια αν το κελί είναι άδειο ή η σημερινή ημέρα δεν αντιστοιχεί πουθενά.
 <br/>
-You can edit the labels on top to always display text.
+Μπορείτε να επεξαργαστήτε μία ετικέτα ώστε ο δείκτης της να εμφανίζει πάντα κείμενο.
 !GIF[CustomLabels]
 <br/>
-You can also edit them to count as an index, which means that the labels will get displayed as:
-`1, 2, 3, 4, TEXT, 6, 7, 8`
-Instead of:
-`1, 2, 3, 4, TEXT, 5, 6, 7, 8`<br/>
-Here's how the labels would look on a Tuesday:
+Μπορείτε επίσης να κάνετε την ετικέτα να μετρήσει και ως δείκτης, που σημαίνει ότι οι υπόλοιποι δείκτες θα εμφανίζονται ως:
+`1, 2, 3, 4, ΚΕΙΜΕΝΟ, 6, 7, 8`
+Και όχι:
+`1, 2, 3, 4, ΚΕΙΜΕΝΟ, 5, 6, 7, 8`<br/>
+Να πως θα φαίνονταν οι ετικέτες αυτού του πίνακα σε μια Τρίτη:
 !IMG[Tuesdays]
-_* The final label is blank, since the final cell of Tuesday is also blank._
+_* Η τελευταία ετικέτα είναι άδεια, εφόσον το τελευταίο κελί της Τρίτης είναι άδειο._
 <br/>
-## Temporary Overrides:
-Temporary Overrides replace a weekday's or cell's default properties with new ones for a specified number of weeks. You can also delay the override for a specified number of weeks. If the override length slider is set to 0, the temporary override will expire the next time that the weekday occurs. _NOTE: If a weekday has multiple days assigned to it, the override will expire on the furthest day_
+## Προσωρινές αλλαγές:
+Οι προσωρινές αλλαγές αντικαθιστούν τις ιδιότητες μιας ημέρας ή ενός κελιού με καινούριες για έναν αριθμό εβδομάδων. Μπορείτε επίσης να καθυστερήσετε την αλλαγή για έναν αριθμό εβδομάδων. Αν η διάρκεια της αλλαγής είναι μηδενική, Η αλλαγή θα λήξει την επόμενη φορά που η συγκεκριμένη ημέρα θα συμβεί.
+_ΣΗΜΕΙΩΣΗ: Αν μια ημέρα/γραμμή συμβαίνει για πάνω από μία ημέρα, η αλλαγή θα λήξει στην πιο μακρινή ημέρα._
 <br/>
-### Creating Temporary Weekdays:
+### Δημιουργία Προσωρινών Ημερών:
 !GIF[WeekdayTemp]
 <br/>
-### Creating Temporary Cells:
+### Δημιουργία Προσωρινών Κελιών:
 !GIF[CellTemp]
 <br/>
-### Deleting Temporary Overrides:
-To delete a temporary override, simply click the trash icon and confirm your changes.<br/>
+### Διαγραφή Προσωρινών Αλλαγών:
+Για να διαγράψετε μια προσωρινή αλλαγή, απλά πατήστε το εικονίδιο του καλαθιού και επιβεβαιώστε τις αλλαγές σας.<br/>
 !GIF[TempDelete]
 <br/>
-# Saving, Loading & Creating Timetables<br/>
-## Saving your work:
-This is the ` Save ` button:
+# Αποθήκευση, Φόρτωση & Δημιουργία Πίνακα<br/>
+## Αποθήκευση:
+Αυτό είναι το κουμπί <u>αποθήκευσης</u>:
 !OBJ[Save]
-When you have unsaved changes, the ` Save ` button will get highlighted. Make sure to save often!
+Αν έχετε μη-αποθηκευμένες αλλαγές, το κουμπί αποθήκευσης θα επισημανθεί. Να αποθηκεύετε συχνά τις αλλαγές σας!
 !OBJ[HighlightedSave]
 <br/>
-## Loading a timetable:
-This is the ` Load ` button:
+## Φόρτωση Πίνακα:
+Αυτό είναι το κουμπί <u>φόρτωσης</u>:
 !OBJ[Load]
-When you click it, you'll be able to load or delete one of your saved timetables:
+Όταν το πατήσετε, θα μπορέσετε να φορτώσετε ή να διαγράψετε έναν από τους αποθηκευμένους σας πίνακες:
 !IMG[OpenTimetable]
 <br/>
-When deleting anything a confirmation prompt will always appear:
+Όταν διαγράφετε οτιδήποτε, πάντα θα εμφανίζεται μία προειδοποίηση:
 !IMG[DeletePrompt]
 <br/>
-## Creating a new timetable:
-This is the ` Create New ` button. When clicked, a new blank timetable is created.<br/>
+## Δημιουργία Νέου Πίνακα:
+Αυτό είναι το κουμπί <u>δημιουργίας νέου πίνακα</u>. Όταν πατηθεί, δημιουργείται ένας άδειος πίνακας.
 !OBJ[CreateNew]
-If you want to use an already existing timetable as a template, you can simply rename and save it:<br/>
+Αν θέλετε να χρησιμοποιήσετε έναν από τους πίνακές σας ως template, μπορείτε να τον μετονομάσετε και να τον ξανααποθηκέυσετε:<br/>
 !GIF[TimetableNew]
 <br/>
-# Copying & Pasting Data
-This is the `Copy` Button:
+# Αντιγραφή & Επικόλληση Δεδομένων
+Αυτό είναι το κουμπί <u>αντιγραφής</u>:
 !OBJ[Copy]
 <br/>
-And this is the ` Paste ` Button:
+Και αυτό είναι το κουμπί <u>επικόλλησης</u>:
 !OBJ[Paste]
 <br/>
-With the use of these 2 buttons, repetitive events can be edited much more quickly. 
+Με αυτά τα 2 κουμπιά, επαναλαμβανόμενα σημεία του πίνακα μπορούν να επεξεργαστούν συντομότερα. 
 <br/>
-We can also use these buttons to share our timetable with other people. When copying, the timetable data is copied as text. The text can then be sent to anyone.
+Μπορείτε επίσης να χρησιμοποιήσετε αυτά τα δύο κουμπιά για να μοιραστείτε τον πίνακά μας με άλλα άτομα. Όταν γίνεται μια αντιγραφή, τα δεδομένα του πίνακα αντιγράφονται ως κείμενο. Αυτό το κείμενο, μπορεί έπειτα να σταλεί σε οποιονδήποτε.
 <br/>
-When the other person receives the text, if they own the application, they can copy the text you sent and click the ` Paste ` button to paste the timetable.
+Όταν ο δέκτης λάβει το κείμενο, αν έχει την εφαρμογή, μπορεί να το αντιγράψει και να πατήσει το κουμπί επικόλλησης για να μπορέσει να χρησιμοποιήσει τον πίνακά σας.
 <br/>
-# Backwards Compatibility
-_School Timetable_, the predecessor of _TimeyCells_ also has this Copy-Paste sharing feature. Therefore, in the event that a user of the old application wants to convert to the new one, they can simply copy their timetable from _School Timetable_ and paste it directly into _TimeyCells_!
+# Συμβατικότητα με Προηγούμενες Εκδώσεις
+Το _School Timetable_, η προηγούμενη εφαρμογή έχει και αυτή την λειτουργία αντιγραφής και επικόλλησης. Γι' αυτό, στην περίπτωση που ένας χρήστης της παλιάς εφαρμογής θέλει να χρησιμοποιήσει την καινούρια, μπορεί απλά να αντιγράψει τον πίνακα του από το _School Timetable_ και να κάνει επικόλληση καυτευθείαν στο _TimeyCells_!
 <br/>
-# Sharing a Photo
-_TimeyCells_ also allows you to share your timetable to a person without the app by just sharing a photo instead.
+# Κοινοποίηση Εικόνας
+Το _TimeyCells_ σας επιτρέπει επίσης να μοιραστείτε τον πίνακά σας με ένα άτομο χωρίς την εφαρμογή, με μία εικόνα.
 <br/>
-You can share the detailed info of the timetable:
+Πατώντας το κουμπί με το εικονίδιο της κάμερας:
+!OBJ[Camera]
+Μπορείτε να κοινοποιήσετε τις λεπτομέριες του πίνακα:
 !IMG[ShareInfo]
 <br/>
-Or you can share the times instead:
+Ή μπορείτε να κοινοποιήσετε το ωράριο:
 !IMG[ShareTime]
 <br/>
-## Sharing photos on Windows:
-On Windows, you'll get the option to copy the photo with the ` Copy ` button.
+## Κοινοποίηση εικόνας στα Windows:
+Στα Windows, έχετε την επιλογή να αντιγράψετε την εικόνα με το κουμπί <u>αντιγραφής</u>.
 !OBJ[Copy]
-This button simply copies the image to the clipboard.
+Αυτό το κουμπί απλά αντιγράφει την εικόνα.
 <br/>
-## Sharing photos on Android:
-On android, you'll instead get the option to share the photo with the ` Share ` button.
+## Κοινοποίηση εικόνας στα Android:
+Στα Android, έχετε την επιλογή να κοινοποιήσετε την εικόνα με το κουμπί <u>κοινοποίησης</u>.
 !OBJ[Share]
-This button will activate android's share sheet, which will look something like this:
+Αυτό το κουμπί θα ενεργοποιήσει την λειτουργία κοινοποίησης του Android, η οποία φαίνεται κάπως έτσι:
 !IMG[ShareSheet]
 <br/>
-# Settings
+# Ρυθμίσεις
 !GIF[BurgerSettings]
 <br/>
-## Time Format:
-You can set the time to a 24 hour format with this toggle:
+## Μορφή Ώρας:
+Μπορείτε να έχετε μορφή εικοσιτετράωρης ώρας με αυτή τη ρύθμιση:
 !OBJ[24hToggle]
-<br/>If you're an English user, you may want your time to look like:
-` 12.00 ` instead of ` 12:00 `. There's a toggle for that too:
+<br/>Αν είστε Άγγλος χρήστης, μπορεί να προτιμάτε την ώρα να φαίνεται κάπως έτσι:
+` 12.00 ` αντί για ` 12:00 `. Υπάρχει ρύθμιση και γι' αυτό:
 !OBJ[EnglishToggle]
 <br/>
-## Language:
-At the moment, there are only 2 supported languages: English and Greek (Ελληνικά), the only languages I know.
+## Γλώσσα:
+Αυτή την στιγμή, η εφαρμογή έχει 2 γλώσσες: Αγγλικά (English) και Ελληνικά, οι μόνες γλώσσες που γνωρίζω.
 <br/>
-## Themes:
-Themes are used to change the app's colors. There are currently !{THEMECOUNT} pre-defined themes. 
+## Χρωματοθέματα:
+Τα χρωματοθέματα αλλάζουν τα χρώματα της εφαρμογής. Υπάρχουν !{THEMECOUNT} προκαθωρισμένες επιλογές.
 <br/>
-You can also create your own themes:
+Μπορείτε επίσης να δημιουργήσετε τα δικά σας χρωματοθέματα και να τα μοιραστείτε με κάποιον με το κουμπί αντιγραφής:
 !GIF[ColorThemes]
 <br/>
-# Portable Mode (PC Only)
-To enable Portable Mode, you must modify ` ExtraProperties.json `, which is located in
-<size=80%>` APPFOLDER\TimeyCells\_Data\StreamingAssets\ `</size>,
-with a text editor and replace ` "IsPortable": false ` with ` "IsPortable": true `.
+# Φορητή Λειτουργία (Μόνο σε Η/Υ)
+Για να ενεργοποιήσετε την Φορητή Λειτουργία, πρέπει να επεξεργαστείτε το αρχείο ` ExtraProperties.json `, το οποίο βρίσκεται στο
+<size=80%>` ΦΑΚΕΛΟΣ-ΕΦΑΡΜΟΓΗΣ\TimeyCells\_Data\StreamingAssets\ `</size>,
+με έναν επεξεργαστή κειμένου και να αντικαταστήσετε το ` "IsPortable": false ` με ` "IsPortable": true `.
 <br/>
-When Portable Mode is enabled, all files will be stored in the application's directory instead of the PC's ` %AppData% `. This is useful if you prefer to store the app inside a USB or a hard drive that you connect to multiple computers.
+Όταν η Φορητή Λειτουργία είναι ενεργοποιημένη, όλα τα αρχεία θα αποθηκεύονται στο φάκελο της εφαρμογής αντί για το φάκελο ` %AppData% ` του Η/Υ. Αυτή η λειτουργία είναι χρήσιμη, αν προτιμάτε να έχετε την εφαρμογή μέσα σ' ένα USB η άλλη αποθηκευτική μονάδα που συνδέεται με πολλούς υπολογιστές.
