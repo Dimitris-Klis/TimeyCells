@@ -6,7 +6,15 @@ TimeyCells is a new version of my previous app, School Timetable. It was built f
 # Download
 Grab the latest version of **TimeyCells** here:<br/>
 [![Latest Release](https://img.shields.io/github/v/release/Dimitris-Klis/TimeyCells)](https://github.com/Dimitris-Klis/TimeyCells/releases/latest)
+
 ---
+
+# Source Code Documentation
+Developers can explore annotated source files and module-level details here:  
+[View the Source Code Docs](./SOURCE-CODE-DOCS.md)
+
+---
+
 # User Manual
 ## Table of Contents
 - 01: [Introduction](#introduction)<br/>
