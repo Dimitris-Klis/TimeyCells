@@ -126,8 +126,8 @@ public class CellInfoEditor : MonoBehaviour
             DelaySlider.SetValueWithoutNotify(selectedInfo.OverrideDelayWeeks);
             LengthSlider.SetValueWithoutNotify(selectedInfo.OverrideExtraLengthWeeks);
 
-            DelayInput.SetTextWithoutNotify(selectedInfo.OverrideDelayWeeks.ToString() + TMP_Specials.clear);
-            LengthInput.SetTextWithoutNotify(selectedInfo.OverrideExtraLengthWeeks.ToString() + TMP_Specials.clear);
+            DelayInput.SetTextWithoutNotify(selectedInfo.OverrideDelayWeeks.ToString());
+            LengthInput.SetTextWithoutNotify(selectedInfo.OverrideExtraLengthWeeks.ToString());
 
             TimeSpan temp_t = DayTimeManager.instance.GetCellStartTime(SelectedCellColumn, SelectedCellRow);
             TempStartTimeInput.text = DayTimeManager.instance.FormatTime(temp_t);
@@ -232,7 +232,6 @@ public class CellInfoEditor : MonoBehaviour
     }
     public void ParseMinutes(string text)
     {
-        text = text.Replace(TMP_Specials.clear, "");
         if (int.TryParse(text, out int length))
         {
             if (length > 59) length = 59;
@@ -253,7 +252,6 @@ public class CellInfoEditor : MonoBehaviour
     }
     public void ParseHours(string text)
     {
-        text = text.Replace(TMP_Specials.clear, "");
         if (int.TryParse(text, out int length))
         {
             if (length > 23) length = 23; // No event will last 24 hours!
@@ -275,7 +273,6 @@ public class CellInfoEditor : MonoBehaviour
 
     public void ParseStartTime(string text)
     {
-        text = text.Replace(TMP_Specials.clear, "");
         if (!DayTimeManager.TryParseTime(text, out DateTime length) ||
             SelectedCellColumn > 0 && DayTimeManager.instance.TimeDiff(length.TimeOfDay, SelectedCellColumn - 1, SelectedCellRow) < TimeSpan.Zero)
         {
@@ -364,14 +361,14 @@ public class CellInfoEditor : MonoBehaviour
 
             MainPreview.FavouriteImage.gameObject.SetActive(e.Favourite);
 
-            if (!isNothing(EventNameOverride.text.Replace(TMP_Specials.clear, "")))
-                MainPreview.EventNameText.text = EventNameOverride.text.Replace(TMP_Specials.clear, "");
+            if (EventNameOverride.text == "")
+                MainPreview.EventNameText.text = EventNameOverride.text;
 
-            if (!isNothing(Info1Override.text.Replace(TMP_Specials.clear, "")))
-                MainPreview.Info1Text.text = Info1Override.text.Replace(TMP_Specials.clear, "");
+            if (Info1Override.text == "")
+                MainPreview.Info1Text.text = Info1Override.text;
 
-            if (!isNothing(Info2Override.text.Replace(TMP_Specials.clear, "")))
-                MainPreview.Info2Text.text = Info2Override.text.Replace(TMP_Specials.clear, "");
+            if (Info2Override.text == "")
+                MainPreview.Info2Text.text = Info2Override.text;
 
             if (TypeOverride.value - 1 >= 0)
             {
@@ -404,34 +401,34 @@ public class CellInfoEditor : MonoBehaviour
             else
                 MainPreview.FavouriteImage.gameObject.SetActive(e.Favourite);
 
-            if (!isNothing(TempEventNameOverride.text.Replace(TMP_Specials.clear, "")))
+            if (TempEventNameOverride.text == "")
             {
                 MainPreview.EventNameText.text = TempEventNameOverride.text;
             }
             else
             {
-                if (!isNothing(EventNameOverride.text.Replace(TMP_Specials.clear, "")))
-                    MainPreview.EventNameText.text = EventNameOverride.text.Replace(TMP_Specials.clear, "");
+                if (EventNameOverride.text == "")
+                    MainPreview.EventNameText.text = EventNameOverride.text;
             }
 
-            if (!isNothing(TempInfo1Override.text.Replace(TMP_Specials.clear, "")))
+            if (TempInfo1Override.text == "")
             {
-                    MainPreview.Info1Text.text = TempInfo1Override.text.Replace(TMP_Specials.clear, "");
+                    MainPreview.Info1Text.text = TempInfo1Override.text;
             }
             else
             {
-                if (!isNothing(Info1Override.text.Replace(TMP_Specials.clear, "")))
-                    MainPreview.Info1Text.text = Info1Override.text.Replace(TMP_Specials.clear, "");
+                if (Info1Override.text == "")
+                    MainPreview.Info1Text.text = Info1Override.text;
             }   
 
-            if (!isNothing(TempInfo2Override.text.Replace(TMP_Specials.clear, "")))
+            if (TempInfo2Override.text == "")
             {
-                MainPreview.Info2Text.text = TempInfo2Override.text.Replace(TMP_Specials.clear, "");
+                MainPreview.Info2Text.text = TempInfo2Override.text;
             }
             else
             {
-                if (!isNothing(Info2Override.text.Replace(TMP_Specials.clear, "")))
-                    MainPreview.Info2Text.text = Info2Override.text.Replace(TMP_Specials.clear, "");
+                if (Info2Override.text == "")
+                    MainPreview.Info2Text.text = Info2Override.text;
             }
 
             if (TempTypeOverride.value - 1 >= 0)
@@ -470,11 +467,6 @@ public class CellInfoEditor : MonoBehaviour
         }
     }
 
-    bool isNothing(string text)
-    {
-        return text.Replace(TMP_Specials.clear, "") == "";
-    }
-
     public void SetDelay(float Delay)
     {
         DelayInput.text = Delay.ToString();
@@ -482,7 +474,7 @@ public class CellInfoEditor : MonoBehaviour
 
     public void UpdateDelaySlider(string Delay)
     {
-        if(int.TryParse(Delay.Replace(TMP_Specials.clear, ""), out int val))
+        if(int.TryParse(Delay, out int val))
         {
             DelaySlider.SetValueWithoutNotify(Mathf.Clamp(val, DelaySlider.minValue, DelaySlider.maxValue));
         }
@@ -493,7 +485,7 @@ public class CellInfoEditor : MonoBehaviour
     }
     public void UpdateLengthSlider(string Length)
     {
-        if (int.TryParse(Length.Replace(TMP_Specials.clear, ""), out int val))
+        if (int.TryParse(Length, out int val))
         {
             LengthSlider.SetValueWithoutNotify(Mathf.Clamp(val, LengthSlider.minValue, LengthSlider.maxValue));
         }
@@ -518,24 +510,24 @@ public class CellInfoEditor : MonoBehaviour
         //EventManager.Instance.ZoomHandler.enabled = true;
         CellInfo c = GetSelectedInfo();
         //TO DO: Make special override type of EventItem
-        c.Override.EventName = EventNameOverride.text.Replace(TMP_Specials.clear, "");
-        c.Override.Info1 = Info1Override.text.Replace(TMP_Specials.clear, "");
-        c.Override.Info2 = Info2Override.text.Replace(TMP_Specials.clear, "");
+        c.Override.EventName = EventNameOverride.text;
+        c.Override.Info1 = Info1Override.text;
+        c.Override.Info2 = Info2Override.text;
         c.Override.EventType = TypeOverride.value - 1;
         c.Override.OverrideFavourite = FavouriteOverride.value > 0;
         c.Override.Favourite = FavouriteOverride.value > 1;
 
         c.OverrideCommonLength = OverrideTimeToggle.isOn;
 
-        string hours = LengthInputHours.text.Replace(TMP_Specials.clear, "");
-        string mins = LengthInputMinutes.text.Replace(TMP_Specials.clear, "");
+        string hours = LengthInputHours.text;
+        string mins = LengthInputMinutes.text;
         if (DayTimeManager.TryParseLength(hours, mins , out TimeSpan len))
         {
             c.NewLength = len;
         }
 
         // Overwriting start time.
-        if (DayTimeManager.TryParseTime(StartTimeInput.text.Replace(TMP_Specials.clear, ""), out DateTime start))
+        if (DayTimeManager.TryParseTime(StartTimeInput.text, out DateTime start))
         {
             if (SelectedCellColumn == 0)
             {
@@ -580,9 +572,9 @@ public class CellInfoEditor : MonoBehaviour
 
         if (TempPropertiesLayout.activeSelf)
         {
-            c.TemporaryOverride.EventName = TempEventNameOverride.text.Replace(TMP_Specials.clear, "");
-            c.TemporaryOverride.Info1 = TempInfo1Override.text.Replace(TMP_Specials.clear, "");
-            c.TemporaryOverride.Info2 = TempInfo2Override.text.Replace(TMP_Specials.clear, "");
+            c.TemporaryOverride.EventName = TempEventNameOverride.text;
+            c.TemporaryOverride.Info1 = TempInfo1Override.text;
+            c.TemporaryOverride.Info2 = TempInfo2Override.text;
             c.TemporaryOverride.EventType = TempTypeOverride.value - 1;
             c.TemporaryOverride.OverrideFavourite = TempFavouriteOverride.value > 0;
             c.TemporaryOverride.Favourite = TempFavouriteOverride.value > 1;
@@ -590,13 +582,13 @@ public class CellInfoEditor : MonoBehaviour
             c.TempOverrideCommonLength = TempOverrideTimeToggle.isOn;
 
             c.OverrideDate = OverrideDate;
-            if (int.TryParse(DelayInput.text.Replace(TMP_Specials.clear, ""), out int delay))
+            if (int.TryParse(DelayInput.text, out int delay))
                 c.OverrideDelayWeeks = delay;
             else
                 c.OverrideDelayWeeks = 0;
 
 
-            if (int.TryParse(LengthInput.text.Replace(TMP_Specials.clear, ""), out int length))
+            if (int.TryParse(LengthInput.text, out int length))
             {
                 c.OverrideExtraLengthWeeks = length;
             }
@@ -628,8 +620,8 @@ public class CellInfoEditor : MonoBehaviour
             c.OverrideExtraLengthWeeks = -1;
         }
 
-        string temphours = TempLengthInputHours.text.Replace(TMP_Specials.clear, "");
-        string tempmins = TempLengthInputMinutes.text.Replace(TMP_Specials.clear, "");
+        string temphours = TempLengthInputHours.text;
+        string tempmins = TempLengthInputMinutes.text;
         if (DayTimeManager.TryParseLength(temphours, tempmins, out TimeSpan templen))
         {
             c.TempNewLength = templen;
@@ -637,7 +629,7 @@ public class CellInfoEditor : MonoBehaviour
 
         // Overwriting temp start time.
 
-        if (DayTimeManager.TryParseTime(TempStartTimeInput.text.Replace(TMP_Specials.clear, ""), out DateTime tempstart))
+        if (DayTimeManager.TryParseTime(TempStartTimeInput.text, out DateTime tempstart))
         {
             if (SelectedCellColumn == 0)
             {

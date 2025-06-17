@@ -51,7 +51,6 @@ public class EventTypeCreator : MonoBehaviour
 
             // Text String
             EventTypeNameInput.text = a.TypeName;
-            if (EventTypeNameInput.text != "") EventTypeNameInput.text += TMP_Specials.clear;
 
             PreviewCell.EventNameText.text = a.TypeName;
 
@@ -95,7 +94,7 @@ public class EventTypeCreator : MonoBehaviour
 
     public void ChangeEventTypeName(string text)
     {
-        PreviewCell.EventNameText.text = text.Replace(TMP_Specials.clear, "");
+        PreviewCell.EventNameText.text = text;
     }
 
 
@@ -126,7 +125,7 @@ public class EventTypeCreator : MonoBehaviour
             EventManager.Instance.CreateNewEventType(out EventTypeItem a);
             a.BackgroundColor = ChangeBackgroundColor.color;
             a.TextColor = ChangeTextColor.color;
-            a.TypeName = EventTypeNameInput.text.Replace(TMP_Specials.clear, "");
+            a.TypeName = EventTypeNameInput.text;
         }
         else
         {
@@ -134,7 +133,7 @@ public class EventTypeCreator : MonoBehaviour
             EventTypeItem a = EventManager.Instance.GetEventType(IDToModify);
             a.BackgroundColor = ChangeBackgroundColor.color;
             a.TextColor = ChangeTextColor.color;
-            a.TypeName = EventTypeNameInput.text.Replace(TMP_Specials.clear, "");
+            a.TypeName = EventTypeNameInput.text;
 
             EventManager.Instance.UpdateEventPreviews(true);
             EventManager.Instance.UpdateEventSelectors();
@@ -155,7 +154,7 @@ public class EventTypeCreator : MonoBehaviour
                 ConfirmationManager.Instance.ShowConfirmation
                 (
                     LocalizationSystem.instance.GetText(gameObject.name, "PROMPT_TITLE_AREYOUSURE"),
-                    LocalizationSystem.instance.GetText(gameObject.name, "PROMPT_DESC_EVENTTYPE").Replace("{x}", EventTypeNameInput.text.Replace(TMP_Specials.clear, "")),
+                    LocalizationSystem.instance.GetText(gameObject.name, "PROMPT_DESC_EVENTTYPE").Replace("{x}", EventTypeNameInput.text),
                     Cancel, Confirm
                 );
                 return;

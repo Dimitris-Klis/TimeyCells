@@ -47,7 +47,7 @@ public class PaletteCreator : MonoBehaviour
         DeleteButton.interactable = ID >= 0;
         if(ID < 0)
         {
-            PaletteNameInput.text = DefaultPreset.PaletteName + TMP_Specials.clear;
+            PaletteNameInput.text = DefaultPreset.PaletteName;
             PalettePreview.PaletteNameText.text = DefaultPreset.PaletteName;
             PrimaryColorImage.color = PalettePreview.PrimaryColorImage.color = DefaultPreset.PrimaryColor;
             SecondaryColorImage.color = PalettePreview.SecondaryColorImage.color = DefaultPreset.SecondaryColor;
@@ -55,7 +55,7 @@ public class PaletteCreator : MonoBehaviour
         }
         else
         {
-            PaletteNameInput.text = Stylizer.ColorStyles[ID].PaletteName + TMP_Specials.clear;
+            PaletteNameInput.text = Stylizer.ColorStyles[ID].PaletteName;
             PalettePreview.PaletteNameText.text = Stylizer.ColorStyles[ID].PaletteName;
             PrimaryColorImage.color = PalettePreview.PrimaryColorImage.color = Stylizer.ColorStyles[ID].PrimaryColor;
             SecondaryColorImage.color = PalettePreview.SecondaryColorImage.color = Stylizer.ColorStyles[ID].SecondaryColor;
@@ -95,7 +95,7 @@ public class PaletteCreator : MonoBehaviour
     }
     public void ChangePaletteName(string name)
     {
-        PalettePreview.PaletteNameText.text = name.Replace(TMP_Specials.clear, "");
+        PalettePreview.PaletteNameText.text = name;
     }
     public void Delete(bool confirm) 
     {
@@ -106,7 +106,7 @@ public class PaletteCreator : MonoBehaviour
             ConfirmationManager.Instance.ShowConfirmation
             (
                 LocalizationSystem.instance.GetText(gameObject.name, "PROMPT_TITLE_AREYOUSURE"),
-                LocalizationSystem.instance.GetText(gameObject.name, "PROMPT_DESC_THEME").Replace("{x}", PaletteNameInput.text.Replace(TMP_Specials.clear, "")),
+                LocalizationSystem.instance.GetText(gameObject.name, "PROMPT_DESC_THEME").Replace("{x}", PaletteNameInput.text),
                 Cancel, Confirm
             );
             return;
@@ -120,7 +120,7 @@ public class PaletteCreator : MonoBehaviour
     {
         if (IDToModify >= 0)
         {
-            Stylizer.ColorStyles[IDToModify].PaletteName = PaletteNameInput.text.Replace(TMP_Specials.clear, "");
+            Stylizer.ColorStyles[IDToModify].PaletteName = PaletteNameInput.text;
             Stylizer.ColorStyles[IDToModify].PrimaryColor = PrimaryColorImage.color;
             Stylizer.ColorStyles[IDToModify].SecondaryColor = SecondaryColorImage.color;
             Stylizer.ColorStyles[IDToModify].BackgroundColor = BackgroundColorImage.color;
@@ -129,7 +129,7 @@ public class PaletteCreator : MonoBehaviour
         {
             ColorStylePreset p = new();
             p.IsCustomPreset = true;
-            p.PaletteName = PaletteNameInput.text.Replace(TMP_Specials.clear, "");
+            p.PaletteName = PaletteNameInput.text;
             p.PrimaryColor = PrimaryColorImage.color;
             p.SecondaryColor = SecondaryColorImage.color;
             p.BackgroundColor = BackgroundColorImage.color;

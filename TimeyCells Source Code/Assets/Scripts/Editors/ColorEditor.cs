@@ -138,7 +138,7 @@ public class ColorEditor : MonoBehaviour
         // Setting the Color Preview Color.
         ColorPreview.color = CurrentColor;
 
-        HexCodeField.text = ColorUtility.ToHtmlStringRGBA(CurrentColor) + TMP_Specials.clear;
+        HexCodeField.text = ColorUtility.ToHtmlStringRGBA(CurrentColor);
 
         UpdateRefs();
 
@@ -213,7 +213,6 @@ public class ColorEditor : MonoBehaviour
     }
     public void SetColor(string hexCode)
     {
-        hexCode = hexCode.Replace(TMP_Specials.clear, "");
         hexCode = hexCode.Replace("#", "");
 
         hexCode = hexCode.Insert(0, "#");

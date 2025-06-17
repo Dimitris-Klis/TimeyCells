@@ -6,22 +6,23 @@ using TMPro;
 public class InputFieldFixer : MonoBehaviour
 {
     public TMP_InputField TMPField;
-    public uint CharacterLimit;
-    bool changed;
-    public void CheckIfEmpty()
+    [SerializeField] TMP_Text PreviewText;
+
+    // We're removing Zero Width Spaces to fix the Roboto font displaying them as a little dot in the corner.
+    public void UpdateTextPreview(string text)
     {
-        if (TMPField.text == TMP_Specials.clear) TMPField.text = string.Empty;
-        else
-        {
-            if (CharacterLimit == 0) return;
-            string textWithoutClear = TMPField.text.Replace(TMP_Specials.clear, "");
-            if (textWithoutClear.Length > CharacterLimit)
-                TMPField.text = textWithoutClear.Remove((int)CharacterLimit, textWithoutClear.Length - (int)CharacterLimit) + TMP_Specials.clear;
-        }
+        // Removing the 0-width spaces
+        string sanitized = text.Replace("\u200b", "");
+        PreviewText.text = sanitized;
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    private void Start()
     {
-        TMPField.onValueChanged.AddListener(delegate {  CheckIfEmpty(); });
+        // We do this so that the custom validators can access the Character Limit.
+        if (TMPField.inputValidator != null)
+        {
+            ValidatorBase b = TMPField.inputValidator as ValidatorBase;
+            b.AssignInputField(TMPField);
+        }
     }
 }

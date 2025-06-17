@@ -3104,7 +3104,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6799973699374911685, guid: 60c2f47415a653244ae540dbb47e653c, type: 3}
       propertyPath: m_CharacterLimit
-      value: 6
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 6799973699374911685, guid: 60c2f47415a653244ae540dbb47e653c, type: 3}
       propertyPath: m_InputValidator

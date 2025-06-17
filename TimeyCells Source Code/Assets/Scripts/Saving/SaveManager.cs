@@ -194,7 +194,8 @@ public class SaveManager : MonoBehaviour
         
         // Using the data.
         TimetableEditor.TimetableNameText.text = data.TimetableName;
-        TimetableEditor.TimetableNameInput.SetTextWithoutNotify(data.TimetableName + TMP_Specials.clear);
+        TimetableEditor.TimetableNameInput.SetTextWithoutNotify(data.TimetableName);
+        TimetableEditor.TimetableNameInput.GetComponent<InputFieldFixer>().TMPField.text = data.TimetableName;
 
         DayTimeManager.instance.WeekDays.Clear();
         DayTimeManager.instance.TimeLabels.Clear();
@@ -525,8 +526,9 @@ public class SaveManager : MonoBehaviour
 
         // Using the data.
         TimetableEditor.TimetableNameText.text = data.TimetableName;
-        TimetableEditor.TimetableNameInput.SetTextWithoutNotify(data.TimetableName + TMP_Specials.clear);
-        
+        TimetableEditor.TimetableNameInput.SetTextWithoutNotify(data.TimetableName);
+        TimetableEditor.TimetableNameInput.GetComponent<InputFieldFixer>().TMPField.text = data.TimetableName;
+
         LastTimetable = timetable;
 
         DayTimeManager.instance.WeekDays.Clear();
@@ -618,7 +620,9 @@ public class SaveManager : MonoBehaviour
     public void LoadNewTimetable(bool checkSave)
     {
         TimetableEditor.TimetableNameText.text = "New Timetable";
-        TimetableEditor.TimetableNameInput.SetTextWithoutNotify("New Timetable" + TMP_Specials.clear);
+        TimetableEditor.TimetableNameInput.SetTextWithoutNotify("New Timetable");
+        TimetableEditor.TimetableNameInput.GetComponent<InputFieldFixer>().TMPField.text = "New Timetable";
+
         DayTimeManager.begin = false;
         if (!saved && checkSave)
         {

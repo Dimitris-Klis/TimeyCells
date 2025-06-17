@@ -201,7 +201,7 @@ public class TimetableEditor : MonoBehaviour
     }
     public void SetTimetableName(string text)
     {
-        TimetableNameText.text = text.Replace(TMP_Specials.clear, "");
+        TimetableNameText.text = text;
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Setup()

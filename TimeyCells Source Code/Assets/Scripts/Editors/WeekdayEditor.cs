@@ -124,7 +124,6 @@ public class WeekdayEditor : MonoBehaviour
     }
     public void ParseStartTime(string text)
     {
-        text = text.Replace(TMP_Specials.clear, "");
         if (!DayTimeManager.TryParseTime(text, out DateTime length))
         {
             WeekDay wd = DayTimeManager.instance.WeekDays[WeekdayIndex];
@@ -141,7 +140,6 @@ public class WeekdayEditor : MonoBehaviour
     }
     public void ParseMinutes(string text)
     {
-        text = text.Replace(TMP_Specials.clear, "");
         if(int.TryParse(text, out int length))
         {
             if (length > 59) length = 59;
@@ -171,7 +169,6 @@ public class WeekdayEditor : MonoBehaviour
     }
     public void ParseHours(string text)
     {
-        text = text.Replace(TMP_Specials.clear, "");
         if (int.TryParse(text, out int length))
         {
             if (length > 23) length = 23; // No event will last 24 hours!
@@ -209,7 +206,7 @@ public class WeekdayEditor : MonoBehaviour
     }
     public void UpdateDelaySlider(string Delay)
     {
-        if (int.TryParse(Delay.Replace(TMP_Specials.clear, ""), out int val))
+        if (int.TryParse(Delay, out int val))
         {
             DelaySlider.SetValueWithoutNotify(Mathf.Clamp(val, DelaySlider.minValue, DelaySlider.maxValue));
         }
@@ -220,7 +217,7 @@ public class WeekdayEditor : MonoBehaviour
     }
     public void UpdateLengthSlider(string Length)
     {
-        if (int.TryParse(Length.Replace(TMP_Specials.clear, ""), out int val))
+        if (int.TryParse(Length, out int val))
         {
             LengthSlider.SetValueWithoutNotify(Mathf.Clamp(val, LengthSlider.minValue, LengthSlider.maxValue));
         }
@@ -288,13 +285,13 @@ public class WeekdayEditor : MonoBehaviour
 
         wd.DayName = WeekdayName.text;
 
-        if (DayTimeManager.TryParseTime(StartTimeField.text.Replace(TMP_Specials.clear, ""), out DateTime result))
+        if (DayTimeManager.TryParseTime(StartTimeField.text, out DateTime result))
         {
             wd.StartTime = result.TimeOfDay;
         }
 
-        string hours = CommonLengthFieldHours.text.Replace(TMP_Specials.clear, "");
-        string mins = CommonLengthFieldMinutes.text.Replace(TMP_Specials.clear, "");
+        string hours = CommonLengthFieldHours.text;
+        string mins = CommonLengthFieldMinutes.text;
         if (DayTimeManager.TryParseLength(hours, mins, out TimeSpan result2))
         {
             wd.CommonLength = result2;
@@ -336,13 +333,13 @@ public class WeekdayEditor : MonoBehaviour
                 wd.OverrideLength = 7 - dayOfWeek + (int)wd.OverrideDate.DayOfWeek;
             }
 
-            if (int.TryParse(DelayInput.text.Replace(TMP_Specials.clear, ""), out int delay))
+            if (int.TryParse(DelayInput.text, out int delay))
                 wd.OverrideDelayWeeks = delay;
             else
                 wd.OverrideDelayWeeks = 0;
 
 
-            if (int.TryParse(LengthInput.text.Replace(TMP_Specials.clear, ""), out int length))
+            if (int.TryParse(LengthInput.text, out int length))
             {
                 wd.OverrideExtraLengthWeeks = length;
             }
@@ -352,7 +349,7 @@ public class WeekdayEditor : MonoBehaviour
 
             if (TempStartTimeToggle.isOn)
             {
-                if (DayTimeManager.TryParseTime(TempStartTimeField.text.Replace(TMP_Specials.clear, ""), out DateTime tempresult))
+                if (DayTimeManager.TryParseTime(TempStartTimeField.text, out DateTime tempresult))
                 {
                     wd.TempStartTime = tempresult.TimeOfDay;
                 }
@@ -360,8 +357,8 @@ public class WeekdayEditor : MonoBehaviour
 
             if (TempCommonLengthToggle.isOn)
             {
-                string temphours = TempCommonLengthFieldHours.text.Replace(TMP_Specials.clear, "");
-                string tempmins = TempCommonLengthFieldMinutes.text.Replace(TMP_Specials.clear, "");
+                string temphours = TempCommonLengthFieldHours.text;
+                string tempmins = TempCommonLengthFieldMinutes.text;
                 if (DayTimeManager.TryParseLength(temphours, tempmins, out TimeSpan tempresult2))
                 {
                     wd.TempCommonLength = tempresult2;

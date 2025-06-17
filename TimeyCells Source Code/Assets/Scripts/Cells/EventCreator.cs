@@ -51,9 +51,9 @@ public class EventCreator : MonoBehaviour
             EventItem a = EventManager.Instance.GetEvent(ID);
 
             // Text
-            EventNameInput.text = a.EventName + TMP_Specials.clear;
-            Info1Input.text = a.Info1 + TMP_Specials.clear;
-            Info2Input.text = a.Info2 + TMP_Specials.clear;
+            EventNameInput.text = a.EventName;
+            Info1Input.text = a.Info1;
+            Info2Input.text = a.Info2;
 
             // Misc
             int eventtype = a.EventType >= 0 && a.EventType < EventManager.Instance.EventTypes.Count ? a.EventType : 0; // Prevents out of range exceptions
@@ -111,9 +111,9 @@ public class EventCreator : MonoBehaviour
             // Create New
             EventManager.Instance.CreateNewEvent(out EventItem a);
 
-            a.EventName = EventNameInput.text.Replace(TMP_Specials.clear, "");
-            a.Info1 = Info1Input.text.Replace(TMP_Specials.clear, "");
-            a.Info2 = Info2Input.text.Replace(TMP_Specials.clear, "");
+            a.EventName = EventNameInput.text;
+            a.Info1 = Info1Input.text;
+            a.Info2 = Info2Input.text;
 
             a.EventType = EventTypeDropdown.value;
             a.Favourite = FavouriteToggle.isOn;
@@ -123,9 +123,9 @@ public class EventCreator : MonoBehaviour
             // Edit Existing
             EventItem a = EventManager.Instance.GetEvent(IDToModify);
 
-            a.EventName = EventNameInput.text.Replace(TMP_Specials.clear, "");
-            a.Info1 = Info1Input.text.Replace(TMP_Specials.clear, "");
-            a.Info2 = Info2Input.text.Replace(TMP_Specials.clear, "");
+            a.EventName = EventNameInput.text;
+            a.Info1 = Info1Input.text;
+            a.Info2 = Info2Input.text;
 
             a.EventType = EventManager.Instance.EventTypes[EventTypeDropdown.value].ItemID;
             a.Favourite = FavouriteToggle.isOn;
@@ -145,7 +145,7 @@ public class EventCreator : MonoBehaviour
             ConfirmationManager.Instance.ShowConfirmation
             (
                 LocalizationSystem.instance.GetText(gameObject.name, "PROMPT_TITLE_AREYOUSURE"),
-                LocalizationSystem.instance.GetText(gameObject.name, "PROMPT_DESC_EVENT").Replace("{x}", EventNameInput.text.Replace(TMP_Specials.clear, "")),
+                LocalizationSystem.instance.GetText(gameObject.name, "PROMPT_DESC_EVENT").Replace("{x}", EventNameInput.text),
                 Cancel, Confirm
             );
             return;

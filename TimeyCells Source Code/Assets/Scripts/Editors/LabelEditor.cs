@@ -26,7 +26,7 @@ public class LabelEditor : MonoBehaviour
 
         if (obj.IsCustomLabel)
         {
-            CustomLabelInput.text = obj.CustomLabelName + TMP_Specials.clear;
+            CustomLabelInput.text = obj.CustomLabelName;
         }
         else
         {
@@ -39,7 +39,7 @@ public class LabelEditor : MonoBehaviour
     }
     public void SetCustomLabel(string text)
     {
-        TimeIndexPreview.IndexText.text = text.Replace(TMP_Specials.clear, "");
+        TimeIndexPreview.IndexText.text = text;
     }
     public void Confirm()
     {
@@ -47,7 +47,7 @@ public class LabelEditor : MonoBehaviour
         var obj = DayTimeManager.instance.TimeLabels[objectToModify];
         obj.IsCustomLabel = CustomLabelToggle.isOn;
         obj.CountAsIndex = CountAsIndexToggle.isOn;
-        obj.CustomLabelName = CustomLabelInput.text.Replace(TMP_Specials.clear, "");
+        obj.CustomLabelName = CustomLabelInput.text;
         DayTimeManager.instance.UpdateTimeIndexes();
         gameObject.SetActive(false);
     }
