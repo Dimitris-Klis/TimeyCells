@@ -10,8 +10,7 @@ Grab the latest version of **TimeyCells** here:<br/>
 ---
 
 # Source Code Documentation
-Developers can explore annotated source files and module-level details here:  
-[View the Source Code Docs](./SOURCE-CODE-DOCS.md)
+Developers and YH4F Judges can learn how the project works by exploring the [Source Code Docs](./SOURCE-CODE-DOCS.md).
 
 ---
 
