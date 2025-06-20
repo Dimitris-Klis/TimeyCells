@@ -69,15 +69,15 @@ You can create events, event types, cells which span across multiple rows and sw
 <br/>
 ## Events, Event Types:
 In order to create events and event types, you need to swap to the `Edit Events` tab:<br/>
-![01  Burger menu - create event type (with transition)](https://github.com/user-attachments/assets/6b38371b-b96c-4b45-a96b-239f1610bc73)
+![01  Burger menu - create event type (with transition) 15fps](https://github.com/user-attachments/assets/2384d600-f042-4c0f-8e06-3681f488b3e4)
 <br/><br/>
 ### Creating Event Types:
 Event Types are used to categorize the events that happen throughout the week. You can change the colors of the text and background. Event Types also need a name.<br/>
-![04  Event Type Creation](https://github.com/user-attachments/assets/25067571-b445-457b-87aa-a335d33a2bc6)
+![04  Event Type Creation 15fps](https://github.com/user-attachments/assets/8fa32507-2f65-46d9-9f7a-49f123c55c83)
 <br/><br/>
 ### Editing Event Types:
 To edit an event type, simply click the one you want to edit. You can also edit the colors of the default event.<br/>
-![05  Event Type Editing](https://github.com/user-attachments/assets/0e4e27cb-bf63-4151-ba1b-8b03f32aecc7)
+![05  Event Type Editing 15fps](https://github.com/user-attachments/assets/bd6a0bf7-9be0-4aa1-8f60-c932e131639a)
 <br/><br/>
 ### Creating Events:
 Events have 5 properties:
@@ -86,36 +86,36 @@ Events have 5 properties:
 - **Info2:** Also meant for extra details.
 - **Event Type:** Meant to categorize your event, which helps with figuring out how important the lesson/event is.
 - **Favourite:** A simple toggle to classify an event as something you really enjoy.<br/>
-![06  Event Creation](https://github.com/user-attachments/assets/6e5c3a8a-ccbe-4a6a-abcf-d98ca26e47b9)
+![06  Event Creation 15fps](https://github.com/user-attachments/assets/f7e6c000-fd54-4118-a73d-d1ffc7c583f7)
 <br/><br/>
 ### Editing Events
 You can edit events by simply clicking on them.
 <br/><br/>
 ## Editing your Timetable
 To begin editing your timetable, click the pencil icon.<br/>
-![07  Edit Timetable](https://github.com/user-attachments/assets/56df73dc-d037-433b-81db-fb6d1e908251)
+![07  Edit Timetable 15fps](https://github.com/user-attachments/assets/407aeb3a-d327-44b7-994d-47b4822450eb)
 <br/><br/>
 ### Renaming your Timetable:
-![08  Renaming your Timetable](https://github.com/user-attachments/assets/7bf022fe-9c76-4ef0-a31a-fe6ddaef236a)
+![08  Renaming your Timetable 15fps](https://github.com/user-attachments/assets/1b10abeb-d669-4469-9783-cf32ed9050ea)
 <br/><br/>
 ### Adding/Deleting Columns & Multirows:
 You can add up to 40 columns, which should be more than enough to satisfy the busiest of schedules. You can also add Multirows, which are columns that use the same event for each weekday.<br/>
-![09  Adding, Deleting Columns](https://github.com/user-attachments/assets/ed9adc73-5447-41e7-91e1-40d449b60feb)
+![09  Renaming your Timetable 15fps](https://github.com/user-attachments/assets/10d43df3-5c14-4857-8ed7-f02c9adb726d)
 <br/><br/>
 ### Adding/Deleting Rows:
 Rows represent weekdays. You can add up to 7 rows, one for each day of the week.<br/>
-![10  Adding, Deleting Rows](https://github.com/user-attachments/assets/052a726a-2b4d-470f-954f-102e2994f3ab)
+![10  Adding, Deleting Rows 15fps](https://github.com/user-attachments/assets/0b77c6dd-b1e5-417f-bca3-79f3dac0eb9a)
 <br/><br/>
 ### Assigning Events to your Timetable:
 While editing, select the event you want to assign. Then, simply click the cell you want to change for a quick assignment.<br/>
-![11  Assigning Events](https://github.com/user-attachments/assets/d2a75d36-1032-48cc-9c40-5cba2fc613b8)
+![11  Assigning Events 15fps](https://github.com/user-attachments/assets/1a12bb7a-e6b5-42fa-ba8d-8ffaa7061e3e)
 <br/><br/>
 ### Swapping Columns:
-![12  Swapping Columns](https://github.com/user-attachments/assets/b8a0b1f0-2af6-494e-9254-22c156936c1b)<br/>
+![12  Swapping Columns 15fps](https://github.com/user-attachments/assets/8d83f93c-b46e-4f52-a917-080339220335)
 <br/><br/>
 ### Swapping Rows:
-![13  Swapping Rows](https://github.com/user-attachments/assets/c207cfa4-bcdd-4511-bf86-b1678180ca67)<br/>
-<br/><br/>
+![13  Swapping Rows 15fps](https://github.com/user-attachments/assets/5fd67207-3354-4ba1-a892-8a5220ee0f2a)
+<br/><br/><br/>
 ## Manual Editing
 ### Editing Weekdays:
 Weekdays have the following properties:
@@ -123,50 +123,50 @@ Weekdays have the following properties:
 - **Start Time:** The time when the first event of the day begins.
 - **Common Length:** The default length for each cell.
 - **Days:** The days when the weekday will take place.
-![14  Editing Weekdays](https://github.com/user-attachments/assets/b39817c8-8c5f-411f-837a-6cc56336e4c2)
+![14  Editing Weekdays 15fps](https://github.com/user-attachments/assets/fa30f18a-28d4-4ccb-bf54-1177e808e0dc)
 <br/><br/>
 ### Editing Cells:
-While not editing, clicking on a cell will bring up the cell editor. There you can manually change the assigned event or override some of the properties. You can also override the length and start time. If not overridden, the length will be defaulted into the row's weekday common length.
-<br/>![15  Manually Editing Cells](https://github.com/user-attachments/assets/52ac2787-f8e7-4213-a256-8f3c080747bb)
+While not editing, clicking on a cell will bring up the cell editor. There you can manually change the assigned event or override some of the properties. You can also override the length and start time. If not overridden, the length will be defaulted into the row's weekday common length.<br/>
+![15  Manually Editing Cells 15fps](https://github.com/user-attachments/assets/803d7977-cc7b-40e0-9eb3-7ecb3e0465a2)
 <br/><br/>
 ### Editing Labels
 Labels are the smaller cells located at the top of the column. They display the start time and an index for each cell of the current day. A label will not be displayed if the cell of the current day is empty or the current day doesn't correspond to a weekday.
 <br/><br/>
 You can edit the labels to always display text.<br/>
-![20  Custom Labels](https://github.com/user-attachments/assets/a4a4fe29-52a3-4b9c-99b3-47d9f21b2a13)<br/>
-You can also edit them to count as an index, which means that the rest of the indexes will be displayed as:
+![20  Custom Labels 15fps](https://github.com/user-attachments/assets/34f41dca-0478-4c76-baa0-36fe1e4234e6)
+<br/>You can also edit them to count as an index, which means that the rest of the indexes will be displayed as:
 `1, 2, 3, 4, TEXT, 6, 7, 8`<br/>
 Instead of:<br/>
 `1, 2, 3, 4, TEXT, 5, 6, 7, 8`
 <br/><br/>
 Here's how thιs timetable's labels would look on a Tuesday:
-![Tuesday Labels](https://github.com/user-attachments/assets/ca47b3b5-dbfa-45fe-a295-4ca3693fe524)<br/>
-_* The final label is blank because the final cell of Tuesday is blank._
+![Tuesday Labels](https://github.com/user-attachments/assets/ca47b3b5-dbfa-45fe-a295-4ca3693fe524)
+<br/>_* The final label is blank because the final cell of Tuesday is blank._
 <br/><br/>
 ### Temporary Overrides:
 Temporary Overrides replace a weekday's or cell's default properties with new ones for a specified number of weeks. You can also delay the override for a specified number of weeks. If the override length is set to 0, the temporary override will expire the next time that the weekday or the weekday of that cell occurs.</br>
 _NOTE: If a weekday has multiple days assigned to it, the override will expire on the furthest day_
 <br/><br/>
 #### Creating Temporary Weekdays:
-![16  Temp Weekday](https://github.com/user-attachments/assets/6118355e-fe8d-4629-b00d-806ccf90a7f3)
+![16  Temp Weekday 15fps](https://github.com/user-attachments/assets/f847c0f1-8003-4ec8-a116-975af2b177c4)
 <br/><br/>
 #### Creating Temporary Cells:
-![17  Temp Cell](https://github.com/user-attachments/assets/2bec3d8a-f49a-4f57-b83b-ee160a66e2dc)
+![17  Temp Cell 15fps](https://github.com/user-attachments/assets/c83e03f9-b66e-4a34-95f5-53da43a19093)
 <br/><br/>
 #### Deleting Temporary Overrides:
 To delete a temporary override, simply click the trash icon and confirm your changes.<br/>
-![18  Temp Deletion](https://github.com/user-attachments/assets/b18fd083-b8e4-4aa9-bc98-9a877256fdb1)
+![18  Temp Deletion 15fps](https://github.com/user-attachments/assets/53f3f05f-02c1-494f-9627-f4040631234a)
 <br/><br/>
 ## Saving, Loading & Creating Timetables
 ### Saving your work:
 This is the `Save` button:<br/>
-![Save Button](https://github.com/user-attachments/assets/d02e531d-01c7-4d07-9320-7aaa581eaf0c)<br/><br/>
-When you have unsaved changes, the `Save` button will get highlighted. Make sure to save often!<br/>
-![Highlighted Save Button](https://github.com/user-attachments/assets/e8521649-a2c0-4159-bf0b-789bf5666217)
+![22  Save Button](https://github.com/user-attachments/assets/00e05a2d-b5ad-4bb3-9e29-637556809e3a)
+<br/><br/>When you have unsaved changes, the `Save` button will get highlighted. Make sure to save often!<br/>
+![23  Save Button Hilighted](https://github.com/user-attachments/assets/6cc4f120-9960-4472-aad0-4d96fe81d038)
 <br/><br/>
 ### Loading a timetable:
 This is the `Load` button:<br/>
-![Load Button](https://github.com/user-attachments/assets/112492a7-dae3-4a8c-ab5b-997e1e0de8cd)
+![24  Load Button](https://github.com/user-attachments/assets/d5e614d2-eeed-4dbe-ac66-b7258cacb78f)
 <br/><br/>
 When you click it, you'll be able to load or delete one of your saved timetables:<br/>
 ![Open Timetable](https://github.com/user-attachments/assets/5144657f-65eb-49a4-96fb-c0807a98b522)
@@ -176,17 +176,17 @@ When deleting anything a confirmation prompt will always appear:<br/>
 <br/><br/>
 ### Creating a new timetable:
 This is the `Create New` button. When clicked, a new blank timetable is created.<br/>
-![Create New Button](https://github.com/user-attachments/assets/6e08a1ae-de54-441e-bddb-3f0d07ac592c)
+![25  New](https://github.com/user-attachments/assets/59f644dd-39c2-4259-8945-e4394a899e72)
 <br/><br/>
 If you want to use an already existing timetable as a template, you can simply rename and save it:<br/>
-![19  New Timetable](https://github.com/user-attachments/assets/b94cbadf-3450-49fc-89ca-9703e94e4d37)
+![19  New Timetable 15fps](https://github.com/user-attachments/assets/26047030-1a92-4a1f-97ff-104050916b5e)
 <br/><br/>
 ## Copying & Pasting Data
 This is the `Copy` Button:<br/>
-![Copy Button](https://github.com/user-attachments/assets/151ebad6-d351-406a-9ddb-730e1765c69a)
+![26  Copy](https://github.com/user-attachments/assets/b6524551-9e5d-44e6-adb6-414ca9f5e6bf)
 <br/><br/>
 And this is the `Paste` Button:<br/>
-![Paste Button](https://github.com/user-attachments/assets/511d8269-98d4-4ee6-a602-b33534b54432)
+![27  Paste](https://github.com/user-attachments/assets/0eb52e86-8373-49e0-882c-c6b2d78dec0d)
 <br/><br/>
 With the use of these 2 buttons, repetitive parts of the timetable can be edited much more quickly.
 <br/><br/>
@@ -201,7 +201,7 @@ _School Timetable_, the predecessor of _TimeyCells_ also has this Copy-Paste sha
 _TimeyCells_ also allows you to share your timetable to a person without the app by just sharing a photo instead.
 <br/><br/>
 By pressing the ` camera ` button:<br/>
-![photoIcon](https://github.com/user-attachments/assets/73656b45-7d0e-4621-8e1b-f137868efa2f)
+![28  photoIcon](https://github.com/user-attachments/assets/6a27dae9-c9f3-41ce-a571-b6f5cfcc1322)
 <br/>You can share the detailed info of the timetable:<br/>
 ![Share Photo Info](https://github.com/user-attachments/assets/2e42eebc-893e-481c-aa6c-71056e132f6d)
 <br/><br/>
@@ -210,12 +210,12 @@ Or you can share the times instead:<br/>
 <br/><br/>
 ### Sharing photos on Windows:
 On Windows, you'll get the option to copy the photo with the `Copy` button.<br/>
-![Copy Button](https://github.com/user-attachments/assets/151ebad6-d351-406a-9ddb-730e1765c69a)
+![26  Copy](https://github.com/user-attachments/assets/b6524551-9e5d-44e6-adb6-414ca9f5e6bf)
 <br/>This button simply copies the image to the clipboard.
 <br/><br/>
 ### Sharing photos on Android:
 On android, you'll instead get the option to share the photo with the `Share` button.<br/>
-![Share Button](https://github.com/user-attachments/assets/b9b3a383-f01b-4e92-9b70-2d994e34b251)
+![29  Share](https://github.com/user-attachments/assets/24161cd5-ff7d-43c8-a41d-bc4b2819cd9a)
 <br/>
 This button will activate android's share sheet, which will look something like this:<br/>
 ![Android Share Sheet](https://github.com/user-attachments/assets/0b038864-84f6-47aa-b176-0271eef34abe)
@@ -237,7 +237,7 @@ At the moment, there are only 2 supported languages: English and Greek (Ελλη
 Themes are used to change the app's colors. There are currently 11 pre-defined themes. 
 <br/><br/>
 You can also create your own themes:<br/>
-![21  Color Themes](https://github.com/user-attachments/assets/55b1ab41-dce7-4ad7-aca0-ec7a5b3e82b7)
+![21  Color Themes 15fps](https://github.com/user-attachments/assets/b5d70873-7a10-4504-bdb9-f01ab1b23aba)
 <br/><br/>
 ## Portable Mode (PC Only)
 To enable Portable Mode, you must modify `ExtraProperties.json`, which is located in<br/>
