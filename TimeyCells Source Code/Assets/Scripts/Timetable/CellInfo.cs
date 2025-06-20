@@ -3,7 +3,8 @@ using System.Collections;
 using UnityEngine;
 using System;
 
-public class CellInfo : MonoBehaviour
+public class 
+    CellInfo : MonoBehaviour
 {
     public TimetableCell CellUI;
 

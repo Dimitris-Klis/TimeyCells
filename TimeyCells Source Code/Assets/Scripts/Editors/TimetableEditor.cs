@@ -11,30 +11,59 @@ public class TimetableEditor : MonoBehaviour
     {
         instance = this;
     }
-    public bool Editing;
+
+    [Header("Read Only Variables")]
+    [ReadOnly] public bool Editing;
+    [ReadOnly] public int SelectedID;
+
+
+    [Space(20)]
+
+
+    [Header("References")]
+    [Space(0)]
+    [Header("--- Important Systems")]
+    public DayTimeManager dayTimeManager;
+    public TimetableGrid Grid;
+
+
+    [Header("--- Updating Selected Cell UI")]
+    public TimetableCell SelectedCellPreview;
+
+
+    [Header("--- Timetable Name")]
     public TMP_Text TimetableNameText;
     public TMP_InputField TimetableNameInput;
-    public TimetableGrid Grid;
-    public DayTimeManager dayTimeManager;
+
+
+    [Header("--- Event Selector")]
+    public GameObject EventSelectorOverlay;
+    public Button SelectorCancelButton;
+
+
+    [Header("--- Editing Timetable Shape")]
+    public Button TableDoneButton;
+
+
+    [Space(20)]
+
+
+    [Header("UI to Disable on Edit")]
     public GameObject[] OtherButtons;
     public CanvasGroup[] OtherGroups;
     public GameObject[] EditorButtons;
-    public Button ColumnDoneButton;
-    [Space]
-    public GameObject EventSelectorOverlay;
-    public Button SelectorCancelButton;
-    [Space]
-    public TimetableCell SelectedCellPreview;
-    public int SelectedID;
+
+
+
     public void SelectEvent(int ID)
     {
         SelectedID = ID;
-        
+
         UpdateSelectorPreview();
 
-        //EventManager.Instance.ZoomHandler.enabled = true;
         EventSelectorOverlay.SetActive(false);
     }
+
     public void UpdateSelectorPreview()
     {
         EventItem e = EventManager.Instance.GetEvent(SelectedID);
@@ -54,40 +83,47 @@ public class TimetableEditor : MonoBehaviour
 
         SelectedCellPreview.FavouriteImage.gameObject.SetActive(e.Favourite);
     }
-    public void StartEdit()
+
+    public void SetTimetableName(string text)
+    {
+        TimetableNameText.text = text;
+    }
+    
+
+
+    public void Setup()
+    {
+        SelectEvent(0);
+        EndEditTable();
+        EndEditMode();
+    }
+
+
+
+    public void BeginEditMode()
     {
         Editing = true;
         TimetableNameText.gameObject.SetActive(!Editing);
         TimetableNameInput.gameObject.SetActive(Editing);
         EventManager.Instance.UpdateEventSelectors();
-        for (int i = 0; i < Grid.ColumnsList.Count; i++)
-        {
-            for (int j = 0; j < Grid.ColumnsList[i].Children.Count; j++)
-            {
-                var c = Grid.ColumnsList[i].Children[j];
-                c.SelfButton.onClick.RemoveAllListeners();
-                c.SelfButton.onClick.AddListener(delegate { c.Info.SetSelfToSelectedEvent(); });
 
-            }
-        }
+        BindCellsForQuickAssign();
 
         for (int i = 0; i < OtherButtons.Length; i++)
         {
             OtherButtons[i].SetActive(false);
         }
+
         for (int i = 0; i < OtherGroups.Length; i++)
         {
             OtherGroups[i].alpha = 0;
             OtherGroups[i].blocksRaycasts = OtherGroups[i].interactable = false;
         }
+
         for (int i = 0; i < EditorButtons.Length; i++)
         {
             EditorButtons[i].SetActive(true);
         }
-        //for (int i = 0; i < DayTimeManager.instance.WeekDayPreviews.Count; i++)
-        //{
-        //    DayTimeManager.instance.WeekDayPreviews[i].selfButton.interactable = false;
-        //}
 
         SelectorCancelButton.onClick.RemoveAllListeners();
         SelectorCancelButton.onClick.AddListener(delegate
@@ -95,48 +131,32 @@ public class TimetableEditor : MonoBehaviour
             EventSelectorOverlay.SetActive(false);
         });
     }
-    public void EndEdit()
+
+    public void EndEditMode()
     {
         SaveManager.instance.ChangesMade();
         Editing = false;
         TimetableNameText.gameObject.SetActive(!Editing);
         TimetableNameInput.gameObject.SetActive(Editing);
         EventManager.Instance.UpdateEventSelectors();
-        for (int i = 0; i < Grid.ColumnsList.Count; i++)
-        {
-            for (int j = 0; j < Grid.ColumnsList[i].Children.Count; j++)
-            {
-                var c = Grid.ColumnsList[i].Children[j];
-                c.SelfButton.onClick.RemoveAllListeners();
-
-                int col = i, row=j;
-
-                c.SelfButton.onClick.AddListener(
-                delegate
-                {
-                    EventManager.Instance.CellInfoEditor.gameObject.SetActive(true);
-                    EventManager.Instance.CellInfoEditor.SelectCell(col, row);
-                });
-            }
-        }
+        
+        BindCellsForManualAssign();
 
         for (int i = 0; i < OtherButtons.Length; i++)
         {
             OtherButtons[i].SetActive(true);
         }
+
         for (int i = 0; i < OtherGroups.Length; i++)
         {
             OtherGroups[i].alpha = 1;
             OtherGroups[i].blocksRaycasts = OtherGroups[i].interactable = true;
         }
+
         for (int i = 0; i < EditorButtons.Length; i++)
         {
             EditorButtons[i].SetActive(false);
         }
-        //for (int i = 0; i < DayTimeManager.instance.WeekDayPreviews.Count; i++)
-        //{
-        //    DayTimeManager.instance.WeekDayPreviews[i].selfButton.interactable = true;
-        //}
 
         SelectorCancelButton.onClick.RemoveAllListeners();
         SelectorCancelButton.onClick.AddListener(delegate
@@ -145,7 +165,9 @@ public class TimetableEditor : MonoBehaviour
         });
     }
 
-    public void StartEditColumns()
+
+    // Prepares editing for both columns and rows.
+    public void BeginEditTable()
     {
         TimetableNameText.gameObject.SetActive(Editing);
         TimetableNameInput.gameObject.SetActive(!Editing);
@@ -153,7 +175,7 @@ public class TimetableEditor : MonoBehaviour
         {
             EditorButtons[i].SetActive(false);
         }
-        ColumnDoneButton.gameObject.SetActive(true);
+        TableDoneButton.gameObject.SetActive(true);
 
         for (int i = 0; i < DayTimeManager.instance.WeekDayPreviews.Count; i++)
         {
@@ -164,19 +186,44 @@ public class TimetableEditor : MonoBehaviour
             DayTimeManager.instance.TimeIndexPreviews[i].button.interactable = false;
         }
     }
-    public void EndEditColumns()
+
+    // Ends editing for both columns and rows.
+    public void EndEditTable()
     {
         TimetableNameText.gameObject.SetActive(!Editing);
         TimetableNameInput.gameObject.SetActive(Editing);
-        Grid.RemoveColumnButtons();
-        Grid.RemoveRowButtons();
+
+        Grid.DestroyColumnButtons();
+        Grid.DestroyRowButtons();
+
         for (int i = 0; i < EditorButtons.Length; i++)
         {
             EditorButtons[i].SetActive(true);
         }
-        ColumnDoneButton.gameObject.SetActive(false);
+
+        TableDoneButton.gameObject.SetActive(false);
 
         // Button functionality for new columns
+        BindCellsForQuickAssign();
+
+        for (int i = 0; i < DayTimeManager.instance.WeekDayPreviews.Count; i++)
+        {
+            DayTimeManager.instance.WeekDayPreviews[i].selfButton.interactable = true;
+        }
+
+        for (int i = 0; i < DayTimeManager.instance.TimeIndexPreviews.Count; i++)
+        {
+            DayTimeManager.instance.TimeIndexPreviews[i].button.interactable = true;
+        }
+
+        dayTimeManager.Highlight.transform.SetAsLastSibling();
+        DragHandleManager.instance.EndSwap();
+    }
+
+
+
+    public void BindCellsForQuickAssign()
+    {
         for (int i = 0; i < Grid.ColumnsList.Count; i++)
         {
             for (int j = 0; j < Grid.ColumnsList[i].Children.Count; j++)
@@ -187,27 +234,26 @@ public class TimetableEditor : MonoBehaviour
 
             }
         }
+    }
 
-        for (int i = 0; i < DayTimeManager.instance.WeekDayPreviews.Count; i++)
-        {
-            DayTimeManager.instance.WeekDayPreviews[i].selfButton.interactable = true;
-        }
-        for (int i = 0; i < DayTimeManager.instance.TimeIndexPreviews.Count; i++)
-        {
-            DayTimeManager.instance.TimeIndexPreviews[i].button.interactable = true;
-        }
-        dayTimeManager.Highlight.transform.SetAsLastSibling();
-        DragHandleManager.instance.EndSwap();
-    }
-    public void SetTimetableName(string text)
+    public void BindCellsForManualAssign()
     {
-        TimetableNameText.text = text;
-    }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public void Setup()
-    {
-        SelectEvent(0);
-        EndEditColumns();
-        EndEdit();
+        for (int i = 0; i < Grid.ColumnsList.Count; i++)
+        {
+            for (int j = 0; j < Grid.ColumnsList[i].Children.Count; j++)
+            {
+                var c = Grid.ColumnsList[i].Children[j];
+                c.SelfButton.onClick.RemoveAllListeners();
+
+                int col = i, row = j;
+
+                c.SelfButton.onClick.AddListener(
+                delegate
+                {
+                    EventManager.Instance.CellInfoEditor.gameObject.SetActive(true);
+                    EventManager.Instance.CellInfoEditor.SelectCell(col, row);
+                });
+            }
+        }
     }
 }

@@ -6108,10 +6108,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Editing: 0
+  SelectedID: 0
+  dayTimeManager: {fileID: 768908571}
+  Grid: {fileID: 397490482}
+  SelectedCellPreview: {fileID: 1929147653}
   TimetableNameText: {fileID: 1454826204}
   TimetableNameInput: {fileID: 530106476}
-  Grid: {fileID: 397490482}
-  dayTimeManager: {fileID: 768908571}
+  EventSelectorOverlay: {fileID: 1282808847}
+  SelectorCancelButton: {fileID: 2142815667}
+  TableDoneButton: {fileID: 1864465235}
   OtherButtons:
   - {fileID: 625348860}
   - {fileID: 1995621213}
@@ -6120,11 +6125,6 @@ MonoBehaviour:
   EditorButtons:
   - {fileID: 2116750958}
   - {fileID: 1151182450}
-  ColumnDoneButton: {fileID: 1864465235}
-  EventSelectorOverlay: {fileID: 1282808847}
-  SelectorCancelButton: {fileID: 2142815667}
-  SelectedCellPreview: {fileID: 1929147653}
-  SelectedID: 0
 --- !u!4 &157766881
 Transform:
   m_ObjectHideFlags: 0
@@ -7809,171 +7809,6 @@ MonoBehaviour:
   TMP_Text: {fileID: 230345047}
   key: PROPERTIES_WEEKDAY_WEEKDAYNAME
   extraText: ':'
---- !u!1001 &230565332
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 2116750960}
-    m_Modifications:
-    - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 157766880}
-    - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: StartEdit
-      objectReference: {fileID: 0}
-    - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: TimetableEditor, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 4953952978038730602, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: a9b9b5830402ccd40b333d1669cd1b45, type: 3}
-    - target: {fileID: 4953952978038730602, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_Color.b
-      value: 0.6509434
-      objectReference: {fileID: 0}
-    - target: {fileID: 4953952978038730602, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_Color.g
-      value: 0.52260906
-      objectReference: {fileID: 0}
-    - target: {fileID: 4953952978038730602, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_Color.r
-      value: 0.3285422
-      objectReference: {fileID: 0}
-    - target: {fileID: 4953952978038730602, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_PixelsPerUnitMultiplier
-      value: 2.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7090316276618494025, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_Pivot.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7090316276618494025, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_Pivot.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7090316276618494025, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7090316276618494025, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7090316276618494025, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7090316276618494025, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7090316276618494025, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 7090316276618494025, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 7090316276618494025, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7090316276618494025, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7090316276618494025, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7090316276618494025, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7090316276618494025, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7090316276618494025, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7090316276618494025, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7090316276618494025, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.3803482
-      objectReference: {fileID: 0}
-    - target: {fileID: 7090316276618494025, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -80
-      objectReference: {fileID: 0}
-    - target: {fileID: 7090316276618494025, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7090316276618494025, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7090316276618494025, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530360307765310901, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_Name
-      value: Cancel Edit (Button)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530360307765310901, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7530360307765310901, guid: df6458806cb44664788024d81a401235, type: 3}
-      propertyPath: m_TagString
-      value: Styled/Button
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 6168778272281232641, guid: df6458806cb44664788024d81a401235, type: 3}
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 7090316276618494025, guid: df6458806cb44664788024d81a401235, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1540002415}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7530360307765310901, guid: df6458806cb44664788024d81a401235, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1312270570}
-  m_SourcePrefab: {fileID: 100100000, guid: df6458806cb44664788024d81a401235, type: 3}
---- !u!224 &230565333 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 7090316276618494025, guid: df6458806cb44664788024d81a401235, type: 3}
-  m_PrefabInstance: {fileID: 230565332}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &233561865
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12316,7 +12151,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: StartEdit
+      value: BeginEditMode
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -13340,11 +13175,11 @@ MonoBehaviour:
   Spacing: {x: 10, y: 10}
   Rows: 5
   Columns: 9
-  DebugGrid: 0
+  Padding: {x: 0, y: 0}
   Center: 1
   FitContent: 1
-  Padding: {x: 4, y: -30}
-  TimetablePrefab: {fileID: 6856377578852616562, guid: 57ecb6090c6b215469ee06694cd12bd9, type: 3}
+  DebugGrid: 0
+  TimetableCellPrefab: {fileID: 6856377578852616562, guid: 57ecb6090c6b215469ee06694cd12bd9, type: 3}
   AddColButtonPrefab: {fileID: 8481199784081230204, guid: 04e01c86542c8cb46aed13a243dad02d, type: 3}
   RemoveColButtonPrefab: {fileID: 4981558412892410615, guid: 4e85396dcf7aaf14a98d497654ec9374, type: 3}
   ColButtonParent: {fileID: 206446499}
@@ -14662,11 +14497,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: StartEditColumns
+      value: BeginEditTable
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
-      value: SetupAddColumnButtons
+      value: SpawnAddColumnButtons
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -16423,11 +16258,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: StartEditColumns
+      value: BeginEditTable
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
-      value: SetupAddColumnButtons
+      value: SpawnAddColumnButtons
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -26777,25 +26612,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e68ff82052d6b174894e29a603aa512d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  begin: 0
   Grid: {fileID: 397490482}
-  WeekDays: []
+  _24hFormat: 0
+  EnglishFormat: 0
+  _24hToggle: {fileID: 1402889821}
+  EnglishToggle: {fileID: 1145847310}
   Highlight: {fileID: 1165173795}
   HighlightRect: {fileID: 1165173796}
   TimeLeftText: {fileID: 1964385369}
   WeekdayEditor: {fileID: 1328001925}
   WeekDayPrefab: {fileID: 6694743357736253523, guid: c8997f0764a64a54885b95fd1565775f, type: 3}
   WeekDaysParent: {fileID: 2093600407}
+  WeekDays: []
   WeekDayPreviews: []
-  _24hFormat: 0
-  EnglishFormat: 0
-  _24hToggle: {fileID: 1402889821}
-  EnglishToggle: {fileID: 1145847310}
+  labelEditor: {fileID: 1653336427}
   TimeIndexPrefab: {fileID: 5938648083441751981, guid: 67236d6717dc732469a59a35fd970ce1, type: 3}
   TimeIndexesParent: {fileID: 1184528046}
   TimeIndexPreviews: []
   TimeLabels: []
-  labelEditor: {fileID: 1653336427}
-  begin: 0
 --- !u!1001 &774122433
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31603,11 +31438,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: StartEditColumns
+      value: BeginEditTable
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
-      value: SetupAddRowButtons
+      value: SpawnAddRowButtons
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -32616,7 +32451,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: StartEditColumns
+      value: BeginEditTable
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
@@ -33613,11 +33448,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: StartEditColumns
+      value: BeginEditTable
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
-      value: SetupDeleteRowButtons
+      value: SpawnDeleteRowButtons
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -34631,6 +34466,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6799973699374911685, guid: 60c2f47415a653244ae540dbb47e653c, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6799973699374911685, guid: 60c2f47415a653244ae540dbb47e653c, type: 3}
       propertyPath: m_OnSelect.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 1
       objectReference: {fileID: 0}
@@ -34643,15 +34482,39 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6799973699374911685, guid: 60c2f47415a653244ae540dbb47e653c, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6799973699374911685, guid: 60c2f47415a653244ae540dbb47e653c, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1328001925}
+    - target: {fileID: 6799973699374911685, guid: 60c2f47415a653244ae540dbb47e653c, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6799973699374911685, guid: 60c2f47415a653244ae540dbb47e653c, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: UpdateTextPreview
+      objectReference: {fileID: 0}
+    - target: {fileID: 6799973699374911685, guid: 60c2f47415a653244ae540dbb47e653c, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: UpdateWeekdayName
       objectReference: {fileID: 0}
     - target: {fileID: 6799973699374911685, guid: 60c2f47415a653244ae540dbb47e653c, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: InputFieldFixer, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6799973699374911685, guid: 60c2f47415a653244ae540dbb47e653c, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: WeekdayEditor, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6799973699374911685, guid: 60c2f47415a653244ae540dbb47e653c, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6799973699374911685, guid: 60c2f47415a653244ae540dbb47e653c, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6800076543082358738, guid: 60c2f47415a653244ae540dbb47e653c, type: 3}
@@ -45106,36 +44969,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1312270566 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7530360307765310901, guid: df6458806cb44664788024d81a401235, type: 3}
-  m_PrefabInstance: {fileID: 230565332}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1312270570
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1312270566}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 891970c3805bd8448a8d0f027ee7d102, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  comment: This object is disabled. At the moment, a cancel button for the entire
-    timetable isn't planned.
---- !u!114 &1312270572 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4953952978038730602, guid: df6458806cb44664788024d81a401235, type: 3}
-  m_PrefabInstance: {fileID: 230565332}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1312270566}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1314821596
 GameObject:
   m_ObjectHideFlags: 0
@@ -52331,81 +52164,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1540002414
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1540002415}
-  - component: {fileID: 1540002417}
-  - component: {fileID: 1540002416}
-  m_Layer: 5
-  m_Name: Image
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1540002415
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1540002414}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 230565333}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -10.9095, y: -10.9095}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1540002416
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1540002414}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7679a15d775552c449a2e4f2b4b07c6d, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1540002417
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1540002414}
-  m_CullTransparentMesh: 1
 --- !u!1 &1548674195 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6479446150819179576, guid: 43831fad7e4d3264aa5188f19a25a450, type: 3}
@@ -52566,11 +52324,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: StartEditColumns
+      value: BeginEditTable
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
-      value: SetupDeleteColumnButtons
+      value: SpawnDeleteColumnButtons
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -61967,7 +61725,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: EndEditColumns
+      value: EndEditTable
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -62079,7 +61837,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7530360307765310901, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_Name
-      value: Apply Column Edit (Button)
+      value: Apply Table Edit (Button)
       objectReference: {fileID: 0}
     - target: {fileID: 7530360307765310901, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_TagString
@@ -62318,7 +62076,7 @@ MonoBehaviour:
   - {fileID: 1238552021}
   - {fileID: 1387857920}
   - {fileID: 1523845484}
-  - {fileID: 1312270572}
+  - {fileID: 0}
   - {fileID: 712556662}
   - {fileID: 1979780046}
   - {fileID: 376085067}
@@ -66912,7 +66670,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: StartEditColumns
+      value: BeginEditTable
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
@@ -67949,7 +67707,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: EndEdit
+      value: EndEditMode
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -69950,7 +69708,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2029494312}
-  - {fileID: 230565333}
   - {fileID: 356940144}
   m_Father: {fileID: 1338706746}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

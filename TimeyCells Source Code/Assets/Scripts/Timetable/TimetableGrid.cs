@@ -4,34 +4,49 @@ using UnityEngine.UI;
 
 public class TimetableGrid : MonoBehaviour
 {
+    [Header("Parent Transform")]
     public RectTransform rect;
-    [Space]
+
+    [Space(20)]
+    [Header("Cell Alignment")]
     public Vector2 CellSize;
     public Vector2 Spacing;
-    [Space]
+
+    [Space(20)]
+    [Header("Parent Properties")]
     public int Rows;
     public int Columns;
     [Space]
-    public bool DebugGrid; // When debugging, destroyImmediate is called, instead of destroy.
-    public bool Center = true;
-    public bool FitContent = true;
     public Vector2 Padding;
     [Space]
-    public TimetableCell TimetablePrefab;
+    public bool Center = true;
+    public bool FitContent = true;
+    [Space]
+    public bool DebugGrid; // When debugging, destroyImmediate is called, instead of destroy.
+
+    [Space(20)]
+    [Header("References")]
+    public TimetableCell TimetableCellPrefab;
+
+    [Space(20)]
+    [Header("Adding/Removing Columns UI")]
     public Button AddColButtonPrefab;
     public Button RemoveColButtonPrefab;
+    [Space]
     public Transform ColButtonParent;
     public Vector2 ColumnButtonsOffset = -Vector2.up * 20;
-    public int MaxColumns = 40;
     [Space]
+    public int MaxColumns = 40;
+
+    [Space(20)]
+    [Header("Adding/Removing Rows UI")]
     public Button AddRowButtonPrefab;
     public Button RemoveRowButtonPrefab;
+    [Space]
     public Transform RowButtonParent;
     public Vector2 RowButtonsOffset = Vector2.right * 20;
+    [Space]
     public int MaxRows = 7;
-
-    Vector2 PivotFix = Vector2.up;
-    Vector2 originalPivot;
 
     [System.Serializable]
     public class Column
@@ -39,16 +54,23 @@ public class TimetableGrid : MonoBehaviour
         public bool IsMultirow;
         public List<TimetableCell> Children = new List<TimetableCell>();
     }
+
+    [Header("Timetable Content")]
     public List<Column> ColumnsList = new();
+
+    [Header("Add/Delete Buttons")]
     public List<Button> ColumnButtons = new();
     public List<Button> RowButtons = new();
+
+    Vector2 PivotFix = Vector2.up;
+    Vector2 originalPivot;
 
     public void Start()
     {
         DebugGrid = false;
     }
 
-    [ContextMenu("Set it up!!!")]
+    [ContextMenu("Setup Timetable Grid!")]
     public void Setup()
     {
         if (rect == null) rect = GetComponent<RectTransform>();
@@ -56,7 +78,7 @@ public class TimetableGrid : MonoBehaviour
         originalPivot = rect.pivot;
         rect.pivot = PivotFix;
 
-        ClearAll();
+        ClearAllCells();
 
         for (int x = 0; x < Columns; x++)
         {
@@ -71,10 +93,12 @@ public class TimetableGrid : MonoBehaviour
         FitToContent();
     }
 
+
+
     //The buttons which will add/delete columns
-    public void SetupAddColumnButtons(bool rowspan)
+    public void SpawnAddColumnButtons(bool rowspan)
     {
-        RemoveColumnButtons();
+        DestroyColumnButtons();
         if (Columns >= MaxColumns) return;
 
         var c = ColumnsList[0].Children[0];
@@ -97,13 +121,14 @@ public class TimetableGrid : MonoBehaviour
             }
             else
             {
-                b.onClick.AddListener(delegate { AddMultirow(colIndex); });
+                b.onClick.AddListener(delegate { AddMultirowColumn(colIndex); });
             }
         }
     }
-    public void SetupDeleteColumnButtons()
+
+    public void SpawnDeleteColumnButtons()
     {
-        RemoveColumnButtons();
+        DestroyColumnButtons();
         if (ColumnsList.Count <= 1) return;
 
         var c = ColumnsList[0].Children[0];
@@ -123,11 +148,10 @@ public class TimetableGrid : MonoBehaviour
         }
     }
 
-
     //The buttons which will add/delete rows
-    public void SetupAddRowButtons()
+    public void SpawnAddRowButtons()
     {
-        RemoveRowButtons();
+        DestroyRowButtons();
         if (Rows >= MaxRows) return;
 
         var c = ColumnsList[0].Children[0];
@@ -147,9 +171,10 @@ public class TimetableGrid : MonoBehaviour
             b.onClick.AddListener(delegate { AddRow(colIndex); });
         }
     }
-    public void SetupDeleteRowButtons()
+
+    public void SpawnDeleteRowButtons()
     {
-        RemoveRowButtons();
+        DestroyRowButtons();
         if (Rows <= 1) return;
 
         var c = ColumnsList[0].Children[0];
@@ -169,7 +194,8 @@ public class TimetableGrid : MonoBehaviour
             b.onClick.AddListener(delegate { RemoveRow(colIndex); });
         }
     }
-    public void RemoveColumnButtons()
+
+    public void DestroyColumnButtons()
     {
         for (int i = 0; i < ColumnButtons.Count; i++)
         {
@@ -177,7 +203,8 @@ public class TimetableGrid : MonoBehaviour
         }
         ColumnButtons.Clear();
     }
-    public void RemoveRowButtons()
+
+    public void DestroyRowButtons()
     {
         for (int i = 0; i < RowButtons.Count; i++)
         {
@@ -186,7 +213,10 @@ public class TimetableGrid : MonoBehaviour
         RowButtons.Clear();
     }
 
-    public void ClearAll()
+
+
+
+    public void ClearAllCells()
     {
         if (ColumnsList.Count <= 0) return;
         for (int i = 0; i < ColumnsList.Count; i++)
@@ -210,6 +240,18 @@ public class TimetableGrid : MonoBehaviour
         }
         ColumnsList.Clear();
     }
+
+    public void UpdateAllCells()
+    {
+        for (int i = 0; i < ColumnsList.Count; i++)
+        {
+            for (int j = 0; j < ColumnsList[i].Children.Count; j++)
+            {
+                ColumnsList[i].Children[j].Info.UpdateUI();
+            }
+        }
+    }
+
     void FitToContent() // Call this, AFTER changing row/column count.
     {
         if (!FitContent) return;
@@ -223,6 +265,10 @@ public class TimetableGrid : MonoBehaviour
 
         rect.sizeDelta = wantedscale;
     }
+
+
+
+
     public Vector3 GetOffset()
     {
         if (!Center) return Vector3.zero;
@@ -233,18 +279,6 @@ public class TimetableGrid : MonoBehaviour
         return offset;
     }
     
-    public void RemoveAllOffsets()
-    {
-        if (!Center) return;
-        for (int i = 0; i < ColumnsList.Count; i++)
-        {
-            var children = ColumnsList[i].Children;
-            for (int j = 0; j < children.Count; j++)
-            {
-                children[j].transform.localPosition -= GetOffset();
-            }
-        }
-    }
     public void AddAllOffsets()
     {
         if (!Center) return;
@@ -257,6 +291,23 @@ public class TimetableGrid : MonoBehaviour
             }
         }
     }
+
+    public void RemoveAllOffsets()
+    {
+        if (!Center) return;
+        for (int i = 0; i < ColumnsList.Count; i++)
+        {
+            var children = ColumnsList[i].Children;
+            for (int j = 0; j < children.Count; j++)
+            {
+                children[j].transform.localPosition -= GetOffset();
+            }
+        }
+    }
+
+
+
+
     public void UpdateColumnTransform(Column column,int index)
     {
         if(column.Children.Count == 0)
@@ -273,7 +324,7 @@ public class TimetableGrid : MonoBehaviour
             var c = column.Children;
             if (c[i] == null)
             {
-                c[i] = Instantiate(TimetablePrefab, this.transform);
+                c[i] = Instantiate(TimetableCellPrefab, this.transform);
                 c[i].rect.sizeDelta = CellSize;
             }
             c[i].transform.localPosition = Vector3.zero;
@@ -293,6 +344,7 @@ public class TimetableGrid : MonoBehaviour
             c[i].transform.localPosition = wantedpos;
         }
     }
+
     public void UpdateBreakTransform(int index)
     {
         if (!ColumnsList[index].IsMultirow) return;
@@ -322,6 +374,7 @@ public class TimetableGrid : MonoBehaviour
         t.rect.sizeDelta = wantedscale;
         t.transform.localPosition = wantedpos;
     }
+
     public void UpdateAllTransforms(int start)
     {
         for (int i = 0; i < ColumnsList.Count; i++)
@@ -334,8 +387,42 @@ public class TimetableGrid : MonoBehaviour
             UpdateColumnTransform(ColumnsList[i], i);
         }
     }
-    
-    public void AddMultirow(int columnIndex)
+
+
+
+
+    public void AddColumn(int columnIndex)
+    {
+        originalPivot = rect.pivot;
+        rect.pivot = PivotFix;
+
+        RemoveAllOffsets();
+
+        Columns++;
+        FitToContent();
+
+        ColumnsList.Insert(columnIndex, new());
+        ColumnsList[columnIndex].IsMultirow = false;
+
+        for (int i = 0; i < Rows; i++)
+        {
+            ColumnsList[columnIndex].Children.Add(null);
+        }
+        UpdateAllTransforms(columnIndex);
+
+        AddAllOffsets();
+
+        rect.pivot = originalPivot;
+        if (TimetableEditor.instance.Editing)
+            SpawnAddColumnButtons(false);
+
+        UpdateAllCells();
+
+        DayTimeManager.instance.AddIndexLabel(columnIndex);
+        DayTimeManager.instance.UpdateTimeIndexes();
+    }
+
+    public void AddMultirowColumn(int columnIndex)
     {
         
         originalPivot = rect.pivot;
@@ -346,7 +433,7 @@ public class TimetableGrid : MonoBehaviour
         Columns++;
         FitToContent();
 
-        TimetableCell t = Instantiate(TimetablePrefab, this.transform);
+        TimetableCell t = Instantiate(TimetableCellPrefab, this.transform);
         
 
         ColumnsList.Insert(columnIndex, new());
@@ -361,41 +448,12 @@ public class TimetableGrid : MonoBehaviour
 
         rect.pivot = originalPivot;
         if (TimetableEditor.instance.Editing)
-            SetupAddColumnButtons(true);
+            SpawnAddColumnButtons(true);
         UpdateAllCells();
 
         DayTimeManager.instance.UpdateTimeIndexes();
     }
-    public void AddColumn(int columnIndex)
-    {
-        originalPivot = rect.pivot;
-        rect.pivot = PivotFix;
-
-        RemoveAllOffsets();
-
-        Columns++;
-        FitToContent();
-
-        ColumnsList.Insert(columnIndex, new());
-        ColumnsList[columnIndex].IsMultirow = false;
-        
-        for (int i = 0; i < Rows; i++)
-        {
-            ColumnsList[columnIndex].Children.Add(null);
-        }
-        UpdateAllTransforms(columnIndex);
-
-        AddAllOffsets();
-
-        rect.pivot = originalPivot;
-        if (TimetableEditor.instance.Editing)
-            SetupAddColumnButtons(false);
-
-        UpdateAllCells();
-
-        DayTimeManager.instance.AddIndexLabel(columnIndex);
-        DayTimeManager.instance.UpdateTimeIndexes();
-    }
+    
     public void RemoveColumn(int columnIndex)
     {
         
@@ -434,19 +492,46 @@ public class TimetableGrid : MonoBehaviour
 
         rect.pivot = originalPivot;
         if (TimetableEditor.instance.Editing)
-            SetupDeleteColumnButtons();
+            SpawnDeleteColumnButtons();
 
         UpdateAllCells();
         
         DayTimeManager.instance.RemoveIndexLabel(columnIndex);
         DayTimeManager.instance.UpdateTimeIndexes();
     }
+
+    public void SwapColumns(int IndexA, int IndexB)
+    {
+        Column columnA = ColumnsList[IndexA];
+        ColumnsList[IndexA] = ColumnsList[IndexB];
+        ColumnsList[IndexB] = columnA;
+        rect.pivot = PivotFix;
+        RemoveAllOffsets();
+        if (!ColumnsList[IndexA].IsMultirow)
+            UpdateColumnTransform(ColumnsList[IndexA], IndexA);
+        else
+            UpdateBreakTransform(IndexA);
+        if (!ColumnsList[IndexB].IsMultirow)
+            UpdateColumnTransform(ColumnsList[IndexB], IndexB);
+        else
+            UpdateBreakTransform(IndexB);
+        AddAllOffsets();
+        rect.pivot = originalPivot;
+
+        // Swapping labels
+        DayTimeManager.instance.SwapIndexLabels(IndexA, IndexB);
+    }
+
     // This is only used for loading saves.
     public void ReplaceColumnWithMultirowAt(int index)
     {
         RemoveColumn(index);
-        AddMultirow(index);
+        AddMultirowColumn(index);
     }
+
+
+
+
     public void AddRow(int rowIndex)
     {
         originalPivot = rect.pivot;
@@ -468,10 +553,11 @@ public class TimetableGrid : MonoBehaviour
         rect.pivot = originalPivot;
 
         if (TimetableEditor.instance.Editing)
-            SetupAddRowButtons();
+            SpawnAddRowButtons();
         UpdateAllCells();
         DayTimeManager.instance.AddNewWeekday(rowIndex);
     }
+
     public void RemoveRow(int rowIndex)
     {
         originalPivot = rect.pivot;
@@ -501,32 +587,11 @@ public class TimetableGrid : MonoBehaviour
         rect.pivot = originalPivot;
 
         if (TimetableEditor.instance.Editing)
-            SetupDeleteRowButtons();
+            SpawnDeleteRowButtons();
         UpdateAllCells();
         DayTimeManager.instance.RemoveWeekday(rowIndex);
     }
-
-    public void SwapColumns(int IndexA, int IndexB)
-    {
-        Column columnA = ColumnsList[IndexA];
-        ColumnsList[IndexA] = ColumnsList[IndexB];
-        ColumnsList[IndexB] = columnA;
-        rect.pivot = PivotFix;
-        RemoveAllOffsets();
-        if (!ColumnsList[IndexA].IsMultirow)
-            UpdateColumnTransform(ColumnsList[IndexA], IndexA);
-        else
-            UpdateBreakTransform(IndexA);
-        if (!ColumnsList[IndexB].IsMultirow)
-            UpdateColumnTransform(ColumnsList[IndexB], IndexB);
-        else
-            UpdateBreakTransform(IndexB);
-        AddAllOffsets();
-        rect.pivot = originalPivot;
-
-        // Swapping labels
-        DayTimeManager.instance.SwapIndexLabels(IndexA, IndexB);
-    }
+    
     public void SwapRows(int IndexA, int IndexB)
     {
         rect.pivot = PivotFix;
@@ -546,25 +611,5 @@ public class TimetableGrid : MonoBehaviour
 
         // Swapping weekdays
         DayTimeManager.instance.SwapWeekDays(IndexA, IndexB);
-    }
-    public void UpdateAllCells()
-    {
-        for (int i = 0; i < ColumnsList.Count; i++)
-        {
-            for (int j = 0; j < ColumnsList[i].Children.Count; j++)
-            {
-                ColumnsList[i].Children[j].Info.UpdateUI();
-            }
-        }
-    }
-    public void CheckCellTempEvents()
-    {
-        for (int i = 0; i < ColumnsList.Count; i++)
-        {
-            for (int j = 0; j < ColumnsList[i].Children.Count; j++)
-            {
-                ColumnsList[i].Children[j].Info.UpdateUI();
-            }
-        }
     }
 }

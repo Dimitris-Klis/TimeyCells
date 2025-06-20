@@ -122,6 +122,10 @@ public class WeekdayEditor : MonoBehaviour
             DayToggles[6].interactable = DayToggles[6].interactable && Sun == 0;
         }
     }
+    public void UpdateWeekdayName(string text)
+    {
+        WeekdayPreview.WeekDayName.text = text;
+    }
     public void ParseStartTime(string text)
     {
         if (!DayTimeManager.TryParseTime(text, out DateTime length))

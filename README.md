@@ -10,56 +10,56 @@ Grab the latest version of **TimeyCells** here:<br/>
 ---
 
 # Source Code Documentation
-Developers and YH4F Judges can learn how the project works by exploring the [Source Code Docs](./SOURCE-CODE-DOCS.md).
+After Reading the User Manual, Developers and YH4F Judges can learn how the project works by exploring the [Source Code Docs](./SOURCE-CODE-DOCS.md).
 
 ---
 
 # User Manual
 ## Table of Contents
-- 01: [Introduction](#introduction)<br/>
+- 01: [Introduction](#introduction)
 
-- 02: [Events, Event Types](#events-event-types)<br/>
-  - [Creating Event Types](#creating-event-types)<br/>
-  - [Editing Event Types](#editing-event-types)<br/>
-  - [Creating Events](#creating-events)<br/>
-  - [Editing Events](#editing-events)<br/>
+- 02: [Events, Event Types](#events-event-types)
+  - [Creating Event Types](#creating-event-types)
+  - [Editing Event Types](#editing-event-types)
+  - [Creating Events](#creating-events)
+  - [Editing Events](#editing-events)
 
-- 03: [Editing your timetable](#editing-your-timetable)<br/>
-  - [Renaming your timetable](#renaming-your-timetable)<br/>
-  - [Adding/Deleting Columns & Multirows](#addingdeleting-columns--multirows)<br/>
-  - [Adding/Deleting Rows](#addingdeleting-rows)<br/>
-  - [Assigning events to your timetable](#assigning-events-to-your-timetable)<br/>
-  - [Swapping Columns](#swapping-columns)<br/>
-  - [Swapping Rows](#swapping-rows)<br/>
+- 03: [Editing your timetable](#editing-your-timetable)
+  - [Renaming your timetable](#renaming-your-timetable)
+  - [Adding/Deleting Columns & Multirows](#addingdeleting-columns--multirows)
+  - [Adding/Deleting Rows](#addingdeleting-rows)
+  - [Assigning events to your timetable](#assigning-events-to-your-timetable)
+  - [Swapping Columns](#swapping-columns)
+  - [Swapping Rows](#swapping-rows)
 
-- 04: [Manual Editing](#manual-editing)<br/>
-  - [Editing Weekdays](#editing-weekdays)<br/>
-  - [Editing Cells](#editing-cells)<br/>
-  - [Editing Labels](#editing-labels)<br/>
-  - [Temporary Overrides](#temporary-overrides)<br/>
-    - [Creating Temporary Weekdays](#creating-temporary-weekdays)<br/>
-    - [Creating Temporary Cells](#creating-temporary-cells)<br/>
-    - [Deleting Temporary Overrides](#deleting-temporary-overrides)<br/>
+- 04: [Manual Editing](#manual-editing)
+  - [Editing Weekdays](#editing-weekdays)
+  - [Editing Cells](#editing-cells)
+  - [Editing Labels](#editing-labels)
+  - [Temporary Overrides](#temporary-overrides)
+    - [Creating Temporary Weekdays](#creating-temporary-weekdays)
+    - [Creating Temporary Cells](#creating-temporary-cells)
+    - [Deleting Temporary Overrides](#deleting-temporary-overrides)
 
-- 05: [Saving, Loading & Creating Timetables](#saving-loading--creating-timetables)<br/>
-  - [Saving your work](#saving-your-work)<br/>
-  - [Loading a timetable](#loading-a-timetable)<br/>
-  - [Creating a new timetable](#creating-a-new-timetable)<br/>
+- 05: [Saving, Loading & Creating Timetables](#saving-loading--creating-timetables)
+  - [Saving your work](#saving-your-work)
+  - [Loading a timetable](#loading-a-timetable)
+  - [Creating a new timetable](#creating-a-new-timetable)
 
-- 06: [Copying & Pasting Data](#copying--pasting-data)<br/>
+- 06: [Copying & Pasting Data](#copying--pasting-data)
 
-- 07: [Backwards Compatibility](#backwards-compatibility)<br/>
+- 07: [Backwards Compatibility](#backwards-compatibility)
 
-- 08: [Sharing a Photo](#sharing-a-photo)<br/>
-  - [Sharing photos on Windows](#sharing-photos-on-windows)<br/>
-  - [Sharing photos on Android](#sharing-photos-on-android)<br/>
+- 08: [Sharing a Photo](#sharing-a-photo)
+  - [Sharing photos on Windows](#sharing-photos-on-windows)
+  - [Sharing photos on Android](#sharing-photos-on-android)
 
-- 09: [Settings](#settings)<br/>
-  - [Time Format](#time-format)<br/>
-  - [Language](#language)<br/>
-  - [Themes](#themes)<br/>
+- 09: [Settings](#settings)
+  - [Time Format](#time-format)
+  - [Language](#language)
+  - [Themes](#themes)
 
-- 10: [Portable Mode (PC Only)](#portable-mode-pc-only)<br/><br/>
+- 10: [Portable Mode (PC Only)](#portable-mode-pc-only)
 
 ---
 ## Introduction:
@@ -249,3 +249,7 @@ When Portable Mode is enabled, all files will be stored in the application's dir
 ## Help
 The app has a similar user manual built in. To access it, you need to swap to the `Help` tab:<br/>
 ![03  Burger menu - Help](https://github.com/user-attachments/assets/48549294-ea8c-424b-a61a-bdcd9f1e4836)
+
+---
+## Done Reading?
+Explore the [Source Code Docs](./SOURCE-CODE-DOCS.md)!
