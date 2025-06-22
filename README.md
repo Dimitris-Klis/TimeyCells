@@ -134,12 +134,12 @@ Labels are the smaller cells located at the top of the column. They display the 
 <br/><br/>
 You can edit the labels to always display text.<br/>
 ![20  Custom Labels 15fps](https://github.com/user-attachments/assets/34f41dca-0478-4c76-baa0-36fe1e4234e6)
-<br/>You can also edit them to count as an index, which means that the rest of the indexes will be displayed as:
+<br/>You can also edit them to count as an index, which means that the rest of the indexes will be displayed as:<br/>
 `1, 2, 3, 4, TEXT, 6, 7, 8`<br/>
 Instead of:<br/>
 `1, 2, 3, 4, TEXT, 5, 6, 7, 8`
 <br/><br/>
-Here's how thιs timetable's labels would look on a Tuesday:
+Here's how this timetable's labels would look on a Tuesday:
 ![Tuesday Labels](https://github.com/user-attachments/assets/ca47b3b5-dbfa-45fe-a295-4ca3693fe524)
 <br/>_* The final label is blank because the final cell of Tuesday is blank._
 <br/><br/>
