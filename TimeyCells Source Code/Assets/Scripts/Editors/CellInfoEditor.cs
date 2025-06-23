@@ -361,13 +361,13 @@ public class CellInfoEditor : MonoBehaviour
 
             MainPreview.FavouriteImage.gameObject.SetActive(e.Favourite);
 
-            if (EventNameOverride.text == "")
+            if (EventNameOverride.text != "")
                 MainPreview.EventNameText.text = EventNameOverride.text;
 
-            if (Info1Override.text == "")
+            if (Info1Override.text != "")
                 MainPreview.Info1Text.text = Info1Override.text;
 
-            if (Info2Override.text == "")
+            if (Info2Override.text != "")
                 MainPreview.Info2Text.text = Info2Override.text;
 
             if (TypeOverride.value - 1 >= 0)
@@ -401,33 +401,33 @@ public class CellInfoEditor : MonoBehaviour
             else
                 MainPreview.FavouriteImage.gameObject.SetActive(e.Favourite);
 
-            if (TempEventNameOverride.text == "")
+            if (TempEventNameOverride.text != "")
             {
                 MainPreview.EventNameText.text = TempEventNameOverride.text;
             }
             else
             {
-                if (EventNameOverride.text == "")
+                if (EventNameOverride.text != "")
                     MainPreview.EventNameText.text = EventNameOverride.text;
             }
 
-            if (TempInfo1Override.text == "")
+            if (TempInfo1Override.text != "")
             {
                     MainPreview.Info1Text.text = TempInfo1Override.text;
             }
             else
             {
-                if (Info1Override.text == "")
+                if (Info1Override.text != "")
                     MainPreview.Info1Text.text = Info1Override.text;
             }   
 
-            if (TempInfo2Override.text == "")
+            if (TempInfo2Override.text != "")
             {
                 MainPreview.Info2Text.text = TempInfo2Override.text;
             }
             else
             {
-                if (Info2Override.text == "")
+                if (Info2Override.text != "")
                     MainPreview.Info2Text.text = Info2Override.text;
             }
 

@@ -12,7 +12,7 @@ public class TimetableEditor : MonoBehaviour
         instance = this;
     }
 
-    [Header("Read Only Variables")]
+    [Header("     Read Only Variables")]
     [ReadOnly] public bool Editing;
     [ReadOnly] public int SelectedID;
 
@@ -105,7 +105,7 @@ public class TimetableEditor : MonoBehaviour
         Editing = true;
         TimetableNameText.gameObject.SetActive(!Editing);
         TimetableNameInput.gameObject.SetActive(Editing);
-        EventManager.Instance.UpdateEventSelectors();
+        EventManager.Instance.UpdateEventSelectorButtons();
 
         BindCellsForQuickAssign();
 
@@ -138,7 +138,7 @@ public class TimetableEditor : MonoBehaviour
         Editing = false;
         TimetableNameText.gameObject.SetActive(!Editing);
         TimetableNameInput.gameObject.SetActive(Editing);
-        EventManager.Instance.UpdateEventSelectors();
+        EventManager.Instance.UpdateEventSelectorButtons();
         
         BindCellsForManualAssign();
 

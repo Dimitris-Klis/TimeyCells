@@ -16,7 +16,8 @@ public class LocalizationSystem : MonoBehaviour
     public string[] languageNames;
     public TextAsset[] textAssets;
     public Dictionary<string, string> stringPairs = new();
-
+    [Space]
+    public HelpSection helpSection;
     
     
     // Start is called before the first frame update
@@ -101,6 +102,7 @@ public class LocalizationSystem : MonoBehaviour
                 Debug.Log($"{item.Key}: {item.Value}");
             }
         }
+        helpSection.ShouldSetup = true;
     }
     public string GetText(string name, string key)
     {

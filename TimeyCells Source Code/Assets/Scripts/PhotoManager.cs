@@ -121,7 +121,7 @@ public class PhotoManager : MonoBehaviour
 
                     c.UpdateUI();
                     
-                    // TO DO: FIX MULTIROWS IN CUSTOM GRID.
+                    // Multirows
                     if (DayTimeManager.instance.Grid.ColumnsList[x].IsMultirow)
                         Grid.MultirowIndexes.Add(index);
                     index++;

@@ -7,15 +7,19 @@ using System.Linq;
 
 public class EventCreator : MonoBehaviour
 {
-    public int IDToModify;
-    public CanvasGroup SelfGroup;
+    [Header("ID To Modify")]
+    [ReadOnly] public int IDToModify;
 
+    [Space(20)]
+    [Header("Overlay Title")]
+    public TMP_Text TitleText;
+
+    [Space(20)]
     [Header("Preview")]
     public TimetableCell PreviewCell;
-    [Space]
-    public TMP_Text TitleText;
-    [Space(30)]
-    [Header("Property Fields")]
+
+    [Space(20)]
+    [Header("Property Fields UI")]
     public TMP_InputField EventNameInput;
     public TMP_InputField Info1Input;
     public TMP_InputField Info2Input;
@@ -24,6 +28,8 @@ public class EventCreator : MonoBehaviour
     public Toggle FavouriteToggle;
     [Space]
     public Button DeleteButton;
+
+
     public void OpenCreator(int ID)
     {
         DeleteButton.interactable = ID >= 0;
@@ -31,9 +37,6 @@ public class EventCreator : MonoBehaviour
         TitleText.text = ID >= 0 ? LocalizationSystem.instance.GetText(gameObject.name, "EDIT_EVENT") : LocalizationSystem.instance.GetText(gameObject.name, "CREATE_EVENT");
 
         IDToModify = ID;
-
-        //SelfGroup.interactable = SelfGroup.blocksRaycasts = true;
-        //SelfGroup.alpha = 1;
 
         //Setting up the dropdown.
         EventTypeDropdown.ClearOptions();
@@ -77,33 +80,42 @@ public class EventCreator : MonoBehaviour
         ChangeEventType(EventTypeDropdown.value);
 
         ChangeIsFavourite(FavouriteToggle.isOn);
-
-        //EventManager.Instance.ShowEditingOverlay();
     }
+
+
+
 
     // These functions simply change the preview. They're only meant for visual feedback.
     public void ChangeEventName(string text)
     {
         PreviewCell.EventNameText.text = text;
     }
+
     public void ChangeInfo1Name(string text)
     {
         PreviewCell.Info1Text.text = text;
     }
+
     public void ChangeInfo2Name(string text)
     {
         PreviewCell.Info2Text.text = text;
     }
+
     public void ChangeEventType(int type)
     {
         EventTypeItem e = EventManager.Instance.EventTypes[type];
         PreviewCell.BackgroundImage.color = e.BackgroundColor;
         PreviewCell.EventNameText.color = PreviewCell.Info1Text.color = PreviewCell.Info2Text.color = e.TextColor;
     }
+
     public void ChangeIsFavourite(bool favourite)
     {
         PreviewCell.FavouriteImage.gameObject.SetActive(favourite);
     }
+
+
+
+
     public void Confirm()
     {
         if (IDToModify < 0)
@@ -132,10 +144,11 @@ public class EventCreator : MonoBehaviour
         }
         SaveManager.instance.ChangesMade();
         EventManager.Instance.UpdateEventPreviews(true);
-        EventManager.Instance.UpdateEventSelectors();
+        EventManager.Instance.UpdateEventSelectorButtons();
         TimetableEditor.instance.UpdateSelectorPreview();
         gameObject.SetActive(false);
     }
+
     public void Delete(bool confirm)
     {
         if (!confirm)
@@ -154,7 +167,7 @@ public class EventCreator : MonoBehaviour
         if (IDToModify < 0) return;
         EventManager.Instance.DeleteEvent(IDToModify);
         EventManager.Instance.UpdateEventPreviews(true);
-        EventManager.Instance.UpdateEventSelectors();
+        EventManager.Instance.UpdateEventSelectorButtons();
         TimetableEditor.instance.UpdateSelectorPreview();
         gameObject.SetActive(false);
     }

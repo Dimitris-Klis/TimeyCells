@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
-using TMPro;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "InputValidator - TimeValidator.asset", menuName = "TextMeshPro/Input Validators/Time", order = 100)]

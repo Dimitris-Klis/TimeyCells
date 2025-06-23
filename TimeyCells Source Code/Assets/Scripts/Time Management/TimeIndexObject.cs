@@ -13,5 +13,4 @@ public class TimeIndexObject : MonoBehaviour
     [Space]
     public GameObject TimeParent;
     public TMP_Text TimeText;
-
 }

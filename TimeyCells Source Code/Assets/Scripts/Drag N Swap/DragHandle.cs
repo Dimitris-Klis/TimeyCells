@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEditor;
-using UnityEngine.UI;
 
 public class DragHandle : MonoBehaviour, IDragHandler, IEndDragHandler
 {
@@ -14,7 +12,7 @@ public class DragHandle : MonoBehaviour, IDragHandler, IEndDragHandler
     public void OnDrag(PointerEventData eventData)
     {
         DragHandleManager.instance.ScrollViewManager.Dragging = true;
-        DragHandleManager.instance.ScrollViewManager.Horizontal = SwapAxis == DragHandleManager.SwapAxis.Horizontal;
+        DragHandleManager.instance.ScrollViewManager.DragHorizontal = SwapAxis == DragHandleManager.SwapAxis.Horizontal;
         Vector3 pos = transform.position;
         if (SwapAxis == DragHandleManager.SwapAxis.Horizontal)
         {

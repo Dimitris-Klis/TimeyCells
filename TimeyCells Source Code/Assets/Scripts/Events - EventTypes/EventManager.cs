@@ -7,57 +7,41 @@ using UnityEngine.UI;
 public class EventManager : MonoBehaviour
 {
     public static EventManager Instance;
-    
-    [Header("General")]
-    public CellInfoEditor CellInfoEditor;
-    //public ScrollZoom ZoomHandler;
-
-    [Space(30)]
-
-    [Header("Creating/Editing Events")]
-
-    public EventCreator EventCreator;
-    public EventItem DefaultNewEvent; // When creating a new event, we set the fields to the correct values.
-    
-
-    [Space(30)]
-
-    [Header("Creating/Editing Event Types")]
-
-    public EventTypeCreator EventTypeCreator;
-    public EventTypeItem DefaultNewEventType;
-    
-
-    [Space(30)]
-
-    [Header("Lists")]
-
-    public List<EventTypeItem> EventTypes = new();
-    public List<EventItem> Events = new();
-
-
-    [Space(30)]
-
-    [Header("List GFX")]
-    
-    public TimetableCell CellPrefab;
-
-    [Space]
-    
-    public Transform EventsParent;
-    public Transform EventSelectorsParent;
-    public List<TimetableCell> EventPreviews = new();
-    public List<TimetableCell> EventSelectorPreviews = new();
-
-    [Space]
-    
-    public Transform EventTypesParent;
-    public List<TimetableCell> EventTypePreviews = new();
-
     private void Awake()
     {
         Instance = this;
     }
+
+    [Header("CellInfoEditor")]
+    public CellInfoEditor CellInfoEditor;
+
+    [Space(20)]
+    [Header("Creating/Editing Events")] // When creating a new event/event type, we set the fields to the default values.
+    public EventCreator EventCreator;
+    public EventItem DefaultNewEvent;
+    
+    [Space(20)]
+    [Header("Creating/Editing Event Types")]
+    public EventTypeCreator EventTypeCreator;
+    public EventTypeItem DefaultNewEventType;
+
+    [Space(20)]
+    [Header("Lists")]
+    public List<EventTypeItem> EventTypes = new();
+    public List<EventItem> Events = new();
+
+    [Space(20)]
+    [Header("Event/Event Type UI")]
+    public TimetableCell CellPrefab; // We use timetable cells to display events / event types
+    [Space]
+    public Transform EventsParent;
+    public Transform EventSelectorsParent;
+    public List<TimetableCell> EventPreviews = new();
+    public List<TimetableCell> EventSelectorPreviews = new();
+    [Space]
+    public Transform EventTypesParent;
+    public List<TimetableCell> EventTypePreviews = new();
+
 
     public void InitializeLists()
     {
@@ -80,31 +64,12 @@ public class EventManager : MonoBehaviour
         }
         UpdateEventTypePreviews(false);
         UpdateEventPreviews(false);
-        UpdateEventSelectors();
+        UpdateEventSelectorButtons();
     }
 
-    public void CreateNewEventType(out EventTypeItem _item)
-    {
-        EventTypes.Add(new());
-        EventTypeItem item = EventTypes[^1];
-        
-        if (EventTypes.Count == 1) item.ItemID = 0;
-        else
-        {
-            // Get largest ID
-            int maxVal = int.MinValue;
-            for (int i = 0; i < EventTypes.Count; i++)
-            {
-                if (EventTypes[i].ItemID > maxVal) maxVal = EventTypes[i].ItemID;
-            }
-            item.ItemID = maxVal + 1;
-        }
+    
 
-        //Sort by ID
-        EventTypes.Sort((item1, item2) => item1.ItemID.CompareTo(item2.ItemID));
 
-        _item = item;
-    }
     public void CreateNewEvent(out EventItem _item)
     {
         Events.Add(new());
@@ -127,22 +92,6 @@ public class EventManager : MonoBehaviour
 
         _item = item;
     }
-    public EventTypeItem GetEventType(int ID)
-    {
-        for (int i = 0; i < EventTypes.Count; i++)
-        {
-            if (EventTypes[i].ItemID == ID) return EventTypes[i];
-        }
-        return null;
-    }
-    public int GetEventTypeIndex(int ID)
-    {
-        for (int i = 0; i < EventTypes.Count; i++)
-        {
-            if (EventTypes[i].ItemID == ID) return i;
-        }
-        return -1;
-    }
 
     public EventItem GetEvent(int ID)
     {
@@ -153,38 +102,193 @@ public class EventManager : MonoBehaviour
         return null;
     }
     
-    public void DeleteEventType(int ID)
+    public int GetEventIndex(int ID)
     {
-        int index = -1;
         for (int i = 0; i < EventTypes.Count; i++)
         {
-            if (EventTypes[i].ItemID == ID)
-            {
-                index = i;
-                break;
-
-                // TO DO: update timetable cells when deleting event types to avoid cells with non existent event types.
-            }
+            if (EventTypes[i].ItemID == ID) return i;
         }
-        EventTypes.RemoveAt(index);
-        if(index==-1)
-            Debug.Log($"No event found with ID '{ID}'!");
+        return -1;
     }
+
     public void DeleteEvent(int ID)
     {
-        for (int i = 0; i < Events.Count; i++)
+        int delIndex = GetEventIndex(ID);
+        if(delIndex < 0)
         {
-            if (Events[i].ItemID == ID)
+            Debug.Log($"No event found with ID '{ID}'!");
+            return;
+        }
+        Events.RemoveAt(delIndex);
+    }
+
+    public void UpdateEventPreviews(bool updateTimetable)
+    {
+        int modAmount = Events.Count - EventPreviews.Count;
+
+        // Add missing or remove extra previews.
+        if (modAmount > 0)
+        {
+            for (int i = 0; i < modAmount; i++)
             {
-                Events.RemoveAt(i);
+                TimetableCell c = Instantiate(CellPrefab, EventsParent);
 
-                // TO DO: Update timetable to not have any non existent events.
-
-                return;
+                c.transform.localScale = Vector3.one * 1.5f;
+                EventPreviews.Add(c);
             }
         }
-        Debug.Log($"No event found with ID '{ID}'!");
+        else if (modAmount < 0)
+        {
+            // Substitue while loop for a for loop to prevent crashing.
+            for (int i = 0; i < Events.Count + 10; i++)
+            {
+                Destroy(EventPreviews[^1].gameObject);
+                EventPreviews.RemoveAt(EventPreviews.Count - 1);
+                if (EventPreviews.Count <= Events.Count) break;
+            }
+        }
+
+        // Styling the event previews & setting up button functionality.
+        for (int i = 0; i < EventPreviews.Count; i++)
+        {
+            var c = EventPreviews[i];
+
+            // Text Setup
+            c.EventNameText.text = Events[i].EventName;
+            c.Info1Text.text = Events[i].Info1;
+            c.Info2Text.text = Events[i].Info2;
+
+            // Color Setup
+            EventTypeItem t = GetEventType(Events[i].EventType);
+            if (t == null) t = GetEventType(0);
+            c.BackgroundImage.color = t.BackgroundColor;
+            c.EventNameText.color = c.Info1Text.color = c.Info2Text.color = t.TextColor;
+
+            // Fav Setup
+            c.FavouriteImage.gameObject.SetActive(Events[i].Favourite);
+
+            // Edit Button Setup
+            SetButton(c.SelfButton, Events[i].ItemID, false);
+        }
+
+        EventPreviews[0].EventNameText.text = "None";
+        EventPreviews[0].SelfButton.interactable = false;
+        if (updateTimetable)
+            TimetableEditor.instance.Grid.UpdateAllCells();
     }
+
+    public void UpdateEventSelectorButtons()
+    {
+        int modAmount = Events.Count - EventSelectorPreviews.Count;
+
+        // Add missing or remove extra previews.
+        if (modAmount > 0)
+        {
+            for (int i = 0; i < modAmount; i++)
+            {
+                TimetableCell c = Instantiate(CellPrefab, EventSelectorsParent);
+
+                c.transform.localScale = Vector3.one * 1.5f;
+                EventSelectorPreviews.Add(c);
+            }
+        }
+        else if (modAmount < 0)
+        {
+            // Substitue while loop with a for loop to prevent crashing.
+            for (int i = 0; i < Events.Count + 10; i++)
+            {
+                Destroy(EventSelectorPreviews[^1].gameObject);
+                EventSelectorPreviews.RemoveAt(EventSelectorPreviews.Count - 1);
+                if (EventSelectorPreviews.Count <= Events.Count) break;
+            }
+        }
+
+        // Styling the event previews & setting up button functionality.
+        for (int i = 0; i < EventSelectorPreviews.Count; i++)
+        {
+            var c = EventSelectorPreviews[i];
+
+            // Text Setup
+            c.EventNameText.text = Events[i].EventName;
+            c.Info1Text.text = Events[i].Info1;
+            c.Info2Text.text = Events[i].Info2;
+
+            // Color Setup
+            EventTypeItem t = GetEventType(Events[i].EventType);
+            if (t == null) t = GetEventType(0);
+            c.BackgroundImage.color = t.BackgroundColor;
+            c.EventNameText.color = c.Info1Text.color = c.Info2Text.color = t.TextColor;
+
+            // Fav Setup
+            c.FavouriteImage.gameObject.SetActive(Events[i].Favourite);
+
+            // Edit Button Setup
+            int id = Events[i].ItemID;
+            c.SelfButton.onClick.RemoveAllListeners();
+            if (TimetableEditor.instance.Editing)
+                c.SelfButton.onClick.AddListener(delegate { TimetableEditor.instance.SelectEvent(id); });
+            else
+                c.SelfButton.onClick.AddListener(delegate { CellInfoEditor.ChangeInfoBase(id); });
+        }
+
+        EventSelectorPreviews[0].EventNameText.text = "None";
+    }
+
+
+
+
+    public void CreateNewEventType(out EventTypeItem _item)
+    {
+        EventTypes.Add(new());
+        EventTypeItem item = EventTypes[^1];
+
+        if (EventTypes.Count == 1) item.ItemID = 0;
+        else
+        {
+            // Get largest ID
+            int maxVal = int.MinValue;
+            for (int i = 0; i < EventTypes.Count; i++)
+            {
+                if (EventTypes[i].ItemID > maxVal) maxVal = EventTypes[i].ItemID;
+            }
+            item.ItemID = maxVal + 1;
+        }
+
+        //Sort by ID
+        EventTypes.Sort((item1, item2) => item1.ItemID.CompareTo(item2.ItemID));
+
+        _item = item;
+    }
+
+    public EventTypeItem GetEventType(int ID)
+    {
+        for (int i = 0; i < EventTypes.Count; i++)
+        {
+            if (EventTypes[i].ItemID == ID) return EventTypes[i];
+        }
+        return null;
+    }
+
+    public int GetEventTypeIndex(int ID)
+    {
+        for (int i = 0; i < EventTypes.Count; i++)
+        {
+            if (EventTypes[i].ItemID == ID) return i;
+        }
+        return -1;
+    }
+
+    public void DeleteEventType(int ID)
+    {
+        int delIndex = GetEventTypeIndex(ID);
+        if (delIndex < 0)
+        {
+            Debug.Log($"No event type found with ID '{ID}'!");
+            return;
+        }
+        EventTypes.RemoveAt(delIndex);
+    }
+
     public void UpdateEventTypePreviews(bool updatecells)
     {
         int modAmount = EventTypes.Count - EventTypePreviews.Count;
@@ -235,60 +339,10 @@ public class EventManager : MonoBehaviour
         if(updatecells)
             TimetableEditor.instance.Grid.UpdateAllCells();
     }
-    public void UpdateEventPreviews(bool updatecells)
-    {
-        int modAmount = Events.Count - EventPreviews.Count;
+    
 
-        // Add missing or remove extra previews.
-        if (modAmount > 0)
-        {
-            for (int i = 0; i < modAmount; i++)
-            {
-                TimetableCell c = Instantiate(CellPrefab, EventsParent);
 
-                c.transform.localScale = Vector3.one * 1.5f;
-                EventPreviews.Add(c);
-            }
-        }
-        else if (modAmount < 0)
-        {
-            // Substitue while loop for a for loop to prevent crashing.
-            for(int i = 0; i < Events.Count+10; i++)
-            {
-                Destroy(EventPreviews[^1].gameObject);
-                EventPreviews.RemoveAt(EventPreviews.Count-1);
-                if (EventPreviews.Count <= Events.Count) break;
-            }
-        }
 
-        // Styling the event previews & setting up button functionality.
-        for (int i = 0; i < EventPreviews.Count; i++)
-        {
-            var c = EventPreviews[i];
-            
-            // Text Setup
-            c.EventNameText.text = Events[i].EventName;
-            c.Info1Text.text = Events[i].Info1;
-            c.Info2Text.text = Events[i].Info2;
-
-            // Color Setup
-            EventTypeItem t = GetEventType(Events[i].EventType);
-            if(t == null) t = GetEventType(0);
-            c.BackgroundImage.color = t.BackgroundColor;
-            c.EventNameText.color = c.Info1Text.color = c.Info2Text.color = t.TextColor;
-
-            // Fav Setup
-            c.FavouriteImage.gameObject.SetActive(Events[i].Favourite);
-
-            // Edit Button Setup
-            SetButton(c.SelfButton, Events[i].ItemID, false);
-        }
-
-        EventPreviews[0].EventNameText.text = "None";
-        EventPreviews[0].SelfButton.interactable = false;
-        if(updatecells)
-            TimetableEditor.instance.Grid.UpdateAllCells();
-    }
     void SetButton(Button b, int id, bool EventType)
     {
         b.onClick.RemoveAllListeners();
@@ -308,60 +362,5 @@ public class EventManager : MonoBehaviour
                 EventTypeCreator.OpenCreator(id); 
             });
     }
-    public void UpdateEventSelectors()
-    {
-        int modAmount = Events.Count - EventSelectorPreviews.Count;
-
-        // Add missing or remove extra previews.
-        if (modAmount > 0)
-        {
-            for (int i = 0; i < modAmount; i++)
-            {
-                TimetableCell c = Instantiate(CellPrefab, EventSelectorsParent);
-
-                c.transform.localScale = Vector3.one * 1.5f;
-                EventSelectorPreviews.Add(c);
-            }
-        }
-        else if (modAmount < 0)
-        {
-            // Substitue while loop with a for loop to prevent crashing.
-            for (int i = 0; i < Events.Count + 10; i++)
-            {
-                Destroy(EventSelectorPreviews[^1].gameObject);
-                EventSelectorPreviews.RemoveAt(EventSelectorPreviews.Count - 1);
-                if (EventSelectorPreviews.Count <= Events.Count) break;
-            }
-        }
-
-        // Styling the event previews & setting up button functionality.
-        for (int i = 0; i < EventSelectorPreviews.Count; i++)
-        {
-            var c = EventSelectorPreviews[i];
-
-            // Text Setup
-            c.EventNameText.text = Events[i].EventName;
-            c.Info1Text.text = Events[i].Info1;
-            c.Info2Text.text = Events[i].Info2;
-
-            // Color Setup
-            EventTypeItem t = GetEventType(Events[i].EventType);
-            if (t == null) t = GetEventType(0);
-            c.BackgroundImage.color = t.BackgroundColor;
-            c.EventNameText.color = c.Info1Text.color = c.Info2Text.color = t.TextColor;
-
-            // Fav Setup
-            c.FavouriteImage.gameObject.SetActive(Events[i].Favourite);
-
-            // Edit Button Setup
-            int id = Events[i].ItemID;
-            c.SelfButton.onClick.RemoveAllListeners();
-            if(TimetableEditor.instance.Editing)
-                c.SelfButton.onClick.AddListener(delegate { TimetableEditor.instance.SelectEvent(id); });
-            else
-                c.SelfButton.onClick.AddListener(delegate { CellInfoEditor.ChangeInfoBase(id); });
-        }
-
-        EventSelectorPreviews[0].EventNameText.text = "None";
-    }
+    
 }

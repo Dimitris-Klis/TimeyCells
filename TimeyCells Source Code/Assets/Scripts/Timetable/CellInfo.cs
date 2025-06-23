@@ -3,25 +3,32 @@ using System.Collections;
 using UnityEngine;
 using System;
 
-public class 
-    CellInfo : MonoBehaviour
+public class CellInfo : MonoBehaviour
 {
+    [Header("UI References")]
     public TimetableCell CellUI;
 
+    [Header("Normal Properties")]
     public int SelectedEventBase = 0;
     public EventItemOverride Override = new();
     [Space]
+    public bool OverrideCommonLength;
+    public TimeSpan NewLength;
+
+    [Space(20)]
+    [Header("Temporary Properties")]
     public int TemporaryBase;
     public EventItemOverride TemporaryOverride = new();
+    [Space]
+    public bool TempOverrideCommonLength;
+    public TimeSpan TempNewLength;
+
+    [Header("Temporary Expiration")]
     public DateTime OverrideDate = DateTime.Now;
     public int OverrideLength = 0;
     public int OverrideDelayWeeks = 0;
     public int OverrideExtraLengthWeeks = -1;
-    //[Space]
-    public bool OverrideCommonLength;
-    public bool TempOverrideCommonLength;
-    public TimeSpan NewLength;
-    public TimeSpan TempNewLength;
+    
 
     public void SetupSelf(TimetableData.CellInfoData data)
     {
@@ -69,6 +76,10 @@ public class
         SelectedEventBase = TimetableEditor.instance.SelectedID;
         UpdateUI();
     }
+
+
+
+
     public void UpdateUI()
     {
         EventItem e = new(EventManager.Instance.GetEvent(SelectedEventBase));
@@ -125,7 +136,8 @@ public class
             }
         }
     }
-    public void CheckIfTempExpired()
+
+    void CheckIfTempExpired()
     {
         if(OverrideExtraLengthWeeks >= 0 && DateTime.Now > OverrideDate.AddDays(OverrideDelayWeeks * 7 + OverrideExtraLengthWeeks * 7 + OverrideLength).AddHours(23).AddMinutes(59))
         {

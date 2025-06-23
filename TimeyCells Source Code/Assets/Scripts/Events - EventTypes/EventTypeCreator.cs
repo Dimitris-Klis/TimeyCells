@@ -3,34 +3,28 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using UnityEditor;
 
 public class EventTypeCreator : MonoBehaviour
 {
-    public int IDToModify;
-    public CanvasGroup SelfGroup;
-    [Header("Preview")]
-    public TimetableCell PreviewCell;
-    [Space]
+    [Header("ID To Modify")]
+    [ReadOnly] public int IDToModify;
+
+    [Space(20)]
+    [Header("Overlay Title")]
     public TMP_Text TitleText;
 
-    [Space(30)]
-
-    [Header("Property Fields")]
+    [Space(20)]
+    [Header("Preview")]
+    public TimetableCell PreviewCell;
+    
+    [Space(20)]
+    [Header("Property Fields UI")]
     public TMP_InputField EventTypeNameInput;
     [Space]
     public Image ChangeTextColor;
     public Image ChangeBackgroundColor;
     [Space]
-    //public Button ChangeTextButton;
-    //public Button ChangeBackgroundButton;
-    [Space]
     public Button DeleteButton;
-
-    //private void Start()
-    //{
-    //    CloseCreator();
-    //}
 
     public void OpenCreator(int ID)
     {
@@ -40,9 +34,6 @@ public class EventTypeCreator : MonoBehaviour
         TitleText.text = ID >= 0 ? LocalizationSystem.instance.GetText(gameObject.name, "EDIT_EVENTTYPE") : LocalizationSystem.instance.GetText(gameObject.name, "CREATE_EVENTTYPE");
 
         IDToModify = ID;
-
-        SelfGroup.interactable = SelfGroup.blocksRaycasts = true;
-        SelfGroup.alpha = 1;
 
         // Setting Defaults
         if(ID >= 0)
@@ -92,10 +83,14 @@ public class EventTypeCreator : MonoBehaviour
     }
 
 
+
+
     public void ChangeEventTypeName(string text)
     {
         PreviewCell.EventNameText.text = text;
     }
+
+
 
 
     public void ActivateColorEditor(bool ChangeBackground) // If it's not background, it's text.
@@ -117,6 +112,10 @@ public class EventTypeCreator : MonoBehaviour
             ColorEditor.instance.AssignNewImages(ChangeTextColor);
         }
     }
+
+
+
+
     public void Confirm()
     {
         if (IDToModify < 0)
@@ -136,13 +135,14 @@ public class EventTypeCreator : MonoBehaviour
             a.TypeName = EventTypeNameInput.text;
 
             EventManager.Instance.UpdateEventPreviews(true);
-            EventManager.Instance.UpdateEventSelectors();
+            EventManager.Instance.UpdateEventSelectorButtons();
             TimetableEditor.instance.UpdateSelectorPreview();
         }
         SaveManager.instance.ChangesMade();
         EventManager.Instance.UpdateEventTypePreviews(true);
         CloseCreator();
     }
+
     public void Delete(bool confirm)
     {
         if(IDToModify > 0)
@@ -163,7 +163,7 @@ public class EventTypeCreator : MonoBehaviour
 
             EventManager.Instance.UpdateEventTypePreviews(true);
             EventManager.Instance.UpdateEventPreviews(true);
-            EventManager.Instance.UpdateEventSelectors();
+            EventManager.Instance.UpdateEventSelectorButtons();
             TimetableEditor.instance.UpdateSelectorPreview();
             CloseCreator();
         }

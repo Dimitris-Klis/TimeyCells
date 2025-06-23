@@ -18,12 +18,12 @@ using UnityEngine;
 * and it won't impact the final game. It may need to add using UnityEditor;
 * at the beginning of the script if you encounter any issues with the
 * #if UNITY_EDITOR directive.
-* ************************************************************************/
+* ************************************************************************ */
 
 [AddComponentMenu("Miscellaneous/README Info Note")]
 public class CommentInformationNote : MonoBehaviour
 {
-    [TextArea(17, 1000)]
+    [TextArea(5, 1000)]
     public string comment = "Information Here.";
 
     void Awake()

@@ -5,14 +5,28 @@ using UnityEngine;
 [System.Serializable]
 public class EventItem
 {
+    [Header("ID")]
     public int ItemID;
-    [Space]
+
+    [Space(20)]
+    [Header("Properties")]
     public string EventName;
     public string Info1;
     public string Info2;
     [Space]
     public int EventType;
     public bool Favourite;
+
+
+    public EventItem()
+    {
+        ItemID = 0;
+        EventName = "";
+        Info1 = "";
+        Info2 = "";
+        EventType = 0;
+        Favourite = false;
+    }
 
     public EventItem(EventItem e)
     {
@@ -22,14 +36,5 @@ public class EventItem
         Info2 = e.Info2;
         EventType = e.EventType;
         Favourite = e.Favourite;
-    }
-    public EventItem()
-    {
-        ItemID = 0;
-        EventName = "";
-        Info1 = "";
-        Info2 = "";
-        EventType = 0;
-        Favourite = false;
     }
 }

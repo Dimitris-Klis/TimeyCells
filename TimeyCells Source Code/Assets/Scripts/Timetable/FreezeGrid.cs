@@ -4,33 +4,45 @@ using UnityEngine;
 
 public class FreezeGrid : MonoBehaviour
 {
+    public enum FreezeModes { FreezeX, FreezeY }
+
+    [Header("References")]
     public TimetableGrid Timetable;
-    public RectTransform Child;
-    public RectTransform rect;
-    
     public RectTransform TimetableViewportRect;
+    [Space]
+    public RectTransform SelfRect;
+    public RectTransform Child;
     
+    [Space(20)]
+    [Header("FreezeMode")]
+    public FreezeModes FreezeMode;
+
+
+    // Stuff for Start()
     Vector2 originalDelta;
     Vector2 originalViewportDelta;
 
-    public enum FreezeModes {FreezeX, FreezeY}
-    public FreezeModes FreezeMode;
+    // Stuff for Update()
+    Vector3 WantedChildPos;
+    Vector2 WantedChildSizeDelta;
+
+    Vector3 WantedScale;
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        originalDelta = rect.sizeDelta;
+        originalDelta = SelfRect.sizeDelta;
         originalViewportDelta = TimetableViewportRect.sizeDelta;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 WantedChildPos = Child.position;
-        Vector2 WantedChildSizeDelta = Child.sizeDelta;
+        WantedChildPos = Child.position;
+        WantedChildSizeDelta = Child.sizeDelta;
 
-        Vector3 WantedScale = Vector3.one;
-
-        if(FreezeMode == FreezeModes.FreezeY)
+        if (FreezeMode == FreezeModes.FreezeY)
         {
             WantedChildPos.x = Timetable.transform.position.x;
             WantedChildSizeDelta.x = Timetable.rect.sizeDelta.x;
@@ -41,9 +53,9 @@ public class FreezeGrid : MonoBehaviour
             Child.sizeDelta = WantedChildSizeDelta;
 
             Child.localScale = WantedScale;
-            rect.sizeDelta = new Vector2(TimetableViewportRect.sizeDelta.x, originalDelta.y * WantedScale.y);
+            SelfRect.sizeDelta = new Vector2(TimetableViewportRect.sizeDelta.x, originalDelta.y * WantedScale.y);
 
-            rect.position = new(TimetableViewportRect.position.x, rect.position.y, rect.position.z);
+            SelfRect.position = new(TimetableViewportRect.position.x, SelfRect.position.y, SelfRect.position.z);
 
             TimetableViewportRect.sizeDelta = new Vector2(TimetableViewportRect.sizeDelta.x, originalViewportDelta.y - (originalDelta.y * (WantedScale.y - 1)));
         }
@@ -58,9 +70,9 @@ public class FreezeGrid : MonoBehaviour
             Child.sizeDelta = WantedChildSizeDelta;
 
             Child.localScale = WantedScale;
-            rect.sizeDelta = new Vector2(originalDelta.x * WantedScale.x, TimetableViewportRect.sizeDelta.y);
+            SelfRect.sizeDelta = new Vector2(originalDelta.x * WantedScale.x, TimetableViewportRect.sizeDelta.y);
 
-            rect.position = new(rect.position.x, TimetableViewportRect.position.y, rect.position.z);
+            SelfRect.position = new(SelfRect.position.x, TimetableViewportRect.position.y, SelfRect.position.z);
 
             TimetableViewportRect.sizeDelta = new Vector2(originalViewportDelta.x - (originalDelta.x * (WantedScale.x - 1)), TimetableViewportRect.sizeDelta.y);
         }

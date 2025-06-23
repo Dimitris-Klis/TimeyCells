@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: asss
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c5b1826bcdca3dc48b1075dab608ae2d, type: 2}
   m_sharedMaterial: {fileID: 4263625095302771445, guid: c5b1826bcdca3dc48b1075dab608ae2d, type: 2}
@@ -341,7 +341,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TMPField: {fileID: 6799973699374911685}
   PreviewText: {fileID: 1240045539675048936}
-  CharacterLimit: 0
 --- !u!1 &6800076543082358738
 GameObject:
   m_ObjectHideFlags: 0

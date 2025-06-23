@@ -94,6 +94,10 @@ public class CopyPasteManager : MonoBehaviour
         GUIUtility.systemCopyBuffer = JsonUtility.ToJson(cellData, false);
     }
 
+    /* 
+     * Notice how the pasted data goes to the editor, and not the CellInfo itself through SetupSelf().
+     * This is intentional and allows the user to retain the ability to cancel their changes!
+    */
     public void PasteCellInfo()
     {
         // Loading the data.
@@ -240,7 +244,7 @@ public class CopyPasteManager : MonoBehaviour
     {
         TimetableData.EventTypeData eventTypeData = JsonUtility.FromJson<TimetableData.EventTypeData>(GUIUtility.systemCopyBuffer);
 
-        EventTypeCreator.EventTypeNameInput.text = eventTypeData.TypeName;
+        if(EventTypeCreator.IDToModify != 0) EventTypeCreator.EventTypeNameInput.text = eventTypeData.TypeName;
 
         EventTypeCreator.ChangeBackgroundColor.color =
         EventTypeCreator.PreviewCell.BackgroundImage.color = new

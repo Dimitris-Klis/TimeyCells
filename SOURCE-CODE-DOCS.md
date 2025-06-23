@@ -158,8 +158,919 @@ UI interaction is handled by Unity. I configured which functions are called and 
   Contains a function to exit the app.
 
 ## Script Breakdown & Unity Integration
-### Script Breakdown:
-Break down the key scripts. Keep descriptions short and focus on what each script is responsible for.
+### Common Patterns Across Scripts
+Many scripts share similar functions or code, so I’ll explain key patterns here:
 
-### Unity Integration:
-Explain how the scripts connect to GameObjects, prefabs, scenes, and components in Unity.
+#### Singletons
+To make important scripts globally accessible, I use the singleton pattern, a common and recommended practice among Unity developers. This involves assigning a `static` instance reference in the `Awake()` method:
+```cs
+using UnityEngine;
+
+public class ClassName : MonoBehaviour
+{
+    public static ClassName Instance;
+
+    // Awake is called when the script instance is being loaded.
+    void Awake()
+    {
+        Instance = this;
+    }
+
+    public void DoSomething()
+    {
+        Debug.Log("Hello World!");
+    }
+}
+```
+
+With this setup, you can access the script from anywhere using `ClassName.Instance`, avoiding the need to create references manually or search for components at runtime.
+
+Here's an example with Singletons:
+```cs
+    void Start()
+    {
+        ClassName.Instance.DoSomething()
+    }
+```
+
+And here's an example without Singletons (less efficient):
+```cs
+    void Start()
+    {
+        // This is fine as long as you don't access the script frequently.
+        FindObjectOfType<ClassName>().DoSomething();
+    }
+```
+Singletons are used in many **manager** and **user editor** scripts.
+
+#### Unity's Attributes
+On many scripts, you'll likely see the following attributes:
+```cs
+  [Header("HeaderNameHere")]
+  [Space(20)]
+  [Space]
+```
+We use these to improve script readability in the Unity Inspector. Headers act like labeled sections, and `[Space]` adds vertical spacing to keep things neat.
+
+Other common attributes include:
+```cs
+// This makes private variables visible and editable in the Unity Inspector.
+[SerializeField] int variable;
+```
+
+
+```cs
+/* Marks a class as serializable so Unity can display it in the Inspector,
+even if the class isn't derived from MonoBehaviour.*/
+[System.Serializable]
+public class Item
+{
+  // Class contents here...
+}
+```
+
+```cs
+/* Used to quickly test functions via the Unity script's context menu.*/
+[ContextMenu("Create!")]
+public void Create()
+{
+  // Method contents here...
+}
+```
+
+---
+
+### `Scripts/Events - Event Types`
+
+#### EventTypeItem.cs
+
+**Description**<br/>
+Event types are primarily used to group and visually distinguish events by applying a background and text color. Naming each type helps users easily identify and select the right one when editing an event.
+
+**Properties**
+- `int ItemID` — Unique identifier for the event type.
+- `string TypeName` — The name of the event type.
+- `Color TextColor` — The color used for the event's text.
+- `Color BackgroundColor` — The color used for the event's background.
+
+**Constructors**
+- `EventTypeItem()` — Default constructor that initializes all fields to default/empty values.
+- `EventTypeItem(TimetableData.EventTypeData data)` — Initializes an `EventTypeItem` from saved data (used by `SaveManager.cs`).
+
+---
+
+#### EventItem.cs
+
+**Description**<br/>
+Represents a single event preset in the timetable. Events can be assigned to timetable cells as a base configuration, making them useful for reusability. While you can override the default event directly, making events technically optional, using them can save time and improve consistency across cells.
+
+**Properties**
+
+- `int ItemID` — Unique identifier for the event.
+- `string EventName` — The name of the event.
+- `string Info1` — Optional user-provided info.
+- `string Info2` — More optional user-provided info.
+- `int EventType` — The event's type.
+- `bool Favourite` — Marks the event as favourite.
+
+**Constructors**
+
+- `EventItem()` — Default constructor that initializes all fields to default/empty values.
+- `EventItem(EventItem e)` — Copy constructor that duplicates an existing `EventItem`.
+
+---
+
+#### EventItemOverride.cs
+
+**Description**<br/>
+Used by CellInfo to store overrides and temporary overrides.
+
+**Properties**<br/>
+- `bool OverrideFavourite` — whether the timetable cell should use the overriden favourite value.
+
+**Constructors**
+- `EventItemOverride()` — Default constructor that initializes all fields to default/empty values.
+
+---
+
+#### EventManager.cs
+
+**Description**<br/>
+`EventManager.cs` is responsible for:
+- Initializing default events and event types
+- Creating and deleting events/event types
+- Updating the UI graphics associated with each event and event type
+
+**Methods**
+```cs
+public void  InitializeLists()
+```
+  Initializes the default `EventItem` and `EventTypeItem`, adding them to their respective lists. These lists are typically cleared by `SaveManager.cs` before loading a timetable.
+
+<br/><br/>
+
+```cs
+public void CreateNewEvent(out EventItem _item)
+```
+  Creates a new `EventItem` and assigns it to the `out` parameter `_item` so it can be configured or referenced elsewhere.
+
+<br/>
+
+```cs
+public EventItem GetEvent(int ID)
+```
+  Searches the `Events` list for an item with a matching `ID`. Returns the item if found, or `null` if not.
+
+<br/>
+
+```cs
+public EventItem GetEventIndex(int ID)
+```
+  Returns the index of the `EventItem` with the specified `ID` in the `Events` list. Returns `-1` if not found. Useful for deletion.
+
+<br/>
+
+```cs
+public void DeleteEvent(int ID)
+```
+  Uses `GetEventIndex(ID)` to find and remove an event from the list. Logs a warning if the event doesn't exist.
+
+<br/>
+
+```cs
+public void UpdateEventPreviews(bool updateTimetable)
+```
+  Updates the event UI previews to reflect the current list of events. If `updateTimetable` is `true`, timetable cells are updated accordingly.
+
+<br/>
+
+```cs
+public void UpdateEventSelectorButtons()
+```
+  Updates the Event Selector UI used for quick cell assignments. This function ensures buttons reflect current events in both edit and normal modes.
+
+
+<br/><br/>
+  
+```cs
+public void CreateNewEventType(out EventTypeItem _item)
+```
+  Creates a new `EventTypeItem` and assigns it to the `out` parameter `_item`.
+
+<br/>
+
+```cs
+public EventTypeItem GetEventType(int ID)
+```
+  Returns the `EventTypeItem` with a matching `ID`, or `null` if not found.
+
+<br/>
+
+```cs
+public EventItem GetEventTypeIndex(int ID)
+```
+  Returns the index of the `EventTypeItem` with the given `ID`, or `-1` if not found.
+
+<br/>
+
+```cs
+public void DeleteEventType(int ID)
+```
+  Uses `GetEventTypeIndex(ID)` to find and remove an event type. Logs a warning if none is found.
+
+<br/>
+
+```cs
+public void UpdateEventTypePreviews(bool updateTimetable)
+```
+  Updates the event type UI previews to reflect changes. Also updates timetable cells if `updateTimetable` is `true`.
+
+<br/><br/>
+
+```cs
+void SetButton(Button b, int id, bool EventType)
+```
+  Attaches click functionality to UI buttons so they open the appropriate event or event type editor.
+
+---
+
+#### EventCreator.cs
+
+**Description**<br/>
+This script allows the user to create and edit events.
+
+**Properties**
+
+**Methods**
+
+```cs
+public void OpenCreator(int ID)
+```
+Initializes the Creator UI for the event with the given ID, loading an existing event item. If the given ID is less than 0, it prepares a blank form for creating a new event.
+
+<br/><br/>
+
+```cs
+public void ChangeEventName(string text)
+```
+A simple method called by a TMP_InputField. Sets the event's `EventName` property.
+
+<br/>
+
+```cs
+public void ChangeInfo1Name(string text)
+```
+A simple method called by a TMP_InputField. Sets the event's `Info1` property.
+
+<br/>
+
+```cs
+public void ChangeInfo2Name(string text)
+```
+A simple method called by a TMP_InputField. Sets the event's `Info2` property.
+
+<br/>
+
+```cs
+public void ChangeEventType(int type)
+```
+A simple method called by a TMP_Dropdown. Sets the event's `EventType` property.
+
+<br/>
+
+```cs
+public void ChangeIsFavourite(bool favourite)
+```
+ Sets the event's `Favourite` property, indicating whether it is marked as a favorite.
+
+<br/><br/>
+
+```cs
+public void Confirm()
+```
+Applies all changes made in the UI to the event item. No changes affect the event until this method is called. 
+
+> **NOTE:** Cancelling is as simple as disabling the gameobject overlay, so no dedicated function is needed.
+
+<br/>
+
+```cs
+public void Delete(bool confirm)
+```
+Deletes the event. If confirm is false, a confirmation screen will appear to ensure you don't delete the event by accident. If true, the event gets immediately deleted.
+
+---
+
+#### EventTypeCreator.cs
+
+**Description**<br/>
+This script allows the user to create and edit event types.
+
+**Methods**
+```cs
+public void OpenCreator(int ID)
+```
+Initializes the Creator UI for the event type with the given ID, loading an existing event type item. If the given ID is less than 0, it prepares a blank form for creating a new event type.
+
+<br/>
+
+```cs
+public void CloseCreator()
+```
+Disables the Creator UI along with the color editor.
+
+<br/><br/>
+
+```cs
+public void ChangeEventTypeName(string text)
+```
+A simple method called by a TMP_InputField. Sets the event's `TypeName` property.
+
+<br/>
+
+```cs
+public void ActivateColorEditor(bool ChangeBackground)
+```
+Activates the color editor, which will change the event type's `TextColor` or `BackgroundColor` property, depending on the `ChangeBackground` parameter.
+
+<br/>
+
+```cs
+public void Confirm()
+```
+Applies all changes made in the UI to the event type item. No changes affect the event type until this method is called. 
+
+
+<br/>
+
+```cs
+public void Delete(bool confirm)
+```
+Deletes the event. If confirm is false, a confirmation screen will appear to ensure you don't delete the event by accident. If true, the event type gets immediately deleted.
+
+---
+
+### `Scripts/Timetable`
+
+#### TimetableCell.cs
+
+**Description**<br/>
+Represents a single timetable cell and contains references to its visual and data components.
+
+**Properties**
+- `bool IsMultirow` — Indicates whether the parent column spans multiple rows.
+
+- `RectTransform rect` — The cell's `RectTransform`.
+- `Button SelfButton` — The cell's clickable button component.
+
+- `Image BackgroundImage` — The background image of the cell.
+- `TMP_Text EventNameText` — Displays the event name.
+- `TMP_Text Info1Text` — Displays Info1.
+- `TMP_Text Info2Text` — Displays Info2.
+- `Image FavouriteImage` — Image that marks the cell as a favorite.
+
+- `CellInfo Info` — The data associated with this cell.
+
+---
+
+#### CellInfo.cs
+
+**Description**<br/>
+Contains the data associated with a timetable cell, including the selected event, any overrides, and the event’s duration.
+
+**Properties**
+- `TimetableCell CellUI` — References the cell’s UI and related components.
+
+
+- `int SelectedEventBase` — The index of the selected base event.
+- `EventItemOverride Override` — Permanent override applied to the base event.
+
+- `bool OverrideCommonLength` — Whether this cell overrides the default length.
+- `TimeSpan NewLength` — Custom event length, used if `OverrideCommonLength` is `true`.
+
+
+
+- `int TemporaryBase` — Temporary event base index.
+- `EventItemOverride TemporaryOverride` — Temporary override applied to the event.
+
+- `bool TempOverrideCommonLength` —  Whether the temporary event overrides the default length.
+- `TimeSpan TempNewLength` — Custom temporary event length.
+
+
+- `DateTime OverrideDate` — The date in which the temporary override was added.
+- `int OverrideLength` — The default length of the temporary override, calculated
+  externally by CellInfoEditor.cs.
+- `int OverrideDelayWeeks` — How many weeks until the temporary override starts to apply.
+- `int OverrideExtraLengthWeeks` — How many extra weeks until the temporary
+  override expires.
+
+**Methods**
+```cs
+public void SetupSelf(TimetableData.CellInfoData data)
+```
+Initializes the cell's data from the provided `data`. Primarily used when loading a timetable.
+
+<br/>
+
+```cs
+public void SetSelfToSelectedEvent()
+```
+Called when `CellUI.button` is clicked while in edit mode. Assigns the currently selected event (`TimetableEditor.instance.SelectedID`) to the cell.
+
+<br/><br/>
+
+```cs
+public void UpdateUI()
+```
+Refreshes the UI of `CellUI` to reflect the current data.
+
+<br/>
+
+```cs
+void CheckIfTempExpired()
+```
+Checks whether the temporary event has expired and removes it if necessary.
+
+---
+
+#### TimetableGrid.Column
+**Description**<br/>
+Nested class used by TimetableGrid.cs to represent a single column in the timetable.
+
+**Properties**
+- `bool IsMultirow` — Indicates whether the column spans multiple rows.
+- `List<TimetableCell> Children` — Stores all the cells contained in said column.
+
+---
+
+#### TimetableGrid.cs
+
+**Description**<br/>
+Responsible for aligning cells correctly, adding/deleting columns and rows, and adding multi-row columns (cells that span across all rows).
+
+**Properties**
+- `Vector2 CellSize` — The size of each cell in the grid.
+- `Vector2 Spacing` — The spacing between each cell in the grid.
+- `int Rows` — Current number of rows.
+- `int Columns` — Current number of columns.
+- `int MaxRows` — Maximum allowed number of rows.
+- `int MaxColumns` — Maximum allowed number of columns.
+
+- `bool Center` — Whether the grid should center its content.
+- `bool FitContent` — Whether the grid should automatically resize to fit its contents.
+- `Vector2 Padding` — Additional padding applied when fitting to content.
+- `bool DebugGrid` — Enables debug behavior for testing grid features. When true, everyting that uses `Destroy()` will use `DestroyImmediate()` instead. Automatically reset to false in `Start()`.
+- `List<Column> ColumnsList` — List of all columns in the timetable.
+
+**Methods**
+```cs
+private void Start()
+```
+Called on the first frame by Unity. Disables `DebugGrid`.
+
+<br/><br/>
+
+```cs
+[ContextMenu("Setup Timetable Grid!")]
+public void Setup()
+```
+Clears existing columns and creates `Column` new ones which will contain `Row` of Children.
+
+<br/><br/>
+
+```cs
+public void SpawnAddColumnButtons(bool rowspan)
+```
+Generates UI buttons between columns to allow the user to insert new columns at desired positions.
+
+<br/>
+
+```cs
+public void SpawnDeleteColumnButtons()
+```
+Generates UI buttons on each column that allow the user to delete them.
+
+<br/>
+
+```cs
+public void SpawnAddRowButtons()
+```
+Generates UI buttons between rows to allow the user to insert new rows.
+
+<br/>
+
+```cs
+public void SpawnDeleteRowButtons()
+```
+Generates UI buttons on each row that allow the user to delete them. These buttons are slightly transparent to maintain weekday visibility.
+
+<br/>
+
+```cs
+public void DestroyColumnButtons()
+```
+Destroys all column-related UI buttons.
+
+<br/>
+
+```cs
+public void DestroyRowButtons()
+```
+Destroys all row-related UI buttons.
+
+<br/><br/>
+
+```cs
+public void ClearAllCells()
+```
+Removes all timetable cells.
+
+<br/>
+
+```cs
+public void UpdateAllCells()
+```
+Updates the UI for all cells in the timetable.
+
+<br/>
+
+```cs
+void FitToContent()
+```
+Adjusts the size of the parent object to fit the entire grid. Call this after modifying the row/column count.
+
+<br/><br/>
+
+```cs
+public Vector3 GetOffset()
+```
+Calculates the positional offset needed to center all timetable cells.
+
+<br/>
+
+```cs
+public void AddAllOffsets()
+```
+Applies the calculated offset to all timetable cells.
+
+<br/>
+
+```cs
+public void RemoveAllOffsets()
+```
+Removes the applied offset from all timetable cells — typically done before resizing the grid.
+
+<br/><br/>
+
+```cs
+public void UpdateColumnTransform(Column column,int index)
+```
+Ensures the specified column contains the correct number of cells and aligns them properly.
+
+<br/>
+
+```cs
+public void UpdateBreakTransform(int index)
+```
+Aligns multirow columns properly.
+
+<br/>
+
+```cs
+public void UpdateAllTransforms(int start)
+```
+Updates the position and size of all cells starting from the given index.
+
+<br/><br/>
+
+```cs
+public void AddColumn(int columnIndex)
+```
+Inserts a new column at the given index and updates the UI.
+
+<br/>
+
+```cs
+public void AddMultirowColumn(int columnIndex)
+```
+Inserts a new multirow column at the given index and updates the UI.
+
+<br/>
+
+```cs
+public void RemoveColumn(int columnIndex)
+```
+Deletes a column at the given index and updates the UI.
+
+<br/>
+
+```cs
+public void SwapColumns(int IndexA, int IndexB)
+```
+Swaps the contents of two columns.
+
+<br/>
+
+```cs
+public void ReplaceColumnWithMultirowAt(int index)
+```
+**Used only during save loading**. Replaces the column at the specified index with a multirow column.
+
+<br/><br/>
+
+```cs
+public void AddRow(int rowIndex)
+```
+Inserts a new row at the given index and updates the UI.
+
+<br/>
+
+```cs
+public void RemoveRow(int rowIndex)
+```
+Deletes a row at the given index and updates the UI.
+
+<br/>
+
+```cs
+public void SwapRows(int IndexA, int IndexB)
+```
+Swaps the contents of two rows.
+
+---
+
+#### ScrollZoom.cs
+
+**Description**<br/>
+Allows the user to zoom and pan their timetable using mouse wheel scrolling on desktop or pinch gestures on mobile. Supports automatic horizontal or vertical scrolling when dragging near the edges of the viewport, useful for swapping rows or columns.
+
+
+**Properties**
+- `Camera MainCam` — The main camera. Used to calculate mouse position.
+
+- `RectTransform ScrollView` — The scroll view container for detecting mouse position.
+- `RectTransform Table` — The timetable UI element to scale (zoom).
+
+
+- `float MinScale` — Minimum zoom level.
+- `float MaxScale` — Maximum zoom level.
+- `float ScrollSensitivity` — How quickly zoom changes per scroll or pinch.
+- `bool mouseOver` — Tracks if the mouse is currently over the scroll view.
+
+
+- `ScrollRect ScrollHandler` — The ScrollRect controlling scrolling behavior.
+- `RectTransform Viewport` — The viewport RectTransform used for drag position calculations.
+
+
+
+- `float DragSpeed` — Speed at which the scroll view auto-scrolls when dragging near edges.
+
+
+- `Dragging` — Whether the user is currently dragging.
+- `DragHorizontal` — Whether dragging is horizontal (`true`) or vertical (`false`).
+
+
+**Methods**
+```cs
+public void OnPointerEnter(PointerEventData eventData)
+```
+Sets `mouseOver` to true when the pointer enters the ScrollView area, enabling zoom input.
+
+<br/>
+
+```cs
+public void OnPointerExit(PointerEventData eventData)
+```
+Sets `mouseOver` to `false` when the pointer exits the ScrollView area, disabling zoom input.
+
+<br/><br/>
+
+```cs
+void HandleDrag()
+```
+If `Dragging` is true, checks mouse position relative to the viewport edges and scrolls the content in the appropriate direction at a speed of `DragSpeed`.
+
+- If `DragHorizontal` is true, scrolls left or right horizontally.
+- Otherwise, scrolls up or down vertically.
+
+<br/><br/>
+
+```cs
+void HandleScrollZoom()
+```
+If the mouse is over the ScrollView, zooms the `Table` content in or out based on mouse wheel input.
+
+<br/>
+
+```cs
+void HandlePinchZoom()
+```
+Supports two-finger pinch zoom on touch devices. Calculates the difference between the current and previous distance between two touches to adjust the `Table` scale smoothly.
+
+<br/>
+
+```cs
+void ClampZoom()
+```
+Clamps the Table scale to ensure it remains between MinScale and MaxScale. Called every frame to enforce limits regardless of zoom input.
+
+<br/><br/>
+
+```cs
+void Update()
+```
+Called once per frame by Unity. Handles zooming and dragging behavior based on the current platform.
+- Calls HandleDrag() to manage auto-scrolling when dragging near viewport edges.
+- Uses platform-specific zoom input:
+  - On mobile, runs HandlePinchZoom()
+  - On desktop, runs HandleScrollZoom()
+- Finally, calls ClampZoom() to limit zoom levels.
+
+---
+
+#### FreezeGrid.cs
+
+**Description**<br/>
+Implements Excel-like frozen panes for the timetable grid. Keeps the first row or first column fixed while the user scrolls through the rest of the grid.
+
+**Properties**
+- `FreezeModes { FreezeX, FreezeY }` — Specifies the axis to freeze:
+  - FreezeX: Freezes the first column (vertical lock).
+  - FreezeY: Freezes the first row (horizontal lock).
+
+- `TimetableGrid Timetable` — Reference to the main timetable grid.
+- `RectTransform TimetableViewportRect` — The scrollable viewport rect of the timetable.
+
+- `RectTransform SelfRect` — The RectTransform of this frozen element's container.
+- `RectTransform Child` — The actual frozen element (e.g., first row/column content).
+
+- `FreezeModes FreezeMode` — Whether this instance freezes X (columns) or Y (rows).
+
+- `Vector2 originalDelta` — The original sizeDelta of SelfRect (cached in `Start()`).
+- `Vector2 originalViewportDelta` — The original sizeDelta of the timetable viewport
+  (cached in `Start()`).
+
+- `Vector3 WantedChildPos` — Computed world position the child should match.
+- `Vector2 WantedChildSizeDelta` — Computed sizeDelta to keep dimensions in sync.
+- `Vector3 WantedScale` — Computed scale to sync with the timetable grid.
+
+**Methods**
+```cs
+void Start()
+```
+Caches the original sizeDelta values of `SelfRect` and `TimetableViewportRect`.
+These baseline values are used to properly recalculate size and positioning during runtime scaling.
+
+<br/>
+
+```cs
+void Update()
+```
+Called once per frame. Dynamically updates the frozen row or column's position, size, and scale to stay aligned with the scrolling and zooming grid.
+
+- If `FreezeMode == FreezeY`:
+  - Aligns the child’s **X-position** and **width** with the timetable’s.
+  - Maintains its vertical position to simulate a frozen **row**.
+  - Resizes and repositions `SelfRect` accordingly.
+  - Adjusts the viewport height to maintain layout.
+- If `FreezeMode == FreezeX`:
+  - Aligns the child’s **Y-position** and **height** with the timetable’s.
+  - Maintains its horizontal position to simulate a frozen **column**.
+  - Resizes and repositions `SelfRect` accordingly.
+  - Adjusts the viewport width to maintain layout.
+
+---
+### `Scripts/Time Management`
+
+#### WeekDay.cs
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+#### WeekDayObject.cs
+**Description**<br/>
+
+**Properties**
+
+#### LabelIndex.cs
+**Description**<br/>
+
+**Properties**
+
+#### TimeIndexObject.cs
+**Description**<br/>
+
+**Properties**
+
+
+#### DayTimeManager.cs
+**Description**<br/>
+
+**Properties**
+
+**Methods**
+
+---
+### `Scripts`
+
+#### QuitButton.cs
+
+**Description**<br/>
+Disables the parent UI object at runtime if the application is running on a mobile platform. This is typically used to hide the quit button on mobile builds, where quitting the app manually is unnecessary.
+
+**Methods**
+```cs
+void Start()
+```
+Called automatically. Checks the platform and disables the parent object if running on a mobile device.
+
+---
+
+### `Scripts/Polish`
+
+#### VersionText.cs
+
+**Description**<br/>
+Updates a UI text element to display the current application version. Typically used to show version info in settings or splash screens.
+
+**Properties**
+- `TMP_Text text` — Reference to the TextMeshPro UI component that displays the version number.
+
+**Methods**
+```cs
+void Start()
+```
+Sets `text.text` to `"v"` followed by `Application.version`, e.g., `"v1.0.0"`.
+
+### `TextMesh Pro/Validators`
+
+#### ValidatorBase.cs
+
+**Description**<br/>
+This class inherits from `TMP_InputValidator` and serves as a base class for a couple custom validators.
+
+**Properties**
+- `TMP_InputField InputField` — Used primarily by subclasses to restore the character limit, since custom validators override the default character limit behavior.
+
+**Methods**
+```cs
+public void AssignInputField(TMP_InputField _inputField)
+```
+Assigns the given `_inputField` to the `InputField` property. Called by InputFieldFixer.cs.
+
+<br/>
+
+```cs
+public override char Validate(ref string text, ref int pos, char ch)
+```
+Automatically called by the `TMP_InputField` as the user types. This method contains the custom validation logic.
+
+---
+
+#### HexCodeValidator.cs
+
+**Description**<br/>
+Inherits from `ValidatorBase.cs`. This class is used by the hex color code input field in the UI Color Editor to restrict input to valid hexadecimal characters.
+
+**Methods**
+```cs
+public override char Validate(ref string text, ref int pos, char ch)
+```
+Automatically called by the `TMP_InputField` as the user types.
+- Accepts only the characters: `0-9`, `a-f`, `A-F`.
+- Accepts `#` only at the first position (`pos == 0`).
+- Blocks any other characters and prevents overflow beyond the input's character limit.
+
+---
+
+#### TimeValidator.cs
+
+**Description**<br/>
+Inherits from `ValidatorBase.cs`. This validator is used by input fields in the WeekDay Editor and CellInfo Editor when entering start times.
+
+**Methods**
+```cs
+public override char Validate(ref string text, ref int pos, char ch)
+```
+Automatically called by the TMP_InputField during input.
+
+- Accepts numeric digits: `0-9`.
+- Accepts time-specific characters: `A`, `P`, `M`, `a`, `p`, `m`.
+- Accepts separators: `:`, `.`, and space (` `).
+- Blocks any other characters and prevents overflow beyond the input's character limit.
+
+---
+
+#### ScriptName.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**

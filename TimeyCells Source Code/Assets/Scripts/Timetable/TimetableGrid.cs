@@ -17,11 +17,16 @@ public class TimetableGrid : MonoBehaviour
     public int Rows;
     public int Columns;
     [Space]
-    public Vector2 Padding;
-    [Space]
+    public int MaxRows = 7;
+    public int MaxColumns = 40;
+
+    [Space(20)]
     public bool Center = true;
     public bool FitContent = true;
     [Space]
+    public Vector2 Padding;
+
+    [Space(20)]
     public bool DebugGrid; // When debugging, destroyImmediate is called, instead of destroy.
 
     [Space(20)]
@@ -35,8 +40,6 @@ public class TimetableGrid : MonoBehaviour
     [Space]
     public Transform ColButtonParent;
     public Vector2 ColumnButtonsOffset = -Vector2.up * 20;
-    [Space]
-    public int MaxColumns = 40;
 
     [Space(20)]
     [Header("Adding/Removing Rows UI")]
@@ -45,8 +48,7 @@ public class TimetableGrid : MonoBehaviour
     [Space]
     public Transform RowButtonParent;
     public Vector2 RowButtonsOffset = Vector2.right * 20;
-    [Space]
-    public int MaxRows = 7;
+    
 
     [System.Serializable]
     public class Column
@@ -65,10 +67,14 @@ public class TimetableGrid : MonoBehaviour
     Vector2 PivotFix = Vector2.up;
     Vector2 originalPivot;
 
-    public void Start()
+
+    private void Start()
     {
         DebugGrid = false;
     }
+
+
+
 
     [ContextMenu("Setup Timetable Grid!")]
     public void Setup()
@@ -92,6 +98,7 @@ public class TimetableGrid : MonoBehaviour
 
         FitToContent();
     }
+
 
 
 
@@ -282,12 +289,14 @@ public class TimetableGrid : MonoBehaviour
     public void AddAllOffsets()
     {
         if (!Center) return;
+        Vector3 offset = GetOffset();
+        
         for (int i = 0; i < ColumnsList.Count; i++)
         {
             var children = ColumnsList[i].Children;
             for (int j = 0; j < children.Count; j++)
             {
-                children[j].transform.localPosition += GetOffset();
+                children[j].transform.localPosition += offset;
             }
         }
     }
@@ -295,12 +304,14 @@ public class TimetableGrid : MonoBehaviour
     public void RemoveAllOffsets()
     {
         if (!Center) return;
+        Vector3 offset = GetOffset();
+
         for (int i = 0; i < ColumnsList.Count; i++)
         {
             var children = ColumnsList[i].Children;
             for (int j = 0; j < children.Count; j++)
             {
-                children[j].transform.localPosition -= GetOffset();
+                children[j].transform.localPosition -= offset;
             }
         }
     }
@@ -345,7 +356,7 @@ public class TimetableGrid : MonoBehaviour
         }
     }
 
-    public void UpdateBreakTransform(int index)
+    public void UpdateMultirowTransform(int index)
     {
         if (!ColumnsList[index].IsMultirow) return;
         TimetableCell t = ColumnsList[index].Children[0];
@@ -381,7 +392,7 @@ public class TimetableGrid : MonoBehaviour
         {
             if (ColumnsList[i].IsMultirow)
             {
-                UpdateBreakTransform(i);
+                UpdateMultirowTransform(i);
                 continue;
             }
             UpdateColumnTransform(ColumnsList[i], i);
@@ -442,7 +453,7 @@ public class TimetableGrid : MonoBehaviour
 
         UpdateAllTransforms(columnIndex);
 
-        UpdateBreakTransform(columnIndex);
+        UpdateMultirowTransform(columnIndex);
 
         AddAllOffsets();
 
@@ -510,11 +521,11 @@ public class TimetableGrid : MonoBehaviour
         if (!ColumnsList[IndexA].IsMultirow)
             UpdateColumnTransform(ColumnsList[IndexA], IndexA);
         else
-            UpdateBreakTransform(IndexA);
+            UpdateMultirowTransform(IndexA);
         if (!ColumnsList[IndexB].IsMultirow)
             UpdateColumnTransform(ColumnsList[IndexB], IndexB);
         else
-            UpdateBreakTransform(IndexB);
+            UpdateMultirowTransform(IndexB);
         AddAllOffsets();
         rect.pivot = originalPivot;
 

@@ -175,7 +175,7 @@ public class SaveManager : MonoBehaviour
         }
         catch (Exception)
         {
-
+            // We catch the error not for debug purposes, or inform the user but instead to prevent weird behaviour.
         }
 
         // This is meant to prevent any weird behaviour if you paste anything other than a json file.

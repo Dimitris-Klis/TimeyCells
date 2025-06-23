@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
-using TMPro;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "InputValidator - HexCodeValidator.asset", menuName = "TextMeshPro/Input Validators/HexCode", order = 100)]

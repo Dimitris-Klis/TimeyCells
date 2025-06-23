@@ -25,6 +25,9 @@ public class HelpSection : MonoBehaviour
     [SerializeField] HelpLayoutGroup ContentLayoutGroup; // This doesn't work! We need to implement a special layout group for the help section!
     [SerializeField] ScrollRect scrollRect; // Assign your ScrollRect
     [SerializeField] GIFHandler GIFHandler;
+    [Space]
+    [ReadOnly] public bool ShouldSetup = true;
+
 
     [System.Serializable]
     public class HelpMedia
@@ -94,6 +97,7 @@ public class HelpSection : MonoBehaviour
     [ContextMenu("Setup Test")]
     public void Setup()
     {
+        if (!ShouldSetup) return;
         tableOfContents.headers.Clear();
         bool startedItalics = false;
         bool startedBold = false;
@@ -276,5 +280,6 @@ public class HelpSection : MonoBehaviour
         tableOfContents.Setup();
         SaveManager.instance.Stylizer.GetElements();
         SaveManager.instance.Stylizer.ApplyCurrentTheme();
+        ShouldSetup = false;
     }
 }
