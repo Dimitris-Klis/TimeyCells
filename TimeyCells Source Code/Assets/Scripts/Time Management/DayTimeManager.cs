@@ -14,9 +14,6 @@ public class DayTimeManager : MonoBehaviour
         instance = this;
     }
 
-    [Header("Begin")]
-    [ReadOnly] public bool begin = false;
-
     [Header("Timetable Grid")]
     public TimetableGrid Grid;
 
@@ -53,7 +50,7 @@ public class DayTimeManager : MonoBehaviour
     public Transform TimeIndexesParent;
     [Space]
     public List<TimeIndexObject> TimeIndexPreviews = new();
-    public List<LabelIndex> TimeLabels = new();
+    public List<TimeIndex> TimeLabels = new();
 
     
     DateTime wantedTime = DateTime.Now;
@@ -66,7 +63,6 @@ public class DayTimeManager : MonoBehaviour
 
     private void Update()
     {
-        if (!begin) return;
         long diff = (DateTime.Now - wantedTime).Ticks;
         if (diff < 0) diff = -diff;
         if (DateTime.Now >= wantedTime || diff > 30000000) // Updating content every 1 system second or if the difference is too big
@@ -78,7 +74,7 @@ public class DayTimeManager : MonoBehaviour
             Grid.UpdateAllCells();
             for (int i = 0; i < WeekDays.Count; i++)
             {
-                WeekDays[i].CheckExpirationDate();
+                WeekDays[i].CheckIfTempExpired();
             }
             // If today has no events
             if (weekdayindex < 0)
@@ -197,7 +193,7 @@ public class DayTimeManager : MonoBehaviour
 
     public void SwapIndexLabels(int IndexA, int IndexB)
     {
-        LabelIndex LabelATemp = TimeLabels[IndexA];
+        TimeIndex LabelATemp = TimeLabels[IndexA];
         TimeLabels[IndexA] = TimeLabels[IndexB];
         TimeLabels[IndexB] = LabelATemp;
     }
@@ -266,6 +262,9 @@ public class DayTimeManager : MonoBehaviour
         int mins = newStartTime.Minutes - t.Minutes + (newStartTime.Minutes < t.Minutes ? 60 : 0);
         return new(hours, mins, 0);
     }
+
+
+
 
     public CellInfo GetCurrentCellInfo(int weekdayindex, out TimeSpan diff)
     {

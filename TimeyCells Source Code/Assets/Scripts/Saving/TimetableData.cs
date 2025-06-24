@@ -320,7 +320,7 @@ public class TimetableData
     public SerializableList<ColumnData> Columns = new();  // Use the length of this to figure out Column Count
 
     public SerializableList<WeekDayData> Weekdays = new(); // Use the length of this to figure out Row Count
-    public SerializableList<LabelIndex> Labels = new();
+    public SerializableList<TimeIndex> Labels = new();
 
     public TimetableData()
     {

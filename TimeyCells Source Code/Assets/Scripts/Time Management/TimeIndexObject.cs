@@ -6,11 +6,9 @@ using UnityEngine.UI;
 
 public class TimeIndexObject : MonoBehaviour
 {
-    public bool CustomLabel;
-    public bool CountAsIndex;
-    public Button button;
+    [Header("References")]
     public TMP_Text IndexText;
-    [Space]
-    public GameObject TimeParent;
     public TMP_Text TimeText;
+    [Space]
+    public Button button;
 }

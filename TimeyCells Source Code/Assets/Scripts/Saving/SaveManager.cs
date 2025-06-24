@@ -143,7 +143,6 @@ public class SaveManager : MonoBehaviour
     }
     public void PasteJsonAsTimetable(bool checkSave)
     {
-        DayTimeManager.begin = false;
         if (!saved && checkSave)
         {
             ConfirmationManager.ButtonPrompt Cancel = new(LocalizationSystem.GetText(gameObject.name, "BUTTONS_CANCEL"), null);
@@ -244,7 +243,6 @@ public class SaveManager : MonoBehaviour
         DayTimeManager.UpdateWeekDays();
         DayTimeManager.UpdateTimeIndexes();
 
-        DayTimeManager.begin = true;
         saved = false;
         Stylizer.Setup();
     }
@@ -425,7 +423,7 @@ public class SaveManager : MonoBehaviour
         newdata.Labels.list = new();
         for (int i =0; i<newdata.Columns.list.Count; i++)
         {
-            LabelIndex label = new();
+            TimeIndex label = new();
             label.CountAsIndex = false;
             label.IsCustomLabel = newdata.Columns.list[i].IsMultirow;
             if (label.IsCustomLabel) label.CustomLabelName = "Break";
@@ -494,7 +492,6 @@ public class SaveManager : MonoBehaviour
     public void LoadTimetable(string timetable, bool checkSave)
     {
         ensureDirectoryExists(FilePath + TimetablesPath + Path.AltDirectorySeparatorChar);
-        DayTimeManager.begin = false;
         if (!saved && checkSave)
         {
             ConfirmationManager.ButtonPrompt Cancel = new(LocalizationSystem.GetText(gameObject.name, "BUTTONS_CANCEL"), null);
@@ -578,8 +575,6 @@ public class SaveManager : MonoBehaviour
         DayTimeManager.Highlight.transform.SetAsLastSibling();
         DayTimeManager.UpdateWeekDays();
         DayTimeManager.UpdateTimeIndexes();
-
-        DayTimeManager.begin = true;
         
         saved = true;
         UnsavedIndicator.enabled = false;
@@ -623,7 +618,6 @@ public class SaveManager : MonoBehaviour
         TimetableEditor.TimetableNameInput.SetTextWithoutNotify("New Timetable");
         TimetableEditor.TimetableNameInput.GetComponent<InputFieldFixer>().TMPField.text = "New Timetable";
 
-        DayTimeManager.begin = false;
         if (!saved && checkSave)
         {
             ConfirmationManager.ButtonPrompt Cancel = new(LocalizationSystem.GetText(gameObject.name, "BUTTONS_CANCEL"), null);
@@ -659,7 +653,6 @@ public class SaveManager : MonoBehaviour
         DayTimeManager.Highlight.transform.SetAsLastSibling();
         DayTimeManager.UpdateWeekDays();
         DayTimeManager.UpdateTimeIndexes();
-        DayTimeManager.begin = true;
 
         saved = true;
         UnsavedIndicator.enabled = false;

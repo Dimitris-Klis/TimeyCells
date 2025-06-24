@@ -6,6 +6,26 @@ using System;
 [System.Serializable]
 public class WeekDay
 {
+    // The days for which the day will run.
+    public uint Days; // max is 127
+    [Space]
+    public string DayName;
+
+    public TimeSpan StartTime = new(7, 30, 0);
+    public TimeSpan CommonLength = new(1, 0, 0);
+
+    public TimeSpan TempStartTime = new(7, 30, 0);
+    public TimeSpan TempCommonLength = new(1, 0, 0);
+
+    public DateTime OverrideDate = DateTime.MinValue;
+    public int OverrideLength = 0;
+
+    public int OverrideDelayWeeks = 0;
+    public int OverrideExtraLengthWeeks = -1;
+    
+    public int OverrideMode = 0; // 0: No Override, 1: Override StartTime, 2: Override CommonLength, 3: Override All
+
+    
     public WeekDay(TimetableData.WeekDayData data)
     {
         DayName = data.WeekDayName;
@@ -30,33 +50,16 @@ public class WeekDay
         }
     }
 
-    // The days for which the day will run.
-    public uint Days; // max is 127
-    [Space]
-    public string DayName;
-
-    public TimeSpan StartTime = new(7, 30, 0);
-    public TimeSpan CommonLength = new(1, 0, 0);
-
-
-
-
-    public TimeSpan TempStartTime = new(7, 30, 0);
-    public TimeSpan TempCommonLength = new(1, 0, 0);
-
-    public int OverrideDelayWeeks = 0;
-    public int OverrideExtraLengthWeeks = -1;
-    public int OverrideMode = 0; // 0: No Override, 1: Override StartTime, 2: Override CommonLength, 3: OverrideAll
-
-    public DateTime OverrideDate = DateTime.MinValue;
-    public int OverrideLength = 0;
-
     public WeekDay(string _DayName, uint _Days)
     {
         DayName= _DayName;
         Days = _Days;
     }
-    public void CheckExpirationDate()
+
+
+
+
+    public void CheckIfTempExpired()
     {
         if (OverrideExtraLengthWeeks >= 0 && DateTime.Now > OverrideDate.AddDays(OverrideDelayWeeks * 7 + OverrideExtraLengthWeeks * 7 + OverrideLength).AddHours(23).AddMinutes(59))
         {

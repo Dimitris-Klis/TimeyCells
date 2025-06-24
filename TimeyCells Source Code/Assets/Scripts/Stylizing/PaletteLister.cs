@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PaletteEditor : MonoBehaviour
+public class PaletteLister : MonoBehaviour
 {
     [Header("References")]
     public PaletteCreator PaletteCreator;

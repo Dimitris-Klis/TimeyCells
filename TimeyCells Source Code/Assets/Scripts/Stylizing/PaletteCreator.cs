@@ -7,7 +7,7 @@ using TMPro;
 public class PaletteCreator : MonoBehaviour
 {
     public ColorStylizer Stylizer;
-    public PaletteEditor PaletteEditor;
+    public PaletteLister PaletteEditor;
     public int IDToModify;
     public ColorStylePreset DefaultPreset;
     public CanvasGroup SelfGroup;
@@ -26,12 +26,6 @@ public class PaletteCreator : MonoBehaviour
     public Image PrimaryColorImage;
     public Image SecondaryColorImage;
     public Image BackgroundColorImage;
-
-    [Space(20)]
-
-    //public Button PrimaryColorButton;
-    //public Button SecondaryColorButton;
-    //public Button BackgroundColorButton;
 
     [Space(20)]
 

@@ -589,7 +589,7 @@ Refreshes the UI of `CellUI` to reflect the current data.
 ```cs
 void CheckIfTempExpired()
 ```
-Checks whether the temporary event has expired and removes it if necessary.
+Checks whether the temporary override has expired and removes it if necessary.
 
 ---
 
@@ -940,9 +940,287 @@ Called once per frame. Dynamically updates the frozen row or column's position, 
   - Adjusts the viewport width to maintain layout.
 
 ---
+
 ### `Scripts/Time Management`
 
 #### WeekDay.cs
+**Description**<br/>
+Represents a row in the timetable. A single row can be shared across multiple days of the week.
+
+**Properties**
+
+- `uint Days` — A bitmask representing which days the row is active. Values are read in binary (max 127) to allow multiple day combinations.
+
+- `string DayName` — The label/name of the row.
+
+- `TimeSpan StartTime` — When the row begins.
+- `TimeSpan CommonLength` — Default duration for each cell in the row.
+
+- `TimeSpan TempStartTime` — When the row begins temporarily.
+- `TimeSpan TempCommonLength` — How long each cell in the row lasts by default temporarily.
+
+- `DateTime OverrideDate` — The date in which the temporary override was added.
+- `int OverrideLength` — The default length of the temporary override, calculated
+  externally by WeekDayEditor.cs.
+- `int OverrideDelayWeeks` — How many weeks until the temporary override starts to apply.
+- `int OverrideExtraLengthWeeks` — How many additional weeks until the temporary
+  override expires.
+
+- `int OverrideMode` — Controls what gets overridden:
+  - `0`: No Override
+  - `1`: Override StartTime
+  - `2`: Override CommonLength
+  - `3`: Override All
+
+**Constructors**
+- `WeekDay(TimetableData.WeekDayData data)` — Initializes the row, using the provided `data`. Primarily used when loading a timetable.
+- `WeekDay(string _DayName, uint _Days)` — Used to create default rows. Called by `SaveManager.cs` and `DayTimeManager.cs`.
+
+**Methods**
+```cs
+public void CheckIfTempExpired()
+```
+Checks whether the temporary override period has expired. If so, it disables the override by resetting `OverrideExtraLengthWeeks` to `-1`.
+
+---
+
+#### WeekDayObject.cs
+**Description**<br/>
+The UI representation of a WeekDay.
+
+**Properties**
+- TMP_Text WeekDayName — Displays the name of the row.
+- Button selfButton — Opens the `WeekDayEditor`.
+
+---
+
+#### TimeIndex.cs
+**Description**<br/>
+Stores configuration for column headers (labels) in the timetable.
+**Properties**
+- `bool IsCustomLabel` —  Whether the label uses custom text.
+- `bool CountAsIndex` —  Whether the label should still be considered an index.
+- `string CustomLabelName` — The custom text to display.
+
+---
+
+#### TimeIndexObject.cs
+**Description**<br/>
+Holds references to the TimeIndex label's UI representation. Modified `DayTimeManager.cs`
+
+**Properties**
+- TMP_Text IndexText — Displays the column number.
+- TMP_Text TimeText — Displays the associated start time.
+
+- Button button — Opens the `LabelEditor` when clicked.
+
+---
+
+#### DayTimeManager.cs
+**Description**<br/>
+Handles everything related to displaying and calculating time for a weekly timetable. Manages the current active time cell, supports custom time formats (12h/24h), and updates time-related UI elements in real-time.
+
+**Properties**
+- static DayTimeManager instance — Singleton reference to the current DayTimeManager.
+
+
+- public TimetableGrid Grid — The grid displaying all timetable cells.
+
+- public bool _24hFormat — Whether time is shown in 24-hour format.
+- public bool EnglishFormat — Whether time punctuation uses English style (`.` instead of `:`).
+
+- public Toggle _24hToggle — UI toggle to switch 24h display on or off.
+- public Toggle EnglishToggle — UI toggle to switch English-style punctuation on or off.
+
+- public GameObject Highlight — The object used to highlight the currently active cell.
+- public RectTransform HighlightRect — RectTransform for resizing the highlight.
+- public TMP_Text TimeLeftText — Text element displaying time left until the next event.
+
+- public WeekdayEditor WeekdayEditor — UI editor for weekday configurations.
+- public WeekDayObject WeekDayPrefab — Prefab used for weekday previews.
+- public Transform WeekDaysParent — Parent transform holding weekday preview objects.
+
+- public List<WeekDay> WeekDays — List of up to 7 weekday objects used in the timetable.
+
+- public List<WeekDayObject> WeekDayPreviews — Instantiated previews for editing/visual feedback.
+
+
+
+- public LabelEditor labelEditor — Editor for modifying index labels.
+- public TimeIndexObject TimeIndexPrefab — Prefab for time/index label display.
+- public Transform TimeIndexesParent — Parent transform for time index objects.
+
+- public List<TimeIndexObject> TimeIndexPreviews — Instantiated UI elements for time/index labels.
+- public List<TimeIndex> TimeLabels — Logical data structure for column index labels.
+
+
+- DateTime wantedTime — Tracks when to update real-time data.
+
+**Methods**
+```cs
+public void Setup()
+```
+Initializes the manager and clears all current weekday data. Called by `SaveManager.cs`.
+<br/>
+
+```cs
+private void Update()
+```
+Runs every frame. Updates time-based highlights and remaining time display every second. Ensures current cell highlight is accurate based on real-world time. Hides highlights when no valid cell is active.
+
+<br/><br/>
+
+```cs
+public int GetWeekDayIndex(int day)
+```
+Returns the index of the `WeekDay` object that contains the specified system day (0 = Sunday, 6 = Saturday). Returns `-1` if no match is found.
+
+<br/>
+
+```cs
+public void UpdateWeekDays()
+```
+Refreshes the UI list of weekday previews based on `WeekDays`. Removes old objects and instantiates new preview buttons for editing.
+
+<br/>
+
+```cs
+public void AddNewWeekday(int index)
+```
+Adds a new blank weekday at the specified index. Updates UI accordingly.
+
+<br/>
+
+```cs
+public void RemoveWeekday(int index)
+```
+Removes the weekday at the specified index and updates UI elements.
+
+<br/>
+
+```cs
+public void SwapWeekDays(int IndexA, int IndexB)
+```
+Swaps two weekdays in the list and updates the preview UI.
+
+<br/><br/>
+
+```cs
+public void AddIndexLabel(int index)
+```
+Inserts a new blank `TimeLabel` (for column indexes) at the given position.
+
+<br/>
+
+```cs
+public void RemoveIndexLabel(int index)
+```
+Removes a time label at the specified index.
+
+<br/>
+
+```cs
+public void SwapIndexLabels(int IndexA, int IndexB)
+```
+Swaps two time/index labels in the list.
+
+<br/><br/>
+
+```cs
+public string GetColumnIndexAt(int index)
+```
+Returns the index label (custom or default numeric) for a given column. Returns empty string if the cell is empty.
+
+<br/><br/>
+
+```cs
+public TimeSpan GetCellCommonLength(int weekday)
+```
+Returns the default duration of a single cell for the specified weekday.
+
+<br/>
+
+```cs
+public TimeSpan GetCellStartTime(int col, int weekday)
+```
+Calculates the start time of a specific cell by summing all durations before it, accounting for overrides.
+
+<br/>
+
+```cs
+public TimeSpan TimeDiff(TimeSpan newStartTime, int col, int weekday)
+```
+Calculates the difference between a new start time and the actual start time of a given cell.
+
+<br/><br/>
+
+```cs
+public CellInfo GetCurrentCellInfo(int weekdayindex, out TimeSpan diff)
+```
+Returns the current active `CellInfo` object for the given day index. Outputs the time remaining until the end of the event.
+
+<br/>
+
+```cs
+public bool IsCellEmpty(int col, int weekday)
+```
+Checks if a cell is empty (no base or override event info present).
+
+<br/><br/>
+
+```cs
+public void HideHighlights()
+```
+Disables the highlight and clears the countdown text.
+
+<br/>
+
+```cs
+public void UpdateTimeIndexes()
+```
+Updates and redraws the time/index labels above the timetable columns. Ensures consistency between labels and columns.
+
+<br/>
+
+```cs
+public string FormatTime(TimeSpan t)
+```
+Returns a formatted string of a time span based on 24h/12h settings and English punctuation.
+
+<br/>
+
+```cs
+public static bool TryParseTime(string text, out DateTime result)
+```
+Attempts to parse a time string into a `DateTime` using multiple 12h/24h format options. Returns success state.
+
+<br/>
+
+```cs
+public static bool TryParseLength(string hours, string minutes, out TimeSpan result)
+```
+Parses hour and minute strings into a valid TimeSpan, capping to max 23:59. Returns true if successful.
+
+<br/><br/>
+
+```cs
+public void Set24h(bool is24)
+```
+Sets the 24-hour format preference and refreshes saved settings and labels.
+
+<br/>
+
+```cs
+public void SetEnglish(bool english)
+```
+Sets English punctuation (colon/dot) and refreshes saved settings and labels.
+
+---
+
+### `Scripts/Stylizing`
+
+#### ColorStylePreset.cs
+
 **Description**<br/>
 
 **Properties**
@@ -951,30 +1229,68 @@ Called once per frame. Dynamically updates the frozen row or column's position, 
 
 **Methods**
 
-#### WeekDayObject.cs
+---
+
+#### ColorStylizer.cs
+
 **Description**<br/>
 
 **Properties**
 
-#### LabelIndex.cs
-**Description**<br/>
-
-**Properties**
-
-#### TimeIndexObject.cs
-**Description**<br/>
-
-**Properties**
-
-
-#### DayTimeManager.cs
-**Description**<br/>
-
-**Properties**
+**Constructors**
 
 **Methods**
 
 ---
+
+#### PaletteObject.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+---
+
+#### PaletteDropdown.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+---
+
+#### PaletteLister.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+---
+
+#### PaletteCreator.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+---
+
 ### `Scripts`
 
 #### QuitButton.cs
@@ -987,6 +1303,47 @@ Disables the parent UI object at runtime if the application is running on a mobi
 void Start()
 ```
 Called automatically. Checks the platform and disables the parent object if running on a mobile device.
+
+---
+
+### `Scripts/Inspector Stuff`
+
+#### CommentInformationNote.cs
+
+**Description**<br/>
+A Unity Editor-only component made by Alan Mattanó from the Unity Forums. Allows you to add notes or comments to GameObjects in the Unity Editor, making it easier to communicate essential information
+about GameObjects or their components to other developers.
+
+**Properties**
+- `string comment` —  A multi-line text field holding the note or comment content.
+
+**Methods**
+```cs
+void Awake()
+```
+Clears the comment string and immediately destroys this component at runtime, ensuring it only exists in the Editor.
+
+---
+
+#### ReadOnlyAttribute.cs
+
+**Description**<br/>
+A simple marker attribute class with no logic, used to tag fields in scripts as read-only in the Unity Inspector. Unity recognizes classes that inherit from `PropertyAttribute` 
+as custom attributes usable in editor scripts.
+
+---
+
+#### ReadOnlyDrawer.cs
+
+**Description**<br/>
+A custom property drawer that renders any field tagged with `[ReadOnly]` as disabled (non-editable) in the Unity Inspector, 
+preventing modifications while still displaying the field's value.
+
+**Methods**
+```cs
+public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+```
+Draws the property in the Inspector in a disabled state, making it uneditable but visible.
 
 ---
 

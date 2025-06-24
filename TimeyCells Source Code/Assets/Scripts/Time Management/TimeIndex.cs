@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 
 [System.Serializable]
-public class LabelIndex
+public class TimeIndex
 {
     public bool IsCustomLabel = false;
     public bool CountAsIndex = false;
