@@ -16002,16 +16002,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d873f9afb883a1a4e9c98a408c1a3c3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Stylizer: {fileID: 1871095415}
-  PaletteEditor: {fileID: 635741586}
   IDToModify: 0
-  DefaultPreset:
+  ColorToChange: 0
+  ThemeDefaults:
     PaletteName: Theme Name
     PrimaryColor: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 1}
     SecondaryColor: {r: 0.4528302, g: 0.4528302, b: 0.4528302, a: 1}
     BackgroundColor: {r: 0.254717, g: 0.254717, b: 0.254717, a: 1}
     IsCustomPreset: 0
-  SelfGroup: {fileID: 442634384}
+  Stylizer: {fileID: 1871095415}
+  CustomPaletteLister: {fileID: 635741586}
   PalettePreview: {fileID: 684696009}
   TitleText: {fileID: 993982902}
   PaletteNameInput: {fileID: 1669038824}
@@ -16019,7 +16019,6 @@ MonoBehaviour:
   SecondaryColorImage: {fileID: 1561603527}
   BackgroundColorImage: {fileID: 1384968872}
   DeleteButton: {fileID: 119119940}
-  ColorToChange: 0
 --- !u!222 &454073187
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -22273,7 +22272,7 @@ GameObject:
   - component: {fileID: 635741584}
   - component: {fileID: 635741586}
   m_Layer: 5
-  m_Name: Palette Lister Overlay
+  m_Name: Custom Palette Lister Overlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22348,14 +22347,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 635741582}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e65123600822794b8ce1eb23df2e8b1, type: 3}
+  m_Script: {fileID: 11500000, guid: ed2f61a8c1a70474abec4cafbf1c9f82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   PaletteCreator: {fileID: 454073186}
   Template: {fileID: 1176539076}
   PalettesParent: {fileID: 669708812}
   Stylizer: {fileID: 1871095415}
-  Message: {fileID: 924914214}
+  MessageIfNoThemes: {fileID: 189029104}
 --- !u!1 &640585036
 GameObject:
   m_ObjectHideFlags: 0
@@ -23972,7 +23971,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Close
+      value: CloseCreator
       objectReference: {fileID: 0}
     - target: {fileID: 1590460727684010776, guid: df6458806cb44664788024d81a401235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName

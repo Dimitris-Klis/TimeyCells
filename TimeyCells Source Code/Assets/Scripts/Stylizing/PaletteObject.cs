@@ -6,7 +6,6 @@ using TMPro;
 
 public class PaletteObject : MonoBehaviour
 {
-
     [Header("Functionality")]
     public PaletteDropdown paletteDropdown;
     public int paletteIndex;
@@ -22,9 +21,7 @@ public class PaletteObject : MonoBehaviour
 
     public void SetPaletteDropdown(bool isOn)
     {
-        if (isOn)
-        {
-            paletteDropdown.ChangeValue(paletteIndex);
-        }
+        if (!isOn) return;
+        paletteDropdown.ChangeValue(paletteIndex);
     }
 }

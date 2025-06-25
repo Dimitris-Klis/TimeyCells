@@ -17,6 +17,14 @@ public class PaletteDropdown : MonoBehaviour
     public int value;
 
     public List<PaletteObject> paletteChildren = new();
+
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        Template.gameObject.SetActive(false);
+    }
+
     public void Setup(ColorStylePreset[] presets)
     {
         for (int i = 0; i < paletteChildren.Count; i++)
@@ -42,11 +50,9 @@ public class PaletteDropdown : MonoBehaviour
         }
         Template.gameObject.SetActive(false);
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        Template.gameObject.SetActive(false);
-    }
+    
+
+
 
     public void ChangeValue(int newvalue)
     {
@@ -65,6 +71,7 @@ public class PaletteDropdown : MonoBehaviour
             paletteChildren[i].toggle.SetIsOnWithoutNotify(paletteChildren[i].paletteIndex == newvalue);
         }
     }
+
     public void SetValueWithoutNotify(int newvalue)
     {
         

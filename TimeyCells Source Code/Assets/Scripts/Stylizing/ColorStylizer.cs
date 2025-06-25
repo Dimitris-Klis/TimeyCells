@@ -6,49 +6,27 @@ using TMPro;
 
 public class ColorStylizer : MonoBehaviour
 {
+    [Header("Selected Color")]
     public int wantedPreset;
     
-    [Space]
+    [Space(20)]
+    [Header("Colors, UI")]
     public PaletteDropdown paletteDropdown;
     public List<ColorStylePreset> ColorStyles;
 
-    [Space]
+    [Space(20)]
+    [Header("Relevant Elements")]
     public Camera Camera;
     public Image[] Backgrounds;
     public Image[] Buttons;
     public TMP_Text[] Texts;
+
+
     public void Setup()
     {
         UpdateDropdown();
         paletteDropdown.SetValueWithoutNotify(wantedPreset);
         ApplyCurrentTheme();
-    }
-    public int GetIndex(ColorStylePreset preset)
-    {
-        for (int i = 0; i < ColorStyles.Count; i++)
-        {
-            if (ColorStyles[i] == preset) return i;
-        }
-        return -1;
-    }
-
-    public void DeleteStyle(int index)
-    {
-        ColorStyles.RemoveAt(index);
-        if (wantedPreset > index) wantedPreset--;
-        if (wantedPreset >= ColorStyles.Count)
-        {
-            wantedPreset = 0;
-        }
-        ApplyCurrentTheme();
-        UpdateDropdown();
-    }
-
-    public void ChangePreset(int index)
-    {
-        wantedPreset = index;
-        ApplyCurrentTheme();
-        SaveManager.instance.SaveSettings();
     }
 
     [ContextMenu("Get Relevant Elements")]
@@ -91,12 +69,17 @@ public class ColorStylizer : MonoBehaviour
             o.SetActive(false);
         }
     }
+
     public void UpdateDropdown()
     {
         paletteDropdown.Setup(ColorStyles.ToArray());
         paletteDropdown.SetValueWithoutNotify(wantedPreset);
         GetElements();
     }
+
+
+
+
     [ContextMenu("Refresh Preset")]
     public void ApplyCurrentTheme()
     {
@@ -129,6 +112,38 @@ public class ColorStylizer : MonoBehaviour
             Buttons[i].color = preset.PrimaryColor;
         }
     }
+
+    public void ChangePreset(int index)
+    {
+        wantedPreset = index;
+        ApplyCurrentTheme();
+        SaveManager.instance.SaveSettings();
+    }
+
+    public void DeleteStyle(int index)
+    {
+        ColorStyles.RemoveAt(index);
+        if (wantedPreset > index) wantedPreset--;
+        if (wantedPreset >= ColorStyles.Count)
+        {
+            wantedPreset = 0;
+        }
+        ApplyCurrentTheme();
+        UpdateDropdown();
+    }
+
+
+
+
+    public int GetIndex(ColorStylePreset preset)
+    {
+        for (int i = 0; i < ColorStyles.Count; i++)
+        {
+            if (ColorStyles[i] == preset) return i;
+        }
+        return -1;
+    }
+    
     public int CountBuiltInThemes()
     {
         int count = 0;

@@ -5,12 +5,17 @@ using UnityEngine;
 [System.Serializable]
 public class ColorStylePreset
 {
+    [Header("Palette Name")]
     public string PaletteName;
-    [Space]
+    
+    [Space(20)]
+    [Header("Colors")]
     public Color PrimaryColor; // Buttons
     public Color SecondaryColor; // Buttons Background
     public Color BackgroundColor; // Camera Background
-    [Space]
+    
+    [Space(20)]
+    [Header("Custom Preset")]
     public bool IsCustomPreset;
 
     public ColorStylePreset(SettingsData.CustomThemeData themeData)

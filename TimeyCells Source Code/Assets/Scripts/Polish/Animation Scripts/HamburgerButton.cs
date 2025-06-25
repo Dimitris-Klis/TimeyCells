@@ -4,17 +4,45 @@ using UnityEngine;
 
 public class HamburgerButton : MonoBehaviour
 {
+    [Header("Animators")]
     public CustomAnimator buttonAnimator;
     public CustomAnimator contentAnimator;
-    [Space]
+    
+    [Space(20)]
+    [Header("Button Animations")]
     public string ButtonOpenAnim = "BurgerToX";
     public string ButtonCloseAnim = "XToBurger";
-    [Space]
+
+    [Space(20)]
+    [Header("Content Animations")]
     public string ContentOpenAnim = "SlideIn";
     public string ContentCloseAnim = "SlideOut";
 
-    bool isOpen;
+    [Space(20)]
+    [Header("Properties")]
     public bool CloseMenuOnDisable;
+
+    bool isOpen;
+    
+
+
+    private void OnEnable()
+    {
+        if (CloseMenuOnDisable) isOpen = false;
+
+        // A simple fix for the animators resetting when getting disabled.
+        if (isOpen)
+        {
+            buttonAnimator.SetState(ButtonOpenAnim, 0, 1);
+            contentAnimator.SetState(ContentOpenAnim, 0, 1);
+        }
+        else
+        {
+            buttonAnimator.SetState(ButtonCloseAnim, 0, 1);
+            contentAnimator.SetState(ContentCloseAnim, 0, 1);
+        }
+    }
+
     public void OpenOrClose()
     {
         isOpen = !isOpen;
@@ -43,23 +71,6 @@ public class HamburgerButton : MonoBehaviour
         {
             buttonAnimator.ChangeState(ButtonCloseAnim);
             contentAnimator.ChangeState(ContentCloseAnim);
-        }
-    }
-    private void OnEnable()
-    {
-        
-        if(CloseMenuOnDisable) isOpen = false;
-
-        // A simple fix for the animators resetting when getting disabled.
-        if (isOpen)
-        {
-            buttonAnimator.SetState(ButtonOpenAnim, 0, 1);
-            contentAnimator.SetState(ContentOpenAnim, 0, 1);
-        }
-        else
-        {
-            buttonAnimator.SetState(ButtonCloseAnim, 0, 1);
-            contentAnimator.SetState(ContentCloseAnim, 0, 1);
         }
     }
 }

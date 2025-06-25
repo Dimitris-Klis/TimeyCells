@@ -3,26 +3,15 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PaletteLister : MonoBehaviour
+public class CustomPaletteLister : MonoBehaviour
 {
     [Header("References")]
     public PaletteCreator PaletteCreator;
     public PaletteObject Template;
     public Transform PalettesParent;
     public ColorStylizer Stylizer;
-    public GameObject Message;
-    public void AddCustomPalettes()
-    {
-        List<ColorStylePreset> customPresets = new List<ColorStylePreset>();
-        for (int i = 0; i < Stylizer.ColorStyles.Count; i++)
-        {
-            if (Stylizer.ColorStyles[i].IsCustomPreset)
-            {
-                customPresets.Add(Stylizer.ColorStyles[i]);
-            }
-        }
-        Setup(customPresets.ToArray());
-    }
+    public GameObject MessageIfNoThemes;
+    
     public void Setup(ColorStylePreset[] presets)
     {
         foreach (Transform child in PalettesParent)
@@ -56,9 +45,23 @@ public class PaletteLister : MonoBehaviour
         Template.gameObject.SetActive(false);
         StartCoroutine(RefreshMessage());
     }
+
+    public void AddCustomPalettes()
+    {
+        List<ColorStylePreset> customPresets = new List<ColorStylePreset>();
+        for (int i = 0; i < Stylizer.ColorStyles.Count; i++)
+        {
+            if (Stylizer.ColorStyles[i].IsCustomPreset)
+            {
+                customPresets.Add(Stylizer.ColorStyles[i]);
+            }
+        }
+        Setup(customPresets.ToArray());
+    }
+
     public IEnumerator RefreshMessage()
     {
         yield return new WaitForEndOfFrame();
-        Message.SetActive(PalettesParent.childCount <= 2);
+        MessageIfNoThemes.SetActive(PalettesParent.childCount <= 2);
     }
 }

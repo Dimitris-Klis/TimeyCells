@@ -6,33 +6,42 @@ using TMPro;
 
 public class PaletteCreator : MonoBehaviour
 {
-    public ColorStylizer Stylizer;
-    public PaletteLister PaletteEditor;
-    public int IDToModify;
-    public ColorStylePreset DefaultPreset;
-    public CanvasGroup SelfGroup;
+    [Header("     Creator Properties")]
+    [ReadOnly] public int IDToModify;
+    [ReadOnly] public int ColorToChange = 0; // 0: Background, 1: Secondary, 2: Primary
 
-    [Header("Preview")]
+    [Space(20)]
+    [Header("Defaults")]
+    public ColorStylePreset ThemeDefaults;
+
+    [Space(20)]
+    [Header("References")]
+    [Space(0)]
+    
+    [Header("--- Important Systems")]
+    public ColorStylizer Stylizer;
+    public CustomPaletteLister CustomPaletteLister;
+
+    [Header("--- Preview")]
     public PaletteObject PalettePreview;
     [Space]
     public TMP_Text TitleText;
-    [Space(20)]
 
-    [Header("Property Fields")]
+    [Space(20)]
+    [Header("--- Property Fields")]
     public TMP_InputField PaletteNameInput;
 
     [Space(20)]
-
+    [Header("--- Colors UI")]
     public Image PrimaryColorImage;
     public Image SecondaryColorImage;
     public Image BackgroundColorImage;
 
     [Space(20)]
-
+    [Header("--- Delete Button")]
     public Button DeleteButton;
 
-    // 0: Background, 1: Secondary, 2: Primary
-    public int ColorToChange = 0;
+
     public void OpenCreator(int ID)
     {
         TitleText.text = ID >= 0 ? LocalizationSystem.instance.GetText(gameObject.name, "EDIT_THEME") : LocalizationSystem.instance.GetText(gameObject.name, "CREATE_THEME");
@@ -41,11 +50,11 @@ public class PaletteCreator : MonoBehaviour
         DeleteButton.interactable = ID >= 0;
         if(ID < 0)
         {
-            PaletteNameInput.text = DefaultPreset.PaletteName;
-            PalettePreview.PaletteNameText.text = DefaultPreset.PaletteName;
-            PrimaryColorImage.color = PalettePreview.PrimaryColorImage.color = DefaultPreset.PrimaryColor;
-            SecondaryColorImage.color = PalettePreview.SecondaryColorImage.color = DefaultPreset.SecondaryColor;
-            BackgroundColorImage.color = PalettePreview.BackgroundColorImage.color = DefaultPreset.BackgroundColor;
+            PaletteNameInput.text = ThemeDefaults.PaletteName;
+            PalettePreview.PaletteNameText.text = ThemeDefaults.PaletteName;
+            PrimaryColorImage.color = PalettePreview.PrimaryColorImage.color = ThemeDefaults.PrimaryColor;
+            SecondaryColorImage.color = PalettePreview.SecondaryColorImage.color = ThemeDefaults.SecondaryColor;
+            BackgroundColorImage.color = PalettePreview.BackgroundColorImage.color = ThemeDefaults.BackgroundColor;
         }
         else
         {
@@ -56,11 +65,16 @@ public class PaletteCreator : MonoBehaviour
             BackgroundColorImage.color = PalettePreview.BackgroundColorImage.color = Stylizer.ColorStyles[ID].BackgroundColor;
         }
     }
-    public void Close()
+
+    public void CloseCreator()
     {
         ColorEditor.instance.ApplyColors();
         gameObject.SetActive(false);
     }
+
+
+
+
     public void ActivateColorEditor(int colorToChange)
     {
         ColorToChange = colorToChange;
@@ -87,11 +101,16 @@ public class PaletteCreator : MonoBehaviour
                 break;
         }
     }
+
     public void ChangePaletteName(string name)
     {
         PalettePreview.PaletteNameText.text = name;
     }
-    public void Delete(bool confirm) 
+
+
+
+
+    public void Delete(bool confirm)
     {
         if (!confirm)
         {
@@ -106,10 +125,11 @@ public class PaletteCreator : MonoBehaviour
             return;
         }
         Stylizer.DeleteStyle(IDToModify);
-        Close();
-        PaletteEditor.AddCustomPalettes();
+        CloseCreator();
+        CustomPaletteLister.AddCustomPalettes();
         SaveManager.instance.SaveSettings();
     }
+
     public void Confirm()
     {
         if (IDToModify >= 0)
@@ -132,8 +152,8 @@ public class PaletteCreator : MonoBehaviour
 
         Stylizer.GetElements();
         Stylizer.UpdateDropdown();
-        PaletteEditor.AddCustomPalettes();
+        CustomPaletteLister.AddCustomPalettes();
         SaveManager.instance.SaveSettings();
-        Close();
+        CloseCreator();
     }
 }

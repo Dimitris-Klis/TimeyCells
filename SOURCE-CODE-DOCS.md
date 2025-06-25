@@ -1222,72 +1222,267 @@ Sets English punctuation (colon/dot) and refreshes saved settings and labels.
 #### ColorStylePreset.cs
 
 **Description**<br/>
+Stores color palette data. Used by `ColorStylizer.cs`.
 
 **Properties**
+- `string PaletteName` — Name of the theme/preset.
+
+- `Color PrimaryColor ` — Color for UI buttons.
+- `Color SecondaryColor` — Color for UI backgrounds and text.
+- `Color BackgroundColor` — Background color for the camera.
+
+- `bool IsCustomPreset` — Whether the preset was user-created.
 
 **Constructors**
-
-**Methods**
+- `public ColorStylePreset(SettingsData.CustomThemeData themeData)` — Constructs a custom preset using external data.
+- `public ColorStylePreset()` — Default constructor with white colors and empty name.
 
 ---
 
 #### ColorStylizer.cs
 
 **Description**<br/>
+Applies selected color presets (themes) to various UI and scene elements such as the camera background, buttons, and text. Can manage, delete, and apply both built-in and user-defined color themes.
 
 **Properties**
-
-**Constructors**
+- `int wantedPreset` — Index of the currently selected color preset.
+- `PaletteDropdown paletteDropdown` — UI component used to display preset options.
+- `List<ColorStylePreset> ColorStyles` — Available color presets.
+- `Camera Camera` — Main camera to apply background color.
+- `Image[] Backgrounds` — UI background elements to recolor.
+- `Image[] Buttons` — Button elements to recolor.
+- `TMP_Text[] Texts` — Text elements to recolor.
 
 **Methods**
+```cs
+void Setup()
+```
+Initializes the stylizer by updating dropdown and applying the current theme.
+
+<br/>
+
+```cs
+int GetIndex(ColorStylePreset preset)
+```
+Returns the index of a given preset in the list, or -1 if not found.
+
+<br/>
+
+```cs
+void DeleteStyle(int index)
+```
+Removes a preset and adjusts the currently selected index as needed.
+
+<br/><br/>
+
+```cs
+void ChangePreset(int index)
+```
+Sets the desired preset and saves the current settings.
+
+<br/>
+
+```cs
+void GetElements()
+```
+Finds and stores all GameObjects tagged as `Styled/Button`, `Styled/Background`, or `Styled/Text`. Also temporarily activates inactive objects to ensure detection.
+
+<br/>
+
+```cs
+void UpdateDropdown()
+```
+Refreshes the dropdown UI with the current list of presets and updates element references.
+
+<br/><br/>
+
+```cs
+void ApplyCurrentTheme()
+```
+Applies the currently selected color preset to all relevant UI elements and camera.
+
+<br/>
+
+```cs
+int CountBuiltInThemes()
+```
+Returns the number of built-in (non-custom) presets.
 
 ---
 
 #### PaletteObject.cs
 
 **Description**<br/>
+A visual and functional representation of a color preset inside the UI. Acts like a toggle button and is instantiated by PaletteDropdown.
 
 **Properties**
+- `PaletteDropdown paletteDropdown` — Reference to the parent dropdown for callback.
+- `int paletteIndex` — Index of the corresponding color preset.
+- `Toggle toggle` — UI toggle component.
 
-**Constructors**
+
+- `TMP_Text PaletteNameText` — Label displaying the preset's name.
+- `Image BackgroundColorImage ` — Swatch showing background color.
+- `Image SecondaryColorImag e` — Swatch showing secondary color.
+- `Image PrimaryColorImage` — Swatch showing primary color.
 
 **Methods**
+```cs
+public void SetPaletteDropdown(bool isOn)
+```
+Called when toggled on. Changes the selected palette.
+If toggled on, sets this object as the selected preset in the dropdown.
 
 ---
 
 #### PaletteDropdown.cs
 
 **Description**<br/>
+Controls the UI for selecting and displaying available color themes. Dynamically creates `PaletteObject` instances based on the `ColorStylePreset` list and keeps everything in sync.
 
 **Properties**
+- `PaletteObject Template` — The prefab used to create palette entries.
+- `Transform PalettesParent` — The container that holds the instantiated 
+  palette entries.
+- `ColorStylizer Stylizer` — Reference to the script managing actual color application.
 
-**Constructors**
+- `UnityEvent<int> onValueChanged` — Event triggered when a new palette is selected.
+- `int value` — Current index of the selected preset.
+- `List<PaletteObject> paletteChildren` — All currently instantiated palette buttons.
 
 **Methods**
+```cs
+void Start()
+```
+Hides the template on initialization.
+
+<br/>
+
+```cs
+public void Setup(ColorStylePreset[] presets)
+```
+Clears the dropdown, instantiates one `PaletteObject` per preset, and initializes them with color and name data.
+
+<br/><br/>
+
+```cs
+public void ChangeValue(int newvalue)
+```
+Changes the selected preset, updates toggle states, and triggers `onValueChanged`.
+
+<br/>
+
+```cs
+public void SetValueWithoutNotify(int newvalue)
+```
+Changes the preset index and toggle states **without** triggering the change event (useful during initialization).
 
 ---
 
-#### PaletteLister.cs
+#### CustomPaletteLister.cs
 
 **Description**<br/>
+Displays a list of custom color palettes (user-created). Instantiates PaletteObject buttons and opens the editor when clicked.
 
 **Properties**
+- `PaletteCreator PaletteCreator` — Reference to the editor UI used when modifying a palette.
+- `PaletteObject Template` — Button prefab used to represent a palette visually.
+- `Transform PalettesParent` — Parent transform that holds all instantiated palette buttons.
+- `ColorStylizer Stylizer` — Core style manager that contains all color presets.
+- `GameObject MessageIfNoThemes` — UI element shown if no custom themes are available.
 
-**Constructors**
 
 **Methods**
+```cs
+public void Setup(ColorStylePreset[] presets)
+```
+Clears the list and recreates entries based on provided presets.
+
+<br/>
+
+```cs
+public void AddCustomPalettes()
+```
+Filters the global preset list and adds only custom ones to the UI.
+
+<br/>
+
+```cs
+public IEnumerator RefreshMessage()
+```
+Toggles a message if there are no custom themes (runs after layout update).
 
 ---
 
 #### PaletteCreator.cs
 
 **Description**<br/>
+Handles creation, editing, and deletion of custom color palettes. Provides a UI for naming the palette and changing its colors.
 
 **Properties**
+- `int IDToModify` — Index of the palette being modified; `-1` if creating new.
+- `int ColorToChange` — Index representing which color is currently being edited (0: Background, 1: Secondary, 2: Primary).
 
-**Constructors**
+
+- `ColorStylePreset ThemeDefaults` — Default values when creating a new palette.
+
+
+- `ColorStylizer Stylizer` — Reference to the global style manager.
+- `CustomPaletteLister CustomPaletteLister` — UI component that lists
+  all custom palettes.
+
+
+- `PaletteObject PalettePreview` — Visual preview of the palette inside the editor.
+
+- `TMP_Text TitleText` — Header showing whether user is editing or creating.
+
+
+- `TMP_InputField PaletteNameInput` — Input field for naming the palette.
+
+
+- `Image PrimaryColorImage`, `SecondaryColorImage`, `BackgroundColorImage` — UI color fields.
+- `Button DeleteButton` — Deletes the current palette.
 
 **Methods**
+```cs
+public void OpenCreator(int ID)
+```
+Opens the editor with either a new or existing palette loaded.
+
+<br/>
+
+```cs
+public void CloseCreator()
+```
+Closes the editor and reapplies any live preview changes.
+
+<br/><br/>
+
+```cs
+public void ActivateColorEditor(int colorToChange)
+```
+Opens the color editor for the selected color field.
+
+<br/>
+
+```cs
+public void ChangePaletteName(string name)
+```
+Updates the preview label text as the user types a name.
+
+<br/><br/>
+
+```cs
+public void Delete(bool confirm)
+```
+Prompts user to confirm and deletes the palette if confirmed.
+
+<br/>
+
+```cs
+public void Confirm()
+```
+Saves changes to an existing palette or adds a new custom palette to the list. Refreshes the stylizer and saves to disk.
 
 ---
 
@@ -1362,6 +1557,73 @@ Updates a UI text element to display the current application version. Typically 
 void Start()
 ```
 Sets `text.text` to `"v"` followed by `Application.version`, e.g., `"v1.0.0"`.
+
+### `Scripts/Polish/Animation Scripts`
+
+#### CustomAnimator.cs
+
+**Description**<br/>
+Wraps Unity's `Animator` to simplify playing animation states while tracking the current state. Prevents redundant state changes.
+
+**Properties**
+- `Animator Animator` — The Animator component driving the animation.
+- `string currState` — Internally stored name of the current animation state
+  (used to prevent replaying the same animation).
+
+**Methods**
+```cs
+public void ChangeState(string newstate)
+```
+Plays the given animation if it differs from the current one. Updates internal `currState`.
+
+<br/>
+
+```cs
+public void SetState(string newstate,int layer ,float progress)
+```
+Forcefully sets an animation to a specific point in its timeline. Updates `currState` and manually applies it with `Animator.Update(0f)` to ensure immediate effect.
+
+---
+
+#### HamburgerButton.cs
+
+**Description**<br/>
+Controls a hamburger-style toggle button and related animated UI content. Handles state switching and ensures animations are visually correct even after being disabled/re-enabled.
+
+**Properties**
+- `CustomAnimator buttonAnimator` — Animator for the hamburger icon itself.
+- `CustomAnimator contentAnimator` — Animator for the associated content panel.
+
+- `string ButtonOpenAnim` — Animation played when button opens (e.g., "Burger to X").
+- `string ButtonCloseAnim` — Animation played when button closes (e.g., "X to Burger").
+
+- `string ContentOpenAnim` — Animation played when showing the content panel.
+- `string ContentCloseAnim` — Animation played when hiding the content panel.
+
+- `bool isOpen` — Internal state tracking whether the menu is open.
+- `bool CloseMenuOnDisable` — If `true`, menu resets to closed when disabled and re-enabled.
+
+**Methods**
+```cs
+private void OnEnable()
+```
+Ensures the correct animation state is restored when the object is re-enabled. Resets to closed if `CloseMenuOnDisable` is true.
+
+<br/>
+
+```cs
+public void OpenOrClose()
+```
+Toggles between open and closed states. Triggers both button and content animations.
+
+<br/>
+
+```cs
+public void SetOpenState(bool open)
+```
+Explicitly sets the open/closed state (without toggling). Avoids duplicate state changes.
+
+---
 
 ### `TextMesh Pro/Validators`
 
