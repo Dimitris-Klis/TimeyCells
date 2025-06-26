@@ -1486,7 +1486,99 @@ Saves changes to an existing palette or adds a new custom palette to the list. R
 
 ---
 
+### `Scripts/Saving`
+
+#### TimetableData.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+---
+
+#### S_ProgramData.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+---
+
+#### SettingsData.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+---
+
+#### TimetableButton.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+---
+
+#### SaveManager.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
 ### `Scripts`
+
+#### CopyPasteManager.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+#### PhotoManager.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+#### ConfirmationManager.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+---
 
 #### QuitButton.cs
 

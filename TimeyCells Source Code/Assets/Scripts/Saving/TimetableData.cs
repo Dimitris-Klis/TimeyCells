@@ -3,18 +3,16 @@ using System.Collections;
 using UnityEngine;
 using System;
 
-[System.Serializable]
+[Serializable]
 public class SerializableList<T> // This makes it 10 times easier to store lists. Thank you c8theino!
 {
     public List<T> list = new List<T>();
 }
 
-[System.Serializable]
+[Serializable]
 public class TimetableData
 {
-    
-
-    [System.Serializable]
+    [Serializable]
     public class WeekDayData
     {
         public string WeekDayName;
@@ -93,7 +91,7 @@ public class TimetableData
         }
     }
 
-    [System.Serializable]
+    [Serializable]
     public class CellInfoData
     {
         public int SelectedEvent;
@@ -260,7 +258,7 @@ public class TimetableData
         }
     }
 
-    [System.Serializable]
+    [Serializable]
     public class ColumnData
     {
         public SerializableList<CellInfoData> children = new();
@@ -283,7 +281,7 @@ public class TimetableData
         }
     }
 
-    [System.Serializable]
+    [Serializable]
     public class EventTypeData
     {
         public int ItemID;
