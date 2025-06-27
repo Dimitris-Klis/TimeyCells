@@ -13,39 +13,21 @@ public class SaveManager : MonoBehaviour
     {
         instance = this;
     }
+
     string FilePath;
     
     string TimetablesPath = Path.AltDirectorySeparatorChar + "Timetables";
     string SettingsPath = Path.AltDirectorySeparatorChar + "Settings.json";
 
-    public TimetableEditor TimetableEditor;
-    public DayTimeManager DayTimeManager;
-    public EventManager EventManager;
-    public ColorStylizer Stylizer;
-    public LocalizationSystem LocalizationSystem;
-    [Space]
-    public GameObject OpenOverlay;
-    public TimetableButton TimetableButtonPrefab;
-    public Transform ButtonsParent;
-    List<TimetableButton> Buttons = new();
-    public S_ProgramData debug_olddata;
-    public TimetableData debug_newdata;
     string LastTimetable;
-    public Image UnsavedIndicator;
-
     static bool saved;
-
-    public void ChangesMade()
-    {
-        saved = false;
-        UnsavedIndicator.enabled = true;
-    }
 
     char[] reservedChars =
         new char[]
         {
             '/','\\','*', '"','<','>',':', '|', '?', (char)0x7F, (char)0
         };
+
     string[] reservedNames = new string[]
     {
         "CON", "PRN", "AUX","NUL",
@@ -54,11 +36,35 @@ public class SaveManager : MonoBehaviour
         "LPT0", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9",
         "LPT\u00B9","LPT\u2074","LPT\u2075",
     };
+
+    List<TimetableButton> Buttons = new();
+
+    [Header("References")]
+    [Space(0)]
+
+    [Header("--- Managers")]
+    public TimetableEditor TimetableEditor;
+    public DayTimeManager DayTimeManager;
+    public EventManager EventManager;
+    public ColorStylizer Stylizer;
+    public LocalizationSystem LocalizationSystem;
+
+    [Space(20)]
+    [Header("--- Timetable Opening")]
+    public GameObject OpenTimetableOverlay;
+    public TimetableButton TimetableButtonPrefab;
+    public Transform ButtonsParent;
+
+    [Space(20)]
+    [Header("--- Unsaved UI")]
+    public Image UnsavedIndicator;
+
     class SaveProperties
     {
         public bool IsPortable = false;
     }
     SaveProperties saveProperties;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -113,6 +119,18 @@ public class SaveManager : MonoBehaviour
             Buttons.Add(b);
         }
     }
+
+
+
+    public void ChangesMade()
+    {
+        saved = false;
+        UnsavedIndicator.enabled = true;
+    }
+
+
+
+
     public void CopyTimetableAsJson()
     {
         TimetableData data = new();
@@ -165,7 +183,6 @@ public class SaveManager : MonoBehaviour
         {
             // Converting old timetables from School Timetable into new ones!
             S_ProgramData olddata = JsonUtility.FromJson<S_ProgramData>(json);
-            debug_olddata = olddata;
             if (olddata != null)
             {
                 data = ConvertOldDataToNew(olddata);
@@ -246,14 +263,11 @@ public class SaveManager : MonoBehaviour
         saved = false;
         Stylizer.Setup();
     }
-    int[] oldCellOrder = new int[]
-    { 
-        0, 30, 10, 20, 35, 5, 15, 25, 
-        31, 21, 11, 1, 36, 26, 16, 6, 
-        32, 12, 2, 22, 7, 37, 27, 17, 
-        33, 3, 13, 23, 8, 18, 38, 28, 
-        4, 14, 34, 24, 29, 9, 19, 39
-    };
+    
+    
+    
+    
+
     public TimetableData ConvertOldDataToNew(S_ProgramData old_data)
     {
         TimetableData newdata = new();
@@ -432,9 +446,17 @@ public class SaveManager : MonoBehaviour
         }
         newdata.TimetableName = olddata.FileName;
 
-        debug_newdata = newdata;
         return newdata;
     }
+
+    int[] oldCellOrder = new int[]
+    {
+        0, 30, 10, 20, 35, 5, 15, 25,
+        31, 21, 11, 1, 36, 26, 16, 6,
+        32, 12, 2, 22, 7, 37, 27, 17,
+        33, 3, 13, 23, 8, 18, 38, 28,
+        4, 14, 34, 24, 29, 9, 19, 39
+    };
     public S_ProgramData SortOldCells(S_ProgramData olddata)
     {
         List<S_ProgramData.LessonCellData> sortedcells = new(olddata.Cells);
@@ -445,6 +467,10 @@ public class SaveManager : MonoBehaviour
         olddata.Cells = sortedcells;
         return olddata;
     }
+    
+    
+    
+    
     public void SaveTimetable()
     {
         TimetableData data = new();
@@ -584,7 +610,7 @@ public class SaveManager : MonoBehaviour
         EventManager.UpdateEventPreviews(false);
         EventManager.UpdateEventTypePreviews(true);
 
-        OpenOverlay.gameObject.SetActive(false);
+        OpenTimetableOverlay.gameObject.SetActive(false);
     }
 
     public void DeleteTimetable(string timetable, bool confirm)
@@ -661,6 +687,9 @@ public class SaveManager : MonoBehaviour
         Stylizer.Setup();
     }
 
+
+
+
     public void SaveSettings()
     {
         ensureDirectoryExists(FilePath);
@@ -735,6 +764,9 @@ public class SaveManager : MonoBehaviour
         LocalizationSystem.SetLanguage(settingsData.SelectedLanguage);
     }
 
+
+
+
     void ensureDirectoryExists(string dir)
     {
         if (!Directory.Exists(dir))
@@ -742,6 +774,7 @@ public class SaveManager : MonoBehaviour
             Directory.CreateDirectory(dir);
         }
     }
+
     string removeReserved(string text)
     {
         string newString = "";
@@ -763,6 +796,9 @@ public class SaveManager : MonoBehaviour
         }
         return newString;
     }
+
+
+
 
     public void Quit(bool checkSave)
     {

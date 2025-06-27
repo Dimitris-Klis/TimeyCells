@@ -4,13 +4,15 @@ using UnityEngine;
 using System;
 
 // This one is meant for copy-pasting simpler things, like cell info, events, event types, etc.
+// Timetable copying/pasting happens in SaveManager.cs
 public class CopyPasteManager : MonoBehaviour
 {
-    public SaveManager SaveManager;
+    [Header("References")]
     public CellInfoEditor CellInfoEditor;
     public EventCreator EventCreator;
     public EventTypeCreator EventTypeCreator;
     public PaletteCreator ThemeCreator;
+
 
     public void CopyCellInfo()
     {
@@ -191,6 +193,9 @@ public class CopyPasteManager : MonoBehaviour
         }
     }
 
+
+
+
     public void CopyEvent()
     {
         EventItem eventData = new EventItem();
@@ -220,6 +225,9 @@ public class CopyPasteManager : MonoBehaviour
 
         EventCreator.ChangeIsFavourite(EventCreator.FavouriteToggle.isOn);
     }
+
+
+
 
     public void CopyEventType()
     {
@@ -267,6 +275,9 @@ public class CopyPasteManager : MonoBehaviour
             eventTypeData.TextColor[3]
         );
     }
+
+
+
 
     public void CopyColorTheme()
     {

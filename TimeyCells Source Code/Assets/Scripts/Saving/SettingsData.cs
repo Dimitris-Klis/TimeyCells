@@ -5,6 +5,27 @@ using UnityEngine;
 [System.Serializable]
 public class SettingsData
 {
+    public string LastOpenedTimetable;
+    
+    public bool Use24HFormat;
+    public bool UseEnglishFormat;
+    
+    public SerializableList<CustomThemeData> CustomThemes = new();
+    public int CurrentTheme;
+    public int SelectedLanguage;
+
+    public SettingsData()
+    {
+        LastOpenedTimetable = "";
+
+        Use24HFormat = false;
+        UseEnglishFormat = false;
+
+        CustomThemes = new();
+        CustomThemes.list = new();
+        CurrentTheme = 0;
+    }
+
     [System.Serializable]
     public class CustomThemeData
     {
@@ -13,6 +34,13 @@ public class SettingsData
         public float[] PrimaryColor = new float[4] { 1, 1, 1, 0 };
         public float[] SecondaryColor = new float[4] { 1, 1, 1, 0 };
         public float[] BackgroundColor = new float[4] { 1, 1, 1, 0 };
+
+        public CustomThemeData()
+        {
+            PrimaryColor = new float[4] { 1, 1, 1, 0 };
+            SecondaryColor = new float[4] { 1, 1, 1, 0 };
+            BackgroundColor = new float[4] { 1, 1, 1, 0 };
+        }
 
         public CustomThemeData(ColorStylePreset cs)
         {
@@ -33,32 +61,5 @@ public class SettingsData
             BackgroundColor[2] = cs.BackgroundColor.b;
             BackgroundColor[3] = cs.BackgroundColor.a;
         }
-        public CustomThemeData()
-        {
-            PrimaryColor = new float[4] { 1, 1, 1, 0 };
-            SecondaryColor = new float[4] { 1, 1, 1, 0 };
-            BackgroundColor = new float[4] { 1, 1, 1, 0 };
-        }
-    }
-
-    public string LastOpenedTimetable;
-    
-    public bool Use24HFormat;
-    public bool UseEnglishFormat;
-    
-    public SerializableList<CustomThemeData> CustomThemes = new();
-    public int CurrentTheme;
-    public int SelectedLanguage;
-
-    public SettingsData()
-    {
-        LastOpenedTimetable = "";
-
-        Use24HFormat = false;
-        UseEnglishFormat = false;
-
-        CustomThemes = new();
-        CustomThemes.list = new();
-        CurrentTheme = 0;
     }
 }

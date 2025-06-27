@@ -7,26 +7,40 @@ using TMPro;
 
 public class PhotoManager : MonoBehaviour
 {
+    [Header("References")]
+    [Space(0)]
+
+    [Header("--- Most Important")]
     public Camera PhotoCamera;
     public Canvas PhotoCanvas;
     public RectTransform Content;
     public RawImage rawImg;
-    [Space]
+
+    [Space(20)]
+    [Header("--- Timetable Modes")]
     public TMP_Dropdown FormatDropdown;
     public CustomGridLayoutGroup Grid;
+
+    [Space(20)]
+    [Header("--- Prefabs")]
     public GameObject CornerPiecePrefab;
-    
     public WeekDayObject PhotoTimePrefab_;
     public CellInfo CellPrefab;
-    [Space]
+
+    [Space(20)]
+    [Header("--- Platform-Specific Buttons")]
     public Button AndroidShareButton;
     public Button WindowsCopyButton;
+
+
+
 
     List<WeekDayObject> PhotoTimes = new();
     List<CellInfo> PhotoCells = new();
     GameObject CornerPiece;
 
     Texture2D PhotoTex;
+    
 
     private void Start()
     {
@@ -42,6 +56,7 @@ public class PhotoManager : MonoBehaviour
                 AndroidShareButton.gameObject.SetActive(false);
         #endif
     }
+
     void SetupCells()
     {
         for (int i = 0; i < PhotoTimes.Count; i++)
@@ -65,6 +80,7 @@ public class PhotoManager : MonoBehaviour
         StartCoroutine(ContinueSetup());
 
     }
+
     IEnumerator ContinueSetup()
     {
         yield return new WaitForEndOfFrame();
@@ -176,11 +192,9 @@ public class PhotoManager : MonoBehaviour
         Snap();
     }
 
-    [UnityEngine.ContextMenu("Setup!")]
-    public void Setup()
-    {
-        SetupCells();
-    }
+
+
+
     public void Snap()
     {
         float scaleFactor = PhotoCanvas.scaleFactor;
@@ -212,13 +226,11 @@ public class PhotoManager : MonoBehaviour
         PhotoCamera.gameObject.SetActive(false);
     }
 
-
-    [ContextMenu("Test Copy!")]
     public void CopyPhotoToClipboard()
     {
         #if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
 
-            Setup();
+            SetupCells();
 
             // Temporarily storing the Texture2D as a png in the cache path.
             string imagePath = Path.Combine(Application.temporaryCachePath, "capture.png");
@@ -282,5 +294,4 @@ public class PhotoManager : MonoBehaviour
             }
         #endif
     }
-
 }

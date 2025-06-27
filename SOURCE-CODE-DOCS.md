@@ -593,16 +593,6 @@ Checks whether the temporary override has expired and removes it if necessary.
 
 ---
 
-#### TimetableGrid.Column
-**Description**<br/>
-Nested class used by TimetableGrid.cs to represent a single column in the timetable.
-
-**Properties**
-- `bool IsMultirow` — Indicates whether the column spans multiple rows.
-- `List<TimetableCell> Children` — Stores all the cells contained in said column.
-
----
-
 #### TimetableGrid.cs
 
 **Description**<br/>
@@ -621,6 +611,17 @@ Responsible for aligning cells correctly, adding/deleting columns and rows, and 
 - `Vector2 Padding` — Additional padding applied when fitting to content.
 - `bool DebugGrid` — Enables debug behavior for testing grid features. When true, everyting that uses `Destroy()` will use `DestroyImmediate()` instead. Automatically reset to false in `Start()`.
 - `List<Column> ColumnsList` — List of all columns in the timetable.
+
+**Subclasses**
+
+- **TimetableGrid.Column**
+
+  **Description**<br/>
+  Nested class used by TimetableGrid.cs to represent a single column in the timetable.
+
+  **Properties**
+  - `bool IsMultirow` — Indicates whether the column spans multiple rows.
+  - `List<TimetableCell> Children` — Stores all the cells contained in said column.
 
 **Methods**
 ```cs
@@ -1491,92 +1492,545 @@ Saves changes to an existing palette or adds a new custom palette to the list. R
 #### TimetableData.cs
 
 **Description**<br/>
+Container class for all persistent timetable data, including layout structure, event definitions, and runtime overrides. Used for serialization and save/load operations.
 
 **Properties**
+- `string TimetableName` — Name of the timetable.
+- `SerializableList<EventTypeData> EventTypes` — List of available event types.
+- `SerializableList<EventItem> Events` — List of event items.
+- `SerializableList<ColumnData> Columns` — Represents the vertical columns of the timetable grid.
+- `SerializableList<WeekDayData> Weekdays` — Row labels for each day of the timetable.
+  timetable (and core timing structure).
+- `SerializableList<TimeIndex> Labels` — The labels on top of each  
+  column.
+
+**Subclasses**
+
+- **SerializableList<T>**
+
+  **Description**<br/>
+  Wrapper around `List<T>` to make generic lists serializable in Unity's inspector and compatible with `JsonUtility`. Found this trick in the Unity Forums!
+
+  **Properties**
+  - `List<T> list` — The wrapped generic list.
+
+- **TimetableData.WeekDayData**
+
+  **Description**<br/>
+  Stores data related to a weekday in the timetable, including its name, duration, start time, and override behaviors (temporary or scheduled changes to timing).
+
+  **Properties**
+  - `string WeekDayName` — Display name for the weekday.
+  - `int Days` — Bitflag or enum value indicating which day(s) this data applies to.
+  - `int[] StartTime` — Default start time (hours, minutes).
+  - `int[] CommonLength` — Default session length (hours, minutes).
+  - `int[] OverrideDate` — Date at which overrides become active (year, month, day).
+  - `int OverrideLength` — Number of weeks the override lasts.
+  - `int ExtraOverrideLengthWeeks` — Duration of override; -1 means no override.
+  - `int OverrideDelayWeeks` — Delay before override becomes active.
+  - `int OverrideMode` — Override behavior type (0 = none, 1 = time only, etc.).
+  - `int[] TempStartTime` — Temporarily overridden start time (hours, minutes).
+  - `int[] TempCommonLength` — Temporarily overridden session length (hours, minutes).
+
+  **Constructors**
+  - `WeekDayData()` — Default initializer with today's date and default values.
+  - `WeekDayData(WeekDay Weekday)` — Creates a WeekDayData from an existing WeekDay object.
+
+- **TimetableData.CellInfoData**
+
+  **Description**<br/>
+  Stores event selection and override data for a single cell in the timetable grid. Supports normal and temporary overrides, including event info, length, and favorite status.
+
+  **Properties**
+  - `int SelectedEvent` — ID/index of the selected base event.
+  - `string EventNameOverride` — Override for the event's display name.
+  - `string Info1Override`, `Info2Override` — Override strings for event details.
+  - `int EventTypeOverride` — Override for the event's type/color.
+  - `int OverrideFavourite` — 0 = no override, 1 = not favorite, 2 = favorite.
+  - `bool OverrideCommonLength` — Whether the session length is overridden.
+  - `int[] NewLength` — New length of the session if overridden (hours, minutes).
+  - `int[] OverrideDate` — Start date for override (year, month, day).
+  - `int OverrideLength` — Duration (in weeks) the override is active.
+  - `int ExtraOverrideLengthWeeks` — Total override length; -1 disables.
+  - `int OverrideDelayWeeks` — Delay (in weeks) before the override begins.
+  - `int TempSelectedEvent` — Temporary event selection.
+  - `string TempEventNameOverride` — Temporary override for name.
+  - `string TempInfo1Override`, `TempInfo2Override` — Temporary override info.
+  - `int TempEventTypeOverride` — Temporary event type override.
+  - `int TempOverrideFavourite` — Temporary favorite override.
+  - `bool TempOverrideCommonLength` — Whether length is temporarily overridden.
+  - `int[] TempNewLength` — Temporary length override (hours, minutes).
+
+  **Constructors**
+  - `CellInfoData()` — Initializes fields with defaults and empty strings.
+  - `CellInfoData(CellInfo c)` — Creates a CellInfoData from an existing CellInfo object.
+
+- **TimetableData.ExtraCellInfoData**
+
+  **Description**<br/>
+  Extension of `CellInfoData` with additional string-based start time data for UI display or logging.
+
+  **Properties**
+  - `string StartTime` — Human-readable start time string.
+  - `string TempStartTime` — Human-readable temporary start time string.
+  (Plus all inherited `CellInfoData` properties.)
+
+  **Constructors**
+  - `ExtraCellInfoData()` — Default constructor, also initializes base class fields.
+
+- **TimetableData.ColumnData**
+
+  **Description**<br/>
+  Represents one vertical column in the timetable grid. Contains per-cell data and whether it spans multiple rows.
+
+  **Properties**
+  - `SerializableList<CellInfoData> children` — List of cell data for this column.
+  - `bool IsMultirow` — Whether this column spans multiple rows (used for merged rows).
+
+  **Constructors**
+  - `ColumnData()` — Initializes with empty children list.
+  - `ColumnData(TimetableGrid.Column c)` — Initializes from a TimetableGrid.Column, copying child cell info.
+
+- **TimetableData.EventTypeData**
+
+  **Description**<br/>
+  Stores metadata and visual information for a specific event type.
+
+  **Properties**
+  - `int ItemID` — Unique ID of the event type.
+  - `string TypeName` — Display name of the type.
+  - `float[] TextColor` — RGBA color for text (4 floats).
+  - `float[] BackgroundColor` — RGBA color for background.
+
+  **Constructors**
+  - `EventTypeData()` — Default constructor with black text and white background.
+  - `EventTypeData(EventTypeItem et)` — Initializes from an EventTypeItem.
 
 **Constructors**
-
-**Methods**
+- `TimetableData() ` — Initializes all list properties and sets TimetableName to an empty string.
 
 ---
 
 #### S_ProgramData.cs
 
 **Description**<br/>
+Legacy timetable data class used in the previous version of the app ("School Timetable"). Supports backwards compatibility by enabling conversion to the new TimetableData format.
 
 **Properties**
+- `List<LessonCellData> Cells` — A flat list of lesson cells (8 columns × 5 weekdays = 40 expected entries), each containing lesson metadata.
+- `bool[] _7hDays = new bool[5]` — Array representing which days are 7-hour days (`true`) and which are 8-hour days (`false`).
+- `int[] BreakLengths_7h = new int[3]` — Durations (in minutes) for the 3 breaks on 7-hour days.
+- `int[] BreakLengths_8h = new int[3]` — Durations (in minutes) for the 3 breaks on 8-hour days.
+- `int[] StartTime = new int[2]` — Time of day when lessons start, `[hour, minute]`. Default is `{7, 30}`.
+- `int[] EndTime = new int[2]` — Time of day when lessons end, `[hour, minute]`. Default is `{13, 35}`.
+- `int _7hDuration = 45` — Default lesson duration (in minutes) for 7-hour days.
+- `int _8hDuration = 40 `— Default lesson duration (in minutes) for 8-hour days.
+- `string FileName` — User-defined or system-generated name of the saved timetable.
 
-**Constructors**
+**Subclasses**
 
-**Methods**
+- **S_ProgramData.LessonCellData**
+
+  **Description**<br/>
+  Holds information about a single lesson slot in the legacy timetable. These are arranged in a specific 8×5 grid pattern.
+
+  **Properties**
+  - `string LessonName` — Name/title of the lesson.
+  - `string RoomIndex` — Room code or index.
+  - `string TeacherName` — Name of the teacher.
+  - `int LessonType` — Type of lesson:
+    - `0`: Normal
+    - `1`: Moving (different class location)
+    - `2`: Gym
+    - `3`: Support
+  - `bool Tested` — Indicates if the lesson is an examined subject.
+  - `bool Favourite` — Marks the lesson as a user’s favourite.
 
 ---
 
 #### SettingsData.cs
 
 **Description**<br/>
+Represents all configurable settings used in the application, including user preferences for time format, language, theming, and the last opened file. Designed to be serialized and persisted between sessions.
 
 **Properties**
+- `string LastOpenedTimetable` — The filename or identifier of the last timetable that was opened.
+- `bool Use24HFormat` — Indicates whether the application should display time in 24-hour format.
+- `bool UseEnglishFormat` — Determines whether English-style date formatting (e.g., MM/DD/YYYY) is used.
+- `SerializableList<SettingsData.CustomThemeData> CustomThemes` — A serializable list of user-defined themes available to the UI.
+- `int CurrentTheme` — Index of the currently selected theme in the CustomThemes list.
+- `int SelectedLanguage` — The index of the currently selected language for localization.
+
+**Subclasses**
+- **SettingsData.CustomThemeData**
+
+  **Description**<br/>
+  Encapsulates a custom user-defined UI theme with three RGBA color categories: primary, secondary, and background. Used to define appearance in a flexible and user-controllable way.
+
+  **Properties**
+  - `string ThemeName` — The name or label assigned to the theme.
+  - `float[] PrimaryColor` — RGBA color used for primary UI accents (e.g., buttons, headers).
+  - `float[] SecondaryColor` — RGBA color used for secondary UI elements or highlights.
+  - `float[] BackgroundColor` — RGBA color used as the background color of the UI.
+  **Constructors**
+  - `CustomThemeData()` — Default constructor. Initializes all colors to white with 0 alpha.
+
+  - `CustomThemeData(ColorStylePreset cs)` — Constructs a theme from an existing ColorStylePreset. Extracts RGBA components from the preset’s colors.
 
 **Constructors**
-
-**Methods**
+`SettingsData()` — Default constructor. Initializes preferences to default values, including empty file path, 12-hour format, and default theme configuration.
 
 ---
 
 #### TimetableButton.cs
 
 **Description**<br/>
+UI component representing a saved timetable file. Each instance of this component displays the file's name and provides options to load or delete it.
 
 **Properties**
-
-**Constructors**
-
-**Methods**
+- `TMP_Text Text` — Displays the timetable's name.
+- `Button Self` — Main button that loads the selected timetable when clicked.
+- `Button DeleteButton` — Button that deletes the associated timetable when clicked.
 
 ---
 
 #### SaveManager.cs
 
 **Description**<br/>
+Manages loading, saving, copying, and deletion of timetables. Also manages saving and loading user settings. Handles file system access, UI updates for saved timetables, and initializes persistent save paths. Also communicates with various systems such as the editor, day/time manager, event manager, and UI components.
 
 **Properties**
+- Basic
+  - `static SaveManager instance` — Singleton instance for global access.
+  - `string FilePath` — Root directory where all save data is stored.
+  - `string TimetablesPath` — Relative path to the timetables subdirectory.
+  - `string SettingsPath` — Relative path to the settings JSON file.
+  - `string LastTimetable` — Name of the last opened timetable.
+  - `static bool saved` — Flag indicating if the current timetable is saved.
+  - `char[] reservedChars` — Array of characters not allowed in filenames.
+  - `string[] reservedNames` — List of reserved Windows filenames that should not be used.
+  - `List<TimetableButton> Buttons` — List of currently active timetable buttons.
 
-**Constructors**
+- Serialized References (Unity Inspector)
+  - `TimetableEditor TimetableEditor` — Reference to the timetable editor logic.
+  - `DayTimeManager DayTimeManager` — Reference to the day and time slot manager.
+  - `EventManager EventManager` — Reference to the timetable event manager.
+  - `ColorStylizer Stylizer` — Reference to the color styling system.
+  - `LocalizationSystem LocalizationSystem` — Reference to the localization/translation manager.
+  - `GameObject OpenTimetableOverlay` — UI overlay for opening timetables.
+  - `TimetableButton TimetableButtonPrefab` — Prefab used to spawn timetable buttons.
+  - `Transform ButtonsParent` — Parent transform that holds all timetable button instances.
+  - `Image UnsavedIndicator` — UI indicator for unsaved changes.
+  - `class SaveProperties` — Class storing metadata from ExtraProperties.json.
+  - `SaveProperties saveProperties` — Instance of the metadata used to determine file behavior (e.g., portable mode).
+
+**Subclasses**
+- **SaveManager.SaveProperties**
+
+  **Description**<br/>
+  Stores extra configuration flags loaded from ExtraProperties.json.
+
+  **Properties**
+  - `bool IsPortable` — Whether the app is running in portable mode (i.e., save location is relative to app directory)
 
 **Methods**
+```cs
+void Awake()
+```
+Initializes the singleton instance.
+
+<br/>
+
+```cs
+void Start()
+```
+Sets up save paths based on platform and `ExtraProperties.json`, loads the last opened timetable and associated settings, and generates buttons for saved timetables.
+
+<br/>
+
+```cs
+void LoadButtons()
+```
+Ensures the timetable directory exists, clears any previously spawned buttons, and creates a `TimetableButton` for each saved timetable file. Assigns click listeners for loading and deleting.
+
+<br/><br/>
+
+```cs
+public void ChangesMade()
+```
+Flags the current timetable as unsaved and enables the unsaved changes UI indicator.
+
+<br/><br/>
+
+```cs
+public void CopyTimetableAsJson()
+```
+Copies the current timetable to the clipboard as a compact JSON string (without pretty print). Strips out placeholder/default data before serialization.
+
+<br/>
+
+```cs
+public void PasteJsonAsTimetable(bool checkSave)
+```
+Imports a timetable from clipboard JSON. Supports both current format and legacy .timetable files. Shows a save prompt if needed before overwriting.
+
+<br/><br/>
+
+```cs
+public TimetableData ConvertOldDataToNew(S_ProgramData old_data)
+```
+Converts legacy timetable data into the current format, mapping old cell types to new event types, creating columns, breaks, and time labels.
+
+<br/>
+
+```cs
+int[] oldCellOrder = new int[]
+{
+    0, 30, 10, 20, 35, 5, 15, 25,
+    31, 21, 11, 1, 36, 26, 16, 6,
+    32, 12, 2, 22, 7, 37, 27, 17,
+    33, 3, 13, 23, 8, 18, 38, 28,
+    4, 14, 34, 24, 29, 9, 19, 39
+};
+public S_ProgramData SortOldCells(S_ProgramData olddata)
+```
+Reorders old timetable cells into the expected layout using the predefined order array `oldCellOrder`.
+
+<br/><br/>
+
+```cs
+public void SaveTimetable()
+```
+Serializes the current timetable to JSON and saves it to disk, creating the file structure if needed. Removes default event and updates the save state.
+
+<br/>
+
+```cs
+public void LoadTimetable(string timetable, bool checkSave)
+```
+Loads a saved timetable from disk. Prompts to save if unsaved changes exist. Applies timetable data to all relevant managers and UI components.
+
+<br/>
+
+```cs
+public void DeleteTimetable(string timetable, bool confirm)
+```
+Deletes the specified timetable JSON file. Optionally asks for confirmation before deletion.
+
+<br/>
+
+```cs
+public void LoadNewTimetable(bool checkSave)
+```
+Creates a new default timetable layout with predefined weekdays. Prompts to save if needed. Clears previous data and resets the grid.
+
+<br/><br/>
+
+```cs
+public void SaveSettings()
+```
+Saves current app settings such as time format, language, theme, and custom color presets to disk.
+
+<br/>
+
+```cs
+public void LoadSettings()
+```
+Loads settings from disk. Applies stored preferences and initializes theme, localization, and time format settings.
+
+<br/><br/>
+
+```cs
+void ensureDirectoryExists(string dir)
+```
+Utility method to create the specified directory if it doesn’t exist.
+
+<br/>
+
+```cs
+string removeReserved(string text)
+```
+Strips out reserved filename characters from a string and ensures it doesn’t match any Windows reserved names.
+
+<br/><br/>
+
+```cs
+public void Quit(bool checkSave)
+```
+Exits the application. Prompts the user to save if there are unsaved changes.
+
+---
 
 ### `Scripts`
 
 #### CopyPasteManager.cs
 
 **Description**<br/>
+Manages copy-paste operations of simpler entities within the timetable system, such as cell info, events, event types, and color themes. It uses the system clipboard (`GUIUtility.systemCopyBuffer`) to store and retrieve JSON representations of these objects.
+It **does not handle timetable copying/pasting**. That is handled by `SaveManager.cs`.
 
 **Properties**
-
-**Constructors**
+- `CellInfoEditor CellInfoEditor` — Manages editing of cell info data in the timetable.
+- `EventCreator EventCreator` — Manages creation and editing of events.
+- `EventTypeCreator EventTypeCreator` — Manages event type creation and editing.
+- `PaletteCreator ThemeCreator` —  Manages color theme creation and editing.
 
 **Methods**
+```cs
+public void CopyCellInfo()
+```
+Copies the currently edited cell info to the clipboard as JSON.
+<br/>
+
+```cs
+public void PasteCellInfo()
+```
+Reads cell info data from the clipboard and pastes it into the editor if valid.
+
+<br/><br/>
+
+```cs
+public void CopyEvent()
+```
+Copies the currently edited event to the clipboard as JSON.
+<br/>
+
+```cs
+public void PasteEvent()
+```
+Reads event data from the clipboard and pastes it into the editor if valid.
+
+<br/><br/>
+
+```cs
+public void CopyEventType()
+```
+Copies the currently edited event type to the clipboard as JSON.
+
+<br/>
+
+```cs
+public void PasteEventType()
+```
+Reads event type data from the clipboard and pastes it into the editor if valid.
+
+<br/><br/>
+
+```cs
+public void CopyColorTheme()
+```
+Copies the currently edited color theme to the clipboard as JSON.
+
+<br/>
+
+```cs
+public void PasteColorTheme()
+```
+Reads color theme data from the clipboard and pastes it into the editor if valid.
+
+---
 
 #### PhotoManager.cs
 
 **Description**<br/>
+Manages the creation, display, and sharing of timetable photos. It sets up a grid of timetable cells and labels based on user-selected formats, captures a photo of the timetable layout, and enables sharing or copying of the photo depending on the platform.
 
 **Properties**
-
-**Constructors**
+- `Camera PhotoCamera` — Camera used to capture the timetable photo.
+- `Canvas PhotoCanvas` — Canvas that contains the photo content.
+- `RectTransform Content` — Container for the photo elements.
+- `RawImage rawImg` — UI element to display the captured photo.
+- `TMP_Dropdown FormatDropdown` — Dropdown to select the photo layout format.
+- `CustomGridLayoutGroup Grid` — Layout manager for positioning cells and labels.
+- `GameObject CornerPiecePrefab` — Prefab for the grid corner element.
+- `WeekDayObject PhotoTimePrefab_` — Prefab for weekday/time labels.
+- `CellInfo CellPrefab` — Prefab for timetable cells.
+- `Button AndroidShareButton` — Button to share photo on Android.
+- `Button WindowsCopyButton` — Button to copy photo on Windows.
 
 **Methods**
+```cs
+private void Start()
+```
+Initializes platform-specific UI buttons. Enables the Windows copy button on Windows platforms, the Android share button on Android, and disables both on others.
+
+<br/>
+
+```cs
+void SetupCells()
+```
+Clears previous photo elements and starts setting up the grid with new timetable data.
+
+<br/>
+
+```cs
+IEnumerator ContinueSetup()
+```
+Finalizes setup after a frame delay. Instantiates labels and cells according to the selected format, adjusts layout, and triggers a photo capture.
+
+<br/><br/>
+
+```cs
+public void Snap()
+```
+Captures the photo layout using the camera, stores it as a texture, and updates the UI with the captured image.
+
+<br/>
+
+```cs
+public void CopyPhotoToClipboard()
+```
+(On Windows) Saves the captured photo as a PNG and executes a PowerShell script to copy it to the clipboard.
+
+<br/>
+
+```cs
+public void SharePhoto()
+```
+(On Android) Saves the photo as a PNG and opens the Android share sheet to share the image.
+
+---
 
 #### ConfirmationManager.cs
 
 **Description**<br/>
+Manages display of confirmation dialogs with customizable titles, descriptions, and buttons. Supports dynamic button creation with associated actions and adjusts UI layout accordingly.
 
 **Properties**
+- `GameObject ConfirmationOverlay` — The overlay GameObject that shows/hides the confirmation dialog.
+- `TMP_Text TMP_Title` — Text component for the dialog title.
+- `TMP_Text TMP_Desc` — Text component for the dialog description.
+- `ContentSizeFitter DescriptionTextSizeFitter` — Adjusts vertical fitting for the description text to handle dynamic sizing.
+- `CenterAndFit DescriptionParent` — Custom component managing layout updates of the description container.
+- `Button ButtonPrefab` — Prefab used to instantiate buttons dynamically.
+- `Transform ButtonsParent` — Parent transform under which buttons are instantiated.
+- `List<Button> Buttons` — List tracking current active buttons in the dialog.
 
-**Constructors**
+**Subclasses**
+- **ConfirmationManager.ButtonPrompt**
+
+  **Description**<br/>
+  Represents a button prompt with label and callback action.
+
+  **Properties**
+  - `string ButtonName` — Label text shown on the button.
+  - `UnityAction Action` — Callback to invoke when the button is clicked.
+
+  **Constructors**
+  - `public ButtonPrompt(string text, UnityAction action)` — Initializes a new button prompt with the specified text and action.
 
 **Methods**
+```cs
+public void ShowConfirmation(string title, string desc, params ButtonPrompt[] buttons)
+```
+Displays the confirmation dialog with a given title, description, and an arbitrary number of buttons. Clears previous buttons, instantiates new ones, assigns their labels and actions, and ensures the overlay is visible.
+
+<br/>
+
+```cs
+IEnumerator PrepareLayout()
+```
+Coroutine that handles layout recalculations for the description text and its container, allowing proper resizing of the confirmation dialog UI elements.
 
 ---
 

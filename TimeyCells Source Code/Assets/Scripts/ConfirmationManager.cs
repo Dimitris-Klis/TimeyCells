@@ -12,15 +12,26 @@ public class ConfirmationManager : MonoBehaviour
     {
         Instance = this;
     }
+
+    [Header("References")]
+    [Space(0)]
+
+    [Header("--- UI")]
     public GameObject ConfirmationOverlay;
     public TMP_Text TMP_Title;
     public TMP_Text TMP_Desc;
 
-    public Button ButtonPrefab;
+    [Space(20)]
+    [Header("--- Components")]
     public ContentSizeFitter DescriptionTextSizeFitter;
     public CenterAndFit DescriptionParent;
+
+    [Space(20)]
+    [Header("--- Buttons")]
+    public Button ButtonPrefab;
     public Transform ButtonsParent;
     public List<Button> Buttons = new();
+
     public class ButtonPrompt
     {
         public string ButtonName;
@@ -57,6 +68,7 @@ public class ConfirmationManager : MonoBehaviour
 
         StartCoroutine(PrepareLayout());
     }
+
     IEnumerator PrepareLayout()
     {
         DescriptionTextSizeFitter.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
