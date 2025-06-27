@@ -256,7 +256,7 @@ public class PhotoManager : MonoBehaviour
     public void SharePhoto()
     {
         #if UNITY_ANDROID
-            Setup();
+            SetupCells();
             
             // Temporarily storing the Texture2D as a png in the cache path.
             string imagePath = Path.Combine(Application.temporaryCachePath, "capture.png");

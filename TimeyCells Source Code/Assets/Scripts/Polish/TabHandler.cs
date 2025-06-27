@@ -7,6 +7,12 @@ using UnityEngine.Events;
 public class TabHandler : MonoBehaviour
 {
     public bool DefaultToZero = true;
+    
+    public Tab[] tabs;
+    public UnityEvent OnSelectTab;
+
+
+
     [System.Serializable]
     public class Tab
     {
@@ -14,8 +20,10 @@ public class TabHandler : MonoBehaviour
         public GameObject TabObject;
         public UnityEvent TabSpecificEvent;
     }
-    public Tab[] tabs;
-    public UnityEvent OnSelectTab;
+
+
+
+
     public void SelectTab(int index)
     {
         
@@ -28,6 +36,7 @@ public class TabHandler : MonoBehaviour
         }
         OnSelectTab.Invoke();
     }
+
     private void Start()
     {
         if(DefaultToZero)

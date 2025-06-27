@@ -7,15 +7,22 @@ using System;
 
 public class WeekdayEditor : MonoBehaviour
 {
+    DateTime OverrideDate;
+    int WeekdayIndex;
+
+    [Header("Basic References")]
+    [Space(0)]
+
+    [Header("--- UI")]
     public WeekDayObject WeekdayPreview;
     public TMP_InputField WeekdayName;
     public TMP_InputField StartTimeField;
     public TMP_InputField CommonLengthFieldHours;
     public TMP_InputField CommonLengthFieldMinutes;
     public Toggle[] DayToggles;
-    public int WeekdayIndex;
-    [Space(30)]
-    [Header("Temporary Overriding")]
+    
+    [Space(20)]
+    [Header("--- Temporary Overriding")]
     public TabHandler TabHandler;
     [Space]
     public GameObject Create;
@@ -31,11 +38,13 @@ public class WeekdayEditor : MonoBehaviour
     [Space]
     public Toggle TempStartTimeToggle;
     public TMP_InputField TempStartTimeField;
-
+    [Space]
     public Toggle TempCommonLengthToggle;
     public TMP_InputField TempCommonLengthFieldHours;
     public TMP_InputField TempCommonLengthFieldMinutes;
-    DateTime OverrideDate;
+
+
+
     public void OpenWeekday(int index)
     {
         WeekdayIndex = index;
@@ -122,10 +131,10 @@ public class WeekdayEditor : MonoBehaviour
             DayToggles[6].interactable = DayToggles[6].interactable && Sun == 0;
         }
     }
-    public void UpdateWeekdayName(string text)
-    {
-        WeekdayPreview.WeekDayName.text = text;
-    }
+
+
+
+
     public void ParseStartTime(string text)
     {
         if (!DayTimeManager.TryParseTime(text, out DateTime length))
@@ -142,6 +151,7 @@ public class WeekdayEditor : MonoBehaviour
             }
         }
     }
+
     public void ParseMinutes(string text)
     {
         if(int.TryParse(text, out int length))
@@ -171,6 +181,7 @@ public class WeekdayEditor : MonoBehaviour
             
         }
     }
+    
     public void ParseHours(string text)
     {
         if (int.TryParse(text, out int length))
@@ -195,19 +206,32 @@ public class WeekdayEditor : MonoBehaviour
             }
             else
             {
-                CommonLengthFieldHours.text = length.ToString();
+                CommonLengthFieldHours.text = wd.CommonLength.Hours.ToString();
             }
         }
+    }
+
+
+
+
+    public void UpdateWeekdayName(string text)
+    {
+        WeekdayPreview.WeekDayName.text = text;
     }
 
     public void SetDelay(float text)
     {
         DelayInput.text = text.ToString();
     }
+
     public void SetLength(float text)
     {
         LengthInput.text = text.ToString();
     }
+
+
+
+
     public void UpdateDelaySlider(string Delay)
     {
         if (int.TryParse(Delay, out int val))
@@ -219,6 +243,7 @@ public class WeekdayEditor : MonoBehaviour
             DelaySlider.SetValueWithoutNotify(0);
         }
     }
+
     public void UpdateLengthSlider(string Length)
     {
         if (int.TryParse(Length, out int val))
@@ -229,17 +254,6 @@ public class WeekdayEditor : MonoBehaviour
         {
             LengthSlider.SetValueWithoutNotify(0);
         }
-    }
-
-
-    public void SetStartTimeInteractable(bool enabled)
-    {
-        TempStartTimeField.interactable = enabled;
-    }
-    public void SetCommonLengthInteractable(bool enabled)
-    {
-        TempCommonLengthFieldHours.interactable = enabled;
-        TempCommonLengthFieldMinutes.interactable = enabled;
     }
 
     public void UpdateCreateButton()
@@ -256,6 +270,26 @@ public class WeekdayEditor : MonoBehaviour
             }
         }
     }
+
+
+
+
+    public void SetStartTimeInteractable(bool enabled)
+    {
+        TempStartTimeField.interactable = enabled;
+    }
+
+    public void SetCommonLengthInteractable(bool enabled)
+    {
+        TempCommonLengthFieldHours.interactable = enabled;
+        TempCommonLengthFieldMinutes.interactable = enabled;
+    }
+
+    
+
+
+
+
     public void CreateTemp()
     {
         Override.SetActive(true);
@@ -280,8 +314,10 @@ public class WeekdayEditor : MonoBehaviour
         Create.SetActive(true);
     }
 
-    // There is no cancel function. Cancelling is as simple as turning off the Editor gameobject.
 
+
+
+    // There is no cancel function. Cancelling is as simple as turning off the Editor gameobject.
     public void Confirm()
     {
         SaveManager.instance.ChangesMade();

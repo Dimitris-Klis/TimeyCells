@@ -11,14 +11,21 @@ public class ColorEditor : MonoBehaviour
     {
         instance = this;
     }
-    [Header("Properties")]
-    public string oldPrompt;
-    public Color CurrentColor, PreviousColor;
 
+    string oldPrompt;
+    Color CurrentColor, PreviousColor;
+
+    [Header("References")]
+    [Space(0)]
+
+
+    [Header("--- Image/Text UI")]
+    public CanvasGroup SelfGroup;
+    [Space]
     public Image[] imageRefs;
     public TMP_Text[] textRefs;
 
-    [Header("Slider References")]
+    [Header("--- Sliders")]
     public Slider HueSlider;
     public Slider SaturationSlider;
     public Slider ValueSlider;
@@ -26,14 +33,15 @@ public class ColorEditor : MonoBehaviour
     public Slider AlphaSlider;
     [Space]
     public TMP_InputField HexCodeField;
-    
-    [Header("GFX References")]
-    public CanvasGroup SelfGroup;
-    [Space]
+
+    [Space(20)]
+    [Header("Color Window")]
     public Image ColorPreview;
     [Space]
     public TMP_Text PromptText;
-    [Space]
+
+    [Space(20)]
+    [Header("Colors")]
     public Image HueValImage; // The rainbow gradient
     public Image HueSatImage; // The white overlay
     [Space]
@@ -43,6 +51,8 @@ public class ColorEditor : MonoBehaviour
     public Image ValHueSatImage;
     [Space]
     public Image AlphaRGBImage;
+
+
 
     public void Open(string prompt, Color color, params Image[] images)
     {
@@ -72,6 +82,7 @@ public class ColorEditor : MonoBehaviour
 
         UpdateColor();
     }
+
     public void Open(string prompt, Color color, params TMP_Text[] texts)
     {
         imageRefs = null;
@@ -104,13 +115,30 @@ public class ColorEditor : MonoBehaviour
         UpdateColor();
     }
 
+
+
+
     public void AssignNewImages(params Image[] images)
     {
         imageRefs = images;
     }
+
     public void AssignNewTexts(params TMP_Text[] texts)
     {
         textRefs = texts;
+    }
+
+
+    public void SetColor(string hexCode)
+    {
+        hexCode = hexCode.Replace("#", "");
+
+        hexCode = hexCode.Insert(0, "#");
+
+        Color c = CurrentColor;
+        ColorUtility.TryParseHtmlString(hexCode, out c);
+        CurrentColor = c;
+        UpdateSliders();
     }
 
     public void UpdateColor()
@@ -144,6 +172,10 @@ public class ColorEditor : MonoBehaviour
 
         //OnColorChange.Invoke();
     }
+
+
+
+
     public void UpdateRefs()
     {
         if (imageRefs != null)
@@ -162,6 +194,20 @@ public class ColorEditor : MonoBehaviour
         }
     }
 
+    public void UpdateSliders()
+    {
+        float H, S, V;
+        Color.RGBToHSV(CurrentColor, out H, out S, out V);
+        HueSlider.value = H;
+        SaturationSlider.value = S;
+        ValueSlider.value = V;
+
+        AlphaSlider.value = CurrentColor.a;
+    }
+
+
+
+
     public void ApplyColors()
     {
         oldPrompt = "";
@@ -169,6 +215,7 @@ public class ColorEditor : MonoBehaviour
         UpdateSliders();
         HideColorEditor();
     }
+
     public void CancelColors()
     {
         if (imageRefs != null)
@@ -196,31 +243,5 @@ public class ColorEditor : MonoBehaviour
 
         imageRefs = null;
         textRefs = null;
-
-        //OnClose.Invoke();
-    }
-    public void UpdateSliders()
-    {
-        float H, S, V;
-        Color.RGBToHSV(CurrentColor, out H, out S, out V);
-        HueSlider.value = H;
-        SaturationSlider.value = S;
-        ValueSlider.value = V;
-        //Debug.Log(CurrentColor);
-        AlphaSlider.value = CurrentColor.a;
-        //Debug.Log($"AlphaSlider: {AlphaSlider.value}, CurrentColor Alpha: {CurrentColor.a}");
-        //UpdateColor();
-    }
-    public void SetColor(string hexCode)
-    {
-        hexCode = hexCode.Replace("#", "");
-
-        hexCode = hexCode.Insert(0, "#");
-        //Debug.Log(hexCode);
-
-        Color c = CurrentColor;
-        ColorUtility.TryParseHtmlString(hexCode, out c);
-        CurrentColor = c;
-        UpdateSliders();
     }
 }

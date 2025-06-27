@@ -8,6 +8,8 @@ public class InputFieldFixer : MonoBehaviour
     public TMP_InputField TMPField;
     [SerializeField] TMP_Text PreviewText;
 
+
+
     // We're removing Zero Width Spaces to fix the Roboto font displaying them as a little dot in the corner.
     public void UpdateTextPreview(string text)
     {

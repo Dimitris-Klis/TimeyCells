@@ -6,12 +6,20 @@ using TMPro;
 
 public class LabelEditor : MonoBehaviour
 {
-    public TimeIndexObject TimeIndexPreview;
     int objectToModify;
+
+    [Header("Preview")]
+    public TimeIndexObject TimeIndexPreview;
+
+    [Space(20)]
+    [Header("Custom Label UI")]
     public Toggle CustomLabelToggle;
-    [Space]
     public TMP_InputField CustomLabelInput;
+    [Space]
     public Toggle CountAsIndexToggle;
+
+
+
     public void ActivateEditor(int objToEdit)
     {
         objectToModify = objToEdit;
@@ -33,14 +41,23 @@ public class LabelEditor : MonoBehaviour
             CustomLabelInput.text = "";
         }
     }
+
+
+
+
     public void IsCustomLabel(bool isTrue)
     {
         CustomLabelInput.interactable = CountAsIndexToggle.interactable = isTrue;
     }
+
     public void SetCustomLabel(string text)
     {
         TimeIndexPreview.IndexText.text = text;
     }
+
+
+
+
     public void Confirm()
     {
         SaveManager.instance.ChangesMade();

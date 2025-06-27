@@ -8,13 +8,22 @@ using System;
 
 public class CellInfoEditor : MonoBehaviour
 {
-    public int SelectedCellColumn =-1;
-    public int SelectedCellRow =-1;
     int originalEvent;
     int originalTempEvent;
+
+    [Header("     Selected Cell")]
+    [ReadOnly] public int SelectedCellColumn =-1;
+    [ReadOnly] public int SelectedCellRow =-1;
+
+    [Space(20)]
+    [Header("Basic References")]
+    [Space(0)]
+
+    [Header("--- Previews")]
     public TimetableCell MainPreview;
     public TimetableCell BasePreview;
-    [Space]
+
+    [Header("--- UI Properties")]
     public TMP_InputField EventNameOverride;
     public TMP_InputField Info1Override;
     public TMP_InputField Info2Override;
@@ -26,8 +35,11 @@ public class CellInfoEditor : MonoBehaviour
     public TMP_InputField LengthInputHours;
     public TMP_InputField LengthInputMinutes;
 
-    [Space(30)]
+    [Space(20)]
     [Header("Temporary Overriding")]
+    [Space(0)]
+
+    [Header("--- Basic References")]
     public TabHandler tabs;
     public GameObject CreateButton;
     public GameObject DeleteButton;
@@ -36,8 +48,9 @@ public class CellInfoEditor : MonoBehaviour
     public GameObject TempPropertiesLayout;
     public GameObject TempPromptLayout;
     public TimetableCell TempBasePreview;
-    [Space(20)]
-    // MaxDelay and length should be 52.
+
+    [Header("--- UI References")]
+    // Max Delay and Length should be 52.
     public Slider DelaySlider;
     public Slider LengthSlider;
     public TMP_InputField DelayInput;
@@ -55,6 +68,8 @@ public class CellInfoEditor : MonoBehaviour
     public TMP_InputField TempLengthInputMinutes;
 
     public DateTime OverrideDate = DateTime.MinValue;
+
+
 
     public void SelectCell(int column, int row)
     {
@@ -78,7 +93,6 @@ public class CellInfoEditor : MonoBehaviour
             OverrideDate = selectedInfo.OverrideDate;
         }
         originalEvent = selectedInfo.SelectedEventBase;
-        //EventManager.Instance.ZoomHandler.enabled = false;
 
         //Setting up the dropdown.
         TypeOverride.ClearOptions();
@@ -170,6 +184,15 @@ public class CellInfoEditor : MonoBehaviour
 
         UpdatePreviews();
     }
+
+    public CellInfo GetSelectedInfo()
+    {
+        return TimetableEditor.instance.Grid.ColumnsList[SelectedCellColumn].Children[SelectedCellRow].Info; 
+    }
+    
+
+
+
     public void CreateTempOverride()
     {
         // TO DO: WHEN WE CHANGE A WEEKDAY'S DAYS, WE SHOULD DELETE THE TEMP OVERRIDE TO PREVENT ANY WEIRD BEHAVIOUR.
@@ -204,6 +227,7 @@ public class CellInfoEditor : MonoBehaviour
 
         UpdatePreviews();
     }
+
     public void DeleteTempOverride()
     {
         TempPromptLayout.SetActive(true);
@@ -213,23 +237,19 @@ public class CellInfoEditor : MonoBehaviour
         GetSelectedInfo().TemporaryBase = 0;
         UpdatePreviews();
     }
-    public CellInfo GetSelectedInfo()
+
+
+
+    public void ParseStartTime(string text)
     {
-        return TimetableEditor.instance.Grid.ColumnsList[SelectedCellColumn].Children[SelectedCellRow].Info; 
-    }
-    public void ToggleOverrideTime(bool overridetime)
-    {
-        if (!TempPropertiesLayout.activeInHierarchy)
+        if (!DayTimeManager.TryParseTime(text, out DateTime length) ||
+            SelectedCellColumn > 0 && DayTimeManager.instance.TimeDiff(length.TimeOfDay, SelectedCellColumn - 1, SelectedCellRow) < TimeSpan.Zero)
         {
-            LengthInputHours.interactable = OverrideTimeToggle.isOn = overridetime;
-            LengthInputMinutes.interactable = OverrideTimeToggle.isOn = overridetime;
-        }
-        else
-        {
-            TempLengthInputHours.interactable = TempOverrideTimeToggle.isOn = overridetime;
-            TempLengthInputMinutes.interactable = TempOverrideTimeToggle.isOn = overridetime;
+            TimeSpan t = DayTimeManager.instance.GetCellStartTime(SelectedCellColumn, SelectedCellRow);
+            StartTimeInput.text = DayTimeManager.instance.FormatTime(t);
         }
     }
+
     public void ParseMinutes(string text)
     {
         if (int.TryParse(text, out int length))
@@ -250,6 +270,7 @@ public class CellInfoEditor : MonoBehaviour
                 TempLengthInputMinutes.text = commonLen.Minutes.ToString();
         }
     }
+    
     public void ParseHours(string text)
     {
         if (int.TryParse(text, out int length))
@@ -271,16 +292,9 @@ public class CellInfoEditor : MonoBehaviour
         }
     }
 
-    public void ParseStartTime(string text)
-    {
-        if (!DayTimeManager.TryParseTime(text, out DateTime length) ||
-            SelectedCellColumn > 0 && DayTimeManager.instance.TimeDiff(length.TimeOfDay, SelectedCellColumn - 1, SelectedCellRow) < TimeSpan.Zero)
-        {
-            TimeSpan t = DayTimeManager.instance.GetCellStartTime(SelectedCellColumn, SelectedCellRow);
-            StartTimeInput.text = DayTimeManager.instance.FormatTime(t);
-        }
-    }
     
+
+
     // This is called by the 'Event Selector' overlay.
     public void ChangeInfoBase(int EventID)
     {
@@ -294,6 +308,7 @@ public class CellInfoEditor : MonoBehaviour
 
         UpdatePreviews();
     }
+    
     public void ChangeInfoBase(int EventID, int TempEventID)
     {
         CellInfo c = GetSelectedInfo();
@@ -306,6 +321,64 @@ public class CellInfoEditor : MonoBehaviour
 
         UpdatePreviews();
     }
+
+
+
+
+    public void ToggleOverrideTime(bool overridetime)
+    {
+        if (!TempPropertiesLayout.activeInHierarchy)
+        {
+            LengthInputHours.interactable = OverrideTimeToggle.isOn = overridetime;
+            LengthInputMinutes.interactable = OverrideTimeToggle.isOn = overridetime;
+        }
+        else
+        {
+            TempLengthInputHours.interactable = TempOverrideTimeToggle.isOn = overridetime;
+            TempLengthInputMinutes.interactable = TempOverrideTimeToggle.isOn = overridetime;
+        }
+    }
+
+
+
+
+    public void SetDelay(float Delay)
+    {
+        DelayInput.text = Delay.ToString();
+    }
+
+    public void UpdateDelaySlider(string Delay)
+    {
+        if(int.TryParse(Delay, out int val))
+        {
+            DelaySlider.SetValueWithoutNotify(Mathf.Clamp(val, DelaySlider.minValue, DelaySlider.maxValue));
+        }
+        else
+        {
+            DelaySlider.SetValueWithoutNotify(0);
+        }
+    }
+
+    public void SetLength(float Length)
+    {
+        LengthInput.text = Length.ToString();
+    }
+
+    public void UpdateLengthSlider(string Length)
+    {
+        if (int.TryParse(Length, out int val))
+        {
+            LengthSlider.SetValueWithoutNotify(Mathf.Clamp(val, LengthSlider.minValue, LengthSlider.maxValue));
+        }
+        else
+        {
+            LengthSlider.SetValueWithoutNotify(0);
+        }
+    }
+
+
+
+
     public void UpdatePreviews()
     {
         CellInfo c = GetSelectedInfo();
@@ -396,7 +469,7 @@ public class CellInfoEditor : MonoBehaviour
             MainPreview.Info1Text.color = temp_et.TextColor;
             MainPreview.Info2Text.color = temp_et.TextColor;
 
-            if(temp_e.ItemID != 0)
+            if (temp_e.ItemID != 0)
                 MainPreview.FavouriteImage.gameObject.SetActive(temp_e.Favourite);
             else
                 MainPreview.FavouriteImage.gameObject.SetActive(e.Favourite);
@@ -413,13 +486,13 @@ public class CellInfoEditor : MonoBehaviour
 
             if (TempInfo1Override.text != "")
             {
-                    MainPreview.Info1Text.text = TempInfo1Override.text;
+                MainPreview.Info1Text.text = TempInfo1Override.text;
             }
             else
             {
                 if (Info1Override.text != "")
                     MainPreview.Info1Text.text = Info1Override.text;
-            }   
+            }
 
             if (TempInfo2Override.text != "")
             {
@@ -467,49 +540,19 @@ public class CellInfoEditor : MonoBehaviour
         }
     }
 
-    public void SetDelay(float Delay)
-    {
-        DelayInput.text = Delay.ToString();
-    }
 
-    public void UpdateDelaySlider(string Delay)
-    {
-        if(int.TryParse(Delay, out int val))
-        {
-            DelaySlider.SetValueWithoutNotify(Mathf.Clamp(val, DelaySlider.minValue, DelaySlider.maxValue));
-        }
-        else
-        {
-            DelaySlider.SetValueWithoutNotify(0);
-        }
-    }
-    public void UpdateLengthSlider(string Length)
-    {
-        if (int.TryParse(Length, out int val))
-        {
-            LengthSlider.SetValueWithoutNotify(Mathf.Clamp(val, LengthSlider.minValue, LengthSlider.maxValue));
-        }
-        else
-        {
-            LengthSlider.SetValueWithoutNotify(0);
-        }
-    }
 
-    public void SetLength(float Length)
-    {
-        LengthInput.text = Length.ToString();
-    }
 
     public void Cancel()
     {
         ChangeInfoBase(originalEvent, originalTempEvent);
         gameObject.SetActive(false);
     }
+
     public void Confirm()
     {
-        //EventManager.Instance.ZoomHandler.enabled = true;
         CellInfo c = GetSelectedInfo();
-        //TO DO: Make special override type of EventItem
+
         c.Override.EventName = EventNameOverride.text;
         c.Override.Info1 = Info1Override.text;
         c.Override.Info2 = Info2Override.text;

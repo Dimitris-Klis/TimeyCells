@@ -16,12 +16,10 @@ public class TimetableEditor : MonoBehaviour
     [ReadOnly] public bool Editing;
     [ReadOnly] public int SelectedID;
 
-
     [Space(20)]
-
-
     [Header("References")]
     [Space(0)]
+
     [Header("--- Important Systems")]
     public DayTimeManager dayTimeManager;
     public TimetableGrid Grid;
@@ -44,14 +42,21 @@ public class TimetableEditor : MonoBehaviour
     [Header("--- Editing Timetable Shape")]
     public Button TableDoneButton;
 
-
     [Space(20)]
-
-
     [Header("UI to Disable on Edit")]
     public GameObject[] OtherButtons;
     public CanvasGroup[] OtherGroups;
     public GameObject[] EditorButtons;
+
+
+
+    public void Setup()
+    {
+        SelectEvent(0);
+        EndEditTable();
+        EndEditMode();
+    }
+
 
 
 
@@ -88,15 +93,7 @@ public class TimetableEditor : MonoBehaviour
     {
         TimetableNameText.text = text;
     }
-    
 
-
-    public void Setup()
-    {
-        SelectEvent(0);
-        EndEditTable();
-        EndEditMode();
-    }
 
 
 
@@ -166,6 +163,8 @@ public class TimetableEditor : MonoBehaviour
     }
 
 
+
+
     // Prepares editing for both columns and rows.
     public void BeginEditTable()
     {
@@ -219,6 +218,7 @@ public class TimetableEditor : MonoBehaviour
         dayTimeManager.Highlight.transform.SetAsLastSibling();
         DragHandleManager.instance.EndSwap();
     }
+
 
 
 

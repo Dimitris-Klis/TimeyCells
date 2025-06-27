@@ -1218,6 +1218,214 @@ Sets English punctuation (colon/dot) and refreshes saved settings and labels.
 
 ---
 
+### `Scripts/Layout Groups`
+
+#### CustomLayoutGroup.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+---
+
+#### CenterAndFit.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+---
+
+#### CustomGridLayoutGroup.cs
+
+**Description**<br/>
+Used by `PhotoManager.cs`.
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+---
+
+### `Scripts/Drag N Swap`
+
+#### DragHandle.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+---
+
+#### TimeIndexDrag.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+---
+
+#### WeekDayDrag.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+---
+
+#### DragHandleManager.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+---
+
+### `Scripts/Help Tab`
+
+#### GIFObject.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+---
+
+#### GIFHandler.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+---
+
+#### ContentButton.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+---
+
+#### HelpLayoutGroup.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+---
+
+#### TableOfContents.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+---
+
+#### HelpSection.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Subclasses**
+- **HelpSection.classname**
+  
+  **Description**<br/>
+
+  **Properties**
+
+  **Constructors**
+
+**Methods**
+
+---
+
+### `Scripts/Localization`
+
+#### ScriptName.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+---
+
+#### ScriptName.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+---
+
+#### ScriptName.cs
+
+**Description**<br/>
+
+**Properties**
+
+**Constructors**
+
+**Methods**
+
+---
+
 ### `Scripts/Stylizing`
 
 #### ColorStylePreset.cs
@@ -1484,6 +1692,642 @@ Prompts user to confirm and deletes the palette if confirmed.
 public void Confirm()
 ```
 Saves changes to an existing palette or adds a new custom palette to the list. Refreshes the stylizer and saves to disk.
+
+---
+
+### `Scripts/Editors`
+
+#### TimetableEditor.cs
+
+**Description**<br/>
+Handles editing operations on a timetable, including selecting events, assigning them to cells, changing timetable shape, and switching between edit/view modes. Manages UI visibility and input state across modes.
+
+**Properties**
+- `static TimetableEditor instance` — Singleton reference to the active instance of the editor.
+
+- `bool Editing` — Indicates whether the timetable is currently in editing mode.
+- `int SelectedID` — The currently selected event ID to assign to timetable cells.
+
+
+- `DayTimeManager dayTimeManager` — Reference to the system managing days and time index previews.
+- `TimetableGrid Grid` — Reference to the timetable grid that holds and organizes cells.
+
+
+- `TimetableCell SelectedCellPreview` — UI element previewing the selected event's details.
+
+
+- `TMP_Text TimetableNameText` — Text component displaying the timetable's name.
+- `TMP_InputField TimetableNameInput` — Input field used to edit the timetable name in edit mode.
+
+
+- `GameObject EventSelectorOverlay` — Overlay UI that displays event selection options.
+- `Button SelectorCancelButton` — Button to cancel event selection.
+
+
+- `Button TableDoneButton` — Button shown while editing timetable shape; exits table edit mode when clicked.
+
+- `GameObject[] OtherButtons` — General-purpose buttons hidden while in edit mode.
+- `CanvasGroup[] OtherGroups` — CanvasGroups that are disabled while editing.
+- `GameObject[] EditorButtons` — Buttons shown only while editing.
+
+**Methods**
+```cs
+private void Awake()
+```
+Initializes the singleton instance.
+
+<br/><br/>
+
+```cs
+public void Setup()
+```
+Initializes the timetable editor. Resets selection, ends any active edit or table edit mode.
+
+<br/><br/>
+
+```cs
+public void SelectEvent(int ID)
+```
+Selects an event by ID for cell assignment and hides the event selector overlay.
+
+<br/>
+
+```cs
+public void UpdateSelectorPreview()
+```
+Updates the selected cell preview UI with the name, info, and style of the currently selected event.
+
+<br/>
+
+```cs
+public void SetTimetableName(string text)
+```
+Sets the visible name of the timetable via the title `TMP_Text`.
+
+<br/><br/>
+
+```cs
+public void BeginEditMode()
+```
+Enables editing mode. Hides general UI, enables input fields and editor-only buttons, and prepares cells for quick assignment.
+
+<br/>
+
+```cs
+public void EndEditMode()
+```
+Disables editing mode. Restores regular UI and binds cells to open the manual editor when clicked.
+
+<br/><br/>
+
+```cs
+public void BeginEditTable()
+```
+Prepares the timetable for row/column modification. Disables interactions and shows the "Done" button.
+
+<br/>
+
+```cs
+public void EndEditTable()
+```
+Ends table shape editing mode. Restores interactions, destroys editing buttons, and re-binds cells for quick assignment.
+
+<br/><br/>
+
+```cs
+public void BindCellsForQuickAssign()
+```
+Binds all timetable cells to assign the currently selected event with a single click.
+
+<br/>
+
+```cs
+public void BindCellsForManualAssign()
+```
+Binds all timetable cells to open the manual cell editor (for detailed editing) on click.
+
+---
+
+#### CellInfoEditor.cs
+
+**Description**<br/>
+UI controller for editing cell information in a timetable, including both permanent overrides and temporary event modifications. Handles input bindings, UI state updates, and preview rendering.
+
+**Properties**
+- `int originalEvent` — Stores the ID of the base event originally associated with the selected cell.
+- `int originalTempEvent` — Stores the ID of the temporary event originally associated with the selected cell.
+
+- `int SelectedCellColumn` — The column index of the selected cell in the timetable grid.
+- `int SelectedCellRow` — The row index of the selected cell in the timetable grid.
+
+
+
+- `TimetableCell MainPreview` — Preview UI component representing the final computed cell state after overrides.
+- `TimetableCell BasePreview` — Preview UI component showing the base event without overrides.
+
+
+- `TMP_InputField EventNameOverride` — Input field for overriding the base event’s name.
+- `TMP_InputField Info1Override` — Input field for overriding the base event’s first line of info.
+- `TMP_InputField Info2Override` — Input field for overriding the base event’s second line of info.
+- `TMP_Dropdown TypeOverride` — Dropdown for selecting the base event's overridden type.
+- `TMP_Dropdown FavouriteOverride` — Dropdown for overriding the event's "favourite" status.
+
+- `Toggle OverrideTimeToggle` — Toggles whether the base event time is overridden.
+- `TMP_InputField StartTimeInput` — Input field for overriding the base event start time.
+- `TMP_InputField LengthInputHours` — Input field for the hour component of the base event’s override length.
+- `TMP_InputField LengthInputMinutes` — Input field for the minute component of the base event’s override length.
+
+
+
+
+- `TabHandler tabs` — Handles switching between permanent and temporary override UI tabs.
+- `GameObject CreateButton` — Button to create a temporary override.
+- `GameObject DeleteButton` — Button to delete an existing temporary override.
+- `GameObject ErrorText` — Warning UI element shown when editing an invalid day (e.g., zero active days).
+
+- `GameObject TempPropertiesLayout` — Container for the temporary override UI.
+- `GameObject TempPromptLayout` — Container for the "create temp override" prompt.
+- `TimetableCell TempBasePreview` — Preview UI showing how the temporary override base looks.
+
+
+
+- `Slider DelaySlider` — Slider for the number of weeks before the temporary override starts.
+- `Slider LengthSlider` — Slider for the number of weeks the temporary override lasts.
+- `TMP_InputField DelayInput` — Input field mirroring the delay slider value.
+- `TMP_InputField LengthInput` — Input field mirroring the length slider value.
+
+- `TMP_InputField TempEventNameOverride` — Input field for overriding the temporary event’s name.
+- `TMP_InputField TempInfo1Override` — Input field for overriding the temporary event’s first line of info.
+- `TMP_InputField TempInfo2Override` — Input field for overriding the temporary event’s second line of info.
+- `TMP_Dropdown TempTypeOverride` — Dropdown for selecting the temporary event's type override.
+- `TMP_Dropdown TempFavouriteOverride` — Dropdown for overriding the temporary event’s favourite status.
+
+- `Toggle TempOverrideTimeToggle` — Toggles whether the temporary event has a custom time.
+- `TMP_InputField TempStartTimeInput` — Input field for overriding the temporary event's start time.
+- `TMP_InputField TempLengthInputHours` — Input for the hour portion of the temporary event’s length.
+- `TMP_InputField TempLengthInputMinutes` — Input for the minute portion of the temporary event’s length.
+
+- `DateTime OverrideDate` — Stores the date on which the override was created.
+
+
+**Methods**
+```cs
+public void SelectCell(int column, int row)
+```
+Loads cell information from the grid, applies it to the UI, and determines whether to show temporary override controls or not. Initializes dropdowns, fields, toggles, and previews.
+
+<br/>
+
+```cs
+public CellInfo GetSelectedInfo()
+```
+Returns the `CellInfo` of the currently selected cell in the timetable grid.
+
+<br/><br/>
+
+```cs
+public void CreateTempOverride()
+```
+Initializes a new temporary override for the selected cell. Activates the proper UI layout, resets fields to defaults, and updates previews.
+
+<br/>
+
+```cs
+public void DeleteTempOverride()
+```
+Removes the temporary override from the currently selected cell and reverts the UI layout. Updates the cell preview.
+
+<br/><br/>
+
+```cs
+public void ParseStartTime(string text)
+```
+Validates and parses the start time input. If the time is invalid or earlier than the previous column's time, reverts to the original start time for the cell.
+
+<br/>
+
+```cs
+public void ParseMinutes(string text)
+```
+Parses the input string as minutes. Caps it at 59 and assigns it to either the base or temp minutes field depending on layout state. Falls back to common length if invalid.
+
+<br/>
+
+```cs
+public void ParseHours(string text)
+```
+Parses the input string as hours. Caps it at 23 and assigns it appropriately. Falls back to the default cell length if parsing fails.
+
+<br/><br/>
+
+```cs
+public void ChangeInfoBase(int EventID)
+```
+Sets the selected event base for the current cell (either base or temp) and refreshes the UI. Closes the event selector overlay.
+
+<br/>
+
+```cs
+public void ChangeInfoBase(int EventID, int TempEventID)
+```
+Sets both the base and temporary event IDs for the current cell and updates the UI accordingly. Also closes the event selector overlay.
+
+<br/><br/>
+
+```cs
+public void ToggleOverrideTime(bool overridetime)
+```
+Toggles the override time input interactability based on the context (permanent vs temporary override). Syncs the toggle state and field interactability.
+
+<br/><br/>
+
+```cs
+public void SetDelay(float Delay)
+```
+Updates the delay input field value based on the delay slider or value provided.
+
+<br/>
+
+```cs
+public void UpdateDelaySlider(string Delay)
+```
+Parses and clamps the delay value, updating the delay slider accordingly. Defaults to 0 if parsing fails.
+
+<br/>
+
+```cs
+public void SetLength(float Length)
+```
+Updates the length input field with the given value.
+
+<br/>
+
+```cs
+public void UpdateLengthSlider(string Length)
+```
+Parses and clamps the length value, updating the length slider accordingly. Defaults to 0 on failure.
+
+<br/><br/>
+
+```cs
+public void UpdatePreviews()
+```
+Updates all preview cells (`BasePreview`, `TempBasePreview`, and `MainPreview`) with the latest selected or overridden data. Applies fallback coloring and visibility based on whether temporary overrides are active. Reflects override fields if filled.
+
+<br/><br/>
+
+```cs
+public void Cancel()
+```
+Cancels current edits by restoring original event and temporary event IDs. Hides the editor UI.
+
+<br/>
+
+```cs
+public void Confirm()
+```
+Commits all changes made in the editor UI to the selected `CellInfo` object.
+
+This includes:
+
+- Setting permanent overrides for event name, info fields, event type, favourite state.
+
+- Applying manual length overrides (hours/minutes) if enabled.
+
+- Parsing and storing a custom start time; when editing the first column, it sets the weekday's start time instead.
+
+- If editing a multi-row cell, updates preceding column entries to ensure proper duration tracking.
+
+- Handles temporary overrides similarly for alternate event data (e.g., temporary name, type, favourite).
+
+- Computes the difference in days between the override date and the cell's target weekday for scheduling offset.
+
+- Applies temporary length and time overrides.
+
+- If applicable, sets override values on multi-row entries for the previous column.
+
+- Updates the state of the DayTimeManager and marks the UI and SaveManager for refresh.
+
+And finally:
+
+- Resets the selected cell indexes and override date.
+
+- Deactivates the editor UI.
+
+---
+
+#### WeekdayEditor.cs
+
+**Description**<br/>
+Handles the UI and logic for editing weekly schedule entries, including their name, days, time slots, and temporary override configurations.
+
+**Properties**
+- `DateTime OverrideDate` — The date on which a temporary override becomes active.
+- `int WeekdayIndex` — The index of the currently edited weekday in the WeekDays list.
+
+- `WeekDayObject WeekdayPreview` — A visual preview element displaying the weekday's name and style.
+- `TMP_InputField WeekdayName` — Input field for editing the weekday's name.
+- `TMP_InputField StartTimeField` — Input field for the base start time of the weekday.
+- `TMP_InputField CommonLengthFieldHours` — Input field for the hour component of the base length.
+- `TMP_InputField CommonLengthFieldMinutes` — Input field for the minute component of the base length.
+- `Toggle[] DayToggles` — Array of toggles representing selectable days of the week (Mon–Sun).
+
+
+- `TabHandler TabHandler` — Manages tab selection between base and override editing modes.
+
+- `GameObject Create` — UI group for creating a new override.
+- `GameObject CreateButton` — Button that creates a temporary override.
+- `GameObject ErrorText` — Error message shown when no days are selected on temporary override tab.
+- `GameObject Override` — UI group for modifying an existing temporary override.
+- `GameObject DeleteOverrideButton` — Button to remove an existing temporary override.
+
+- `Slider DelaySlider` — Slider controlling the delay (in weeks) before the temporary override starts.
+- `Slider LengthSlider` — Slider controlling the length (in weeks) of the temporary override.
+- `TMP_InputField DelayInput` — Input field controlling the delay (in weeks) before the temporary override starts.
+- `TMP_InputField LengthInput` — Input field controlling the length (in weeks) of the temporary override.
+
+- `Toggle TempStartTimeToggle` — Toggles temporary override of start time.
+- `TMP_InputField TempStartTimeField` — Input field for temporary override start time.
+
+- `Toggle TempCommonLengthToggle` — Toggles temporary override of common length.
+- `TMP_InputField TempCommonLengthFieldHours` — Input field for temporary override hours.
+- `TMP_InputField TempCommonLengthFieldMinutes` — Input field for temporary override minutes.
+
+**Methods**
+```cs
+public void OpenWeekday(int index)
+```
+Initializes the editor UI for the selected weekday and populates all fields.
+
+<br/><br/>
+
+```cs
+public void ParseStartTime(string text)
+```
+Validates and parses the input for start time; reverts on invalid input.
+
+<br/>
+
+```cs
+public void ParseMinutes(string text)
+```
+Validates and parses the minute field; clamps values to 0–59.
+
+<br/>
+
+```cs
+public void ParseHours(string text)
+```
+Validates and parses the hour field; clamps values to 0–23.
+
+<br/><br/>
+
+```cs
+public void UpdateWeekdayName(string text)
+```
+Updates the live preview of the weekday name in the UI.
+
+<br/>
+
+```cs
+public void SetDelay(float text)
+```
+Updates the delay input field when the slider is moved.
+
+<br/>
+
+```cs
+public void SetLength(float text)
+```
+Updates the length input field when the slider is moved.
+
+<br/><br/>
+
+```cs
+public void UpdateDelaySlider(string Delay)
+```
+Parses and applies the delay input value to the slider.
+
+<br/>
+
+```cs
+public void UpdateLengthSlider(string Length)
+```
+Parses and applies the length input value to the slider.
+
+<br/>
+
+```cs
+public void UpdateCreateButton()
+```
+Toggles visibility of the create button and error text based on day selection.
+
+<br/><br/>
+
+```cs
+public void SetStartTimeInteractable(bool enabled)
+```
+Enables or disables the override start time input field.
+
+<br/>
+
+```cs
+public void SetCommonLengthInteractable(bool enabled)
+```
+Enables or disables the override length input fields.
+
+<br/><br/>
+
+```cs
+public void CreateTemp()
+```
+Initializes a temporary override for the current weekday.
+
+<br/>
+
+```cs
+public void DeleteTemp()
+```
+Removes the temporary override from the current weekday.
+
+<br/><br/>
+
+```cs
+public void Confirm()
+```
+Applies all changes to the weekday object and closes the editor.
+
+---
+
+#### LabelEditor.cs
+
+**Description**<br/>
+Manages the UI and logic for editing time label properties, including custom naming and index inclusion for schedule visualization.
+
+**Properties**
+- `int objectToModify` — The index of the time label currently being edited.
+
+- `TimeIndexObject TimeIndexPreview` — UI preview of the time label, showing label name and time.
+
+
+- `Toggle CustomLabelToggle` — Enables or disables the use of a custom label name.
+- `TMP_InputField CustomLabelInput` — Input field for entering a custom label.
+
+- `Toggle CountAsIndexToggle` — Determines whether the custom label should be considered a valid time index in logic.
+
+**Methods**
+```cs
+public void ActivateEditor(int objToEdit)
+```
+Initializes the editor with the data from the selected time label and populates UI fields.
+
+<br/><br/>
+
+```cs
+public void IsCustomLabel(bool isTrue)
+```
+Toggles the interactivity of custom label fields based on whether a custom label is being used.
+
+<br/>
+
+```cs
+public void SetCustomLabel(string text)
+```
+Updates the label preview in real time as the user types.
+
+<br/><br/>
+
+```cs
+public void Confirm()
+```
+Saves changes to the selected label and updates all time indexes.
+
+---
+
+#### ColorEditor.cs
+
+**Description**<br/>
+
+**Properties**
+- `static ColorEditor instance` — Singleton instance of the ColorEditor.
+
+- `string oldPrompt` — Stores the last used prompt to detect editor reuse.
+- `Color CurrentColor` — The color currently being edited.
+- `Color PreviousColor` — The original color before editing started, used for cancellation.
+
+
+- `CanvasGroup SelfGroup` — Controls the visibility and interactivity of the color editor UI.
+
+- `Image[] imageRefs` — Array of images to apply the selected color to.
+- `TMP_Text[] textRefs` — Array of text elements to apply the selected color to.
+
+
+- `Slider HueSlider` — Slider for adjusting the hue component of the color.
+- `Slider SaturationSlider` — Slider for adjusting saturation.
+- `Slider ValueSlider` — Slider for adjusting brightness (value).
+
+- `Slider AlphaSlider` — Slider for adjusting alpha (transparency).
+
+- `TMP_InputField HexCodeField` — Input field for entering hex color codes.
+
+
+- `Image ColorPreview` — Shows the current selected color.
+
+- `TMP_Text PromptText` — Displays the prompt or title of the color editor.
+
+
+- `Image HueValImage` — Gradient image for the hue/value selector background.
+- `Image HueSatImage` — Overlay image affecting hue/saturation display.
+
+- `Image SatValHueImage` — Main saturation/value image for hue display.
+- `Image SatValImage` — Child saturation/value image.
+
+- `Image ValHueSatImage` — Image for value/hue/saturation gradient display.
+
+- `Image AlphaRGBImage` — Displays the RGB color for the alpha slider.
+
+**Methods**
+```cs
+private void Awake()
+```
+Initializes the singleton instance.
+
+<br/><br/>
+
+```cs
+public void Open(string prompt, Color color, params Image[] images)
+```
+Opens the color editor targeting an array of images with the specified initial color and prompt.
+
+<br/>
+
+```cs
+public void Open(string prompt, Color color, params TMP_Text[] texts)
+```
+Opens the color editor targeting an array of text components with the specified initial color and prompt.
+
+<br/><br/>
+
+```cs
+public void AssignNewImages(params Image[] images)
+```
+Assigns a new set of images to be updated with the selected color.
+
+<br/>
+
+```cs
+public void AssignNewTexts(params TMP_Text[] texts)
+```
+Assigns a new set of text elements to be updated with the selected color.
+
+<br/><br/>
+
+```cs
+public void SetColor(string hexCode)
+```
+Sets the current color from a hex string, updating sliders accordingly.
+
+<br/>
+
+```cs
+public void UpdateColor()
+```
+Updates the current color based on slider values and refreshes UI previews and referenced elements.
+
+<br/><br/>
+
+```cs
+public void UpdateRefs()
+```
+Applies the current color to all referenced images and texts.
+
+<br/>
+
+```cs
+public void UpdateSliders()
+```
+Updates the sliders to reflect the current color’s HSV and alpha values.
+
+<br/><br/>
+
+```cs
+public void ApplyColors()
+```
+Commits the current color to referenced elements and hides the editor.
+
+<br/>
+
+```cs
+public void CancelColors()
+```
+Reverts all referenced elements to their original colors before editing and hides the editor.
+
+<br/>
+
+```cs
+public void HideColorEditor()
+```
+Hides the color editor UI and clears referenced elements.
 
 ---
 
@@ -2090,6 +2934,68 @@ Draws the property in the Inspector in a disabled state, making it uneditable bu
 
 ### `Scripts/Polish`
 
+#### InputFieldFixer.cs
+
+**Description**<br/>
+Provides helper functionality for `TMP_InputField` to sanitize text and ensure proper validator setup. Specifically removes zero-width spaces that visually interfere with the Roboto font and links the input field to its validator.
+
+**Properties**
+- `TMP_InputField TMPField` — The target input field to monitor and validate.
+- `TMP_Text PreviewText` —  Text element that displays the cleaned-up version of the input, with zero-width spaces removed.
+
+**Methods**
+```cs
+public void UpdateTextPreview(string text)
+```
+Removes zero-width space characters (`\u200b`) from the input and updates the preview text. This prevents Roboto font from showing visual artifacts.
+
+<br/>
+
+```cs
+private void Start()
+```
+Automatically assigns the `TMPField` to its `ValidatorBase` validator on start, allowing custom validation logic to access the input field’s character limit.
+
+---
+
+#### TabHandler.cs
+
+**Description**<br/>
+Controls a UI tab system by toggling visibility of associated tab content and invoking custom events on selection. Allows tabs to be dynamically assigned in the Inspector and initialized at runtime.
+
+**Properties**
+- `bool DefaultToZero` — If true, the first tab is automatically selected on start.
+
+- `Tab[] tabs` — Array of Tab objects, each representing a button-content pair and an optional event.
+
+- `UnityEvent OnSelectTab` — Global event invoked any time a tab is selected.
+
+**Subclasses**
+- **TabHandler.Tab**
+
+  **Description**<br/>
+  Represents a single tab consisting of a button, its associated content, and a custom event triggered when the tab is selected.
+
+  **Properties**
+  - `Button TabButton` — The UI button that triggers tab selection.
+  - `GameObject TabObject` — The GameObject (usually a panel) that is activated when the tab is selected.
+  - `UnityEvent TabSpecificEvent` — Optional event that runs when this specific tab is selected.
+
+**Methods**
+```cs
+public void SelectTab(int index)
+```
+Activates the tab at the given index, enabling its content and disabling others. Triggers the selected tab’s event and the global `OnSelectTab` event. Safely ignores out-of-range indices.
+
+<br/>
+
+```cs
+private void Start()
+```
+Initializes the tab system. If `DefaultToZero` is true, selects the first tab. Also attaches `SelectTab(index)` calls to each tab's button onClick listener.
+
+---
+
 #### VersionText.cs
 
 **Description**<br/>
@@ -2103,6 +3009,8 @@ Updates a UI text element to display the current application version. Typically 
 void Start()
 ```
 Sets `text.text` to `"v"` followed by `Application.version`, e.g., `"v1.0.0"`.
+
+---
 
 ### `Scripts/Polish/Animation Scripts`
 
@@ -2230,12 +3138,51 @@ Automatically called by the TMP_InputField during input.
 
 ---
 
-#### ScriptName.cs
+### `StreamingAssets`
+
+#### CopyToClipboard.ps1
 
 **Description**<br/>
+PowerShell script used on Windows to copy a generated timetable image to the clipboard. Called by `PhotoManager.cs` when the user taps the "Copy" button.
 
-**Properties**
+---
 
-**Constructors**
+### `Plugins/Android`
 
-**Methods**
+#### FileProviderLib-release.aar
+
+**Description**<br/>
+Android AAR library that provides `FileProvider` functionality, enabling secure file sharing via the Android share sheet. Used by `PhotoManager.cs` when invoking the system share UI for timetable screenshots.
+
+---
+
+## Packages Used
+
+### Unity Features
+- 2D Features
+  - 2D Animation
+  - 2D Aseprite Importer
+  - 2D Common
+  - 2D Pixel Perfect
+  - 2D PSD Importer
+  - 2D Sprite
+  - 2D SpriteShape
+  - 2D Tilemap Editor
+  - 2D Tilemap Extras
+
+  NOTE: Some of these packages aren't used but Unity counts all of these as a group, so they can't be removed separetely.
+
+### Unity Packages
+- Burst
+- Collections
+- Custom NUnit
+- Mathematics
+- Mono Cecil
+- Performance testing API
+- Test Framework
+- Timeline
+- Unity UI
+- Visual Studio Editor
+
+### Libraries
+- TextMeshPro
