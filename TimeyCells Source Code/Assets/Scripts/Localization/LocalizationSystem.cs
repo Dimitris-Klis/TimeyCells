@@ -7,24 +7,32 @@ public class LocalizationSystem : MonoBehaviour
 {
     public static LocalizationSystem instance;
 
+    [Header("References")]
     public TMP_Dropdown LanguageDropdown;
+    public HelpSection helpSection;
+
+    [Space(20)]
+    [Header("     Properties")]
+    [ReadOnly] public int SelectedLanguage = 0;
     [Space]
     public bool DebugDictionary;
     public bool DebugObjects;
-    public int SelectedLanguage = 0;
-    [Space]
-    public string[] languageNames;
-    public TextAsset[] textAssets;
-    public Dictionary<string, string> stringPairs = new();
-    [Space]
-    public HelpSection helpSection;
     
     
-    // Start is called before the first frame update
+    
+    string[] languageNames;
+    TextAsset[] textAssets;
+    Dictionary<string, string> stringPairs = new();
+    
+    
+    
+    
+
     void Awake()
     {
         instance = this;
     }
+
     public void Setup()
     {
         textAssets = Resources.LoadAll<TextAsset>("Localization");
@@ -50,6 +58,10 @@ public class LocalizationSystem : MonoBehaviour
             Debug.LogWarning("You forgot to assign a dropdown to the Localization System!");
         }
     }
+
+
+
+
     public void SetLanguage(int langIndex)
     {
         stringPairs.Clear();
@@ -104,11 +116,16 @@ public class LocalizationSystem : MonoBehaviour
         }
         helpSection.ShouldSetup = true;
     }
+
     public string GetText(string name, string key)
     {
         if(DebugObjects) Debug.Log(name + ": " + key);
         return stringPairs[key];
     }
+
+
+
+
     void UpdateLocalizers()
     {
         foreach(TMPLocalizer loc in FindObjectsByType<TMPLocalizer>(FindObjectsInactive.Include,FindObjectsSortMode.None))

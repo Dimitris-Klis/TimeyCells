@@ -8,6 +8,8 @@ public class TMPDropdownLocalizer : MonoBehaviour
     public TMP_Dropdown TMP_Dropdown;
     public string[] keys;
 
+
+
     public void UpdateText()
     {
         if (TMP_Dropdown == null) return;

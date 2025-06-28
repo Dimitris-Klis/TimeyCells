@@ -5,9 +5,13 @@ using UnityEngine;
 public class CustomLayoutGroup : MonoBehaviour
 {
     public enum AlignmentModes { Horizontal, Vertical}
-    public AlignmentModes AlignmentMode;
 
+    [Header("Self Rect")]
     public RectTransform SelfRect;
+
+    [Space(20)]
+    [Header("Properties")]
+    public AlignmentModes AlignmentMode;
     [Space]
     public bool AffectCellSizeX;
     public float CellSizeX;
@@ -16,7 +20,10 @@ public class CustomLayoutGroup : MonoBehaviour
     public float CellSizeY;
     [Space]
     public float Spacing;
-    [ContextMenu("UpdateLayout")]
+
+
+
+    [ContextMenu("Update Layout")]
     public void UpdateLayout()
     {
         float wantedPos = 0;

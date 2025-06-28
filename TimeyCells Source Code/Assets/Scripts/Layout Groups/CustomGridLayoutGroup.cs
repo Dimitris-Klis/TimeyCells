@@ -4,16 +4,22 @@ using UnityEngine;
 
 public class CustomGridLayoutGroup : MonoBehaviour
 {
+    [Header("Self Rect")]
+    public RectTransform SelfRect;
+
+    [Space(20)]
+    [Header("Properties")]
     public int Rows, Columns;
+    [Space]
     public Vector2 Spacing;
     public Vector2 Size;
-    public List<int> MultirowIndexes = new();
-
-    // HeaderSize.y: First Row Height
-    // HeaderSize.x: First Column Width
-    public Vector2 HeaderSize;
     [Space]
-    public RectTransform SelfRect;
+    public Vector2 HeaderSize;
+
+    [Space(20)]
+    [ReadOnly] public List<int> MultirowIndexes = new();
+    
+
 
     [ContextMenu("UpdateLayout")]
     public void UpdateLayout()
@@ -82,12 +88,7 @@ public class CustomGridLayoutGroup : MonoBehaviour
 
                 
             }
-            //if(index == indexToDebug)
-            //{
-            //    Debug.Log($"Col=({index} + {indexOffset}) / {Rows}   =   {col}");
-            //    Debug.Log($"Row={index}+{rowsOffset}-{col}*{Rows}   =   {row}");
-                
-            //}
+
             if (MultirowIndexes.Contains(index))
             {
                 child.sizeDelta = new(child.sizeDelta.x, (Rows - 1) * Size.y + (Rows - 2) * Spacing.y);

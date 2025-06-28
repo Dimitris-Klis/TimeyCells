@@ -1218,45 +1218,6 @@ Sets English punctuation (colon/dot) and refreshes saved settings and labels.
 
 ---
 
-### `Scripts/Layout Groups`
-
-#### CustomLayoutGroup.cs
-
-**Description**<br/>
-
-**Properties**
-
-**Constructors**
-
-**Methods**
-
----
-
-#### CenterAndFit.cs
-
-**Description**<br/>
-
-**Properties**
-
-**Constructors**
-
-**Methods**
-
----
-
-#### CustomGridLayoutGroup.cs
-
-**Description**<br/>
-Used by `PhotoManager.cs`.
-
-**Properties**
-
-**Constructors**
-
-**Methods**
-
----
-
 ### `Scripts/Drag N Swap`
 
 #### DragHandle.cs
@@ -1383,44 +1344,6 @@ Used by `PhotoManager.cs`.
   **Properties**
 
   **Constructors**
-
-**Methods**
-
----
-
-### `Scripts/Localization`
-
-#### ScriptName.cs
-
-**Description**<br/>
-
-**Properties**
-
-**Constructors**
-
-**Methods**
-
----
-
-#### ScriptName.cs
-
-**Description**<br/>
-
-**Properties**
-
-**Constructors**
-
-**Methods**
-
----
-
-#### ScriptName.cs
-
-**Description**<br/>
-
-**Properties**
-
-**Constructors**
 
 **Methods**
 
@@ -2328,6 +2251,198 @@ Reverts all referenced elements to their original colors before editing and hide
 public void HideColorEditor()
 ```
 Hides the color editor UI and clears referenced elements.
+
+---
+
+### `Scripts/Localization`
+
+#### TMPLocalizer.cs
+
+**Description**<br/>
+Updates a `TMP_Text` component's value based on the selected language. Fetches localized text via `LocalizationSystem` using a specified key, with optional suffix text.
+
+**Properties**
+- `TMP_Text TMP_Text` — Reference to the text component to localize.
+- `string key` — The key used to retrieve the localized string.
+- `string extraText` — Additional text to append after the localized value.
+
+**Methods**
+```cs
+public void UpdateText()
+```
+Updates the `TMP_Text` with the current language's localized value based on the key.
+
+<br/>
+
+```cs
+private void OnDrawGizmos()
+```
+(Only in editor) Ensures the `TMP_Text` reference is auto-assigned for convenience.
+
+---
+
+#### TMPDropdownLocalizer.cs
+
+**Description**<br/>
+Updates the labels of a `TMP_Dropdown` based on localized keys. Used for dropdown UIs that should reflect the currently selected language.
+
+**Properties**
+- `TMP_Dropdown TMP_Dropdown` — Reference to the dropdown to localize.
+- `string[] keys` — Keys for each option in the dropdown, matching the order of the dropdown options.
+
+
+**Methods**
+```cs
+public void UpdateText()
+```
+Updates the text for all dropdown options and refreshes the caption to match the current value.
+
+<br/>
+
+```cs
+private void OnDrawGizmos()
+```
+(Only in editor) Ensures the `TMP_Dropdown` reference is auto-assigned if missing.
+
+---
+
+#### LocalizationSystem.cs
+
+**Description**<br/>
+Handles language selection, translation retrieval from text files and notifies UI elements when the language changes.
+
+**Properties**
+
+`static LocalizationSystem instance` — Singleton instance.
+
+`TMP_Dropdown LanguageDropdown` — UI dropdown for selecting languages.
+`HelpSection helpSection` — Reference to help UI that reacts to language changes.
+
+
+`int SelectedLanguage` —  Index of the currently selected language.
+
+`bool DebugDictionary` — Logs key-value pairs when language is loaded.
+`bool DebugObjects` — Logs keys and object names during lookups.
+
+
+`string[] languageNames` — Names of all available languages.
+`TextAsset[] textAssets` — Raw localization text files.
+`Dictionary<string, string> stringPairs` — Key-value pairs for current language.
+
+**Methods**
+```cs
+void Awake()
+```
+Initializes the singleton instance.
+
+<br/>
+
+```cs
+public void Setup()
+```
+Loads available language files from Resources, parses names, and populates the dropdown.
+
+<br/><br/>
+
+```cs
+public void SetLanguage(int langIndex)
+```
+Parses and loads localization data from the selected language file and updates all localized UI elements.
+
+<br/>
+
+```cs
+public string GetText(string name, string key)
+```
+Returns the localized string associated with a given key. Logs the key if `DebugObjects` is enabled.
+
+<br/><br/>
+
+```cs
+void UpdateLocalizers()
+```
+Finds all active and inactive `TMPLocalizer` and TMPDropdownLocalizer instances and updates their displayed text.
+
+---
+
+### `Scripts/Layout Groups`
+
+#### CustomLayoutGroup.cs
+
+**Description**<br/>
+Aligns child elements linearly in a horizontal or vertical direction. Optionally resizes elements and spaces them with precision.
+
+**Properties**
+- `enum AlignmentModes { Horizontal, Vertical}` —  Direction of alignment.
+
+
+- `RectTransform SelfRect` — Reference to this object's `RectTransform`.
+
+
+- `AlignmentModes AlignmentMode` — Layout orientation.
+
+- `bool AffectCellSizeX` — Whether to override child width.
+- `float CellSizeX` — Width to apply if `AffectCellSizeX` is true.
+
+- `bool AffectCellSizeY` — Whether to override child height.
+- `float CellSizeY` —  Height to apply if `AffectCellSizeY` is true.
+
+- `float Spacing` — Gap between child elements.
+
+
+**Methods**
+```cs
+public void UpdateLayout()
+```
+Repositions and optionally resizes child elements, then centers them within the layout.
+
+---
+
+#### CenterAndFit.cs
+
+**Description**<br/>
+Aligns and optionally centers child elements in a line (horizontally or vertically), then resizes the parent `RectTransform` to fit the content.
+
+**Properties**
+- `RectTransform SelfRect` — Reference to this object's `RectTransform`.
+
+- `CustomLayoutGroup.AlignmentModes AlignmentMode` — Layout orientation.
+
+- `float Spacing` — Space between child elements.
+- `bool Center` — Whether to center the content within the layout.
+
+
+**Methods**
+```cs
+public void UpdateLayout()
+```
+Positions child elements, optionally centers them, and resizes the parent `RectTransform` to fit to the content.
+
+---
+
+#### CustomGridLayoutGroup.cs
+
+**Description**<br/>
+Arranges child elements in a flexible grid layout with optional headers and multi-row cells, similar to the timetable. Used by `PhotoManager.cs`.
+
+**Properties**
+- `RectTransform SelfRect` — Reference to this object's `RectTransform`.
+
+- `int Rows` — Number of rows in the grid.
+- `int Columns` — Number of columns in the grid.
+
+- `Vector2 Spacing` — Space between grid cells (x = horizontal, y = vertical).
+- `Vector2 Size` — Default size for grid cells.
+
+- `Vector2 HeaderSize` — Size of the top row and left column headers.
+
+- `List<int> MultirowIndexes` — List of child indexes that span multiple rows.
+
+**Methods**
+```cs
+public void UpdateLayout()
+```
+Calculates grid cell positions and sizes, handles header dimensions, supports row-spanning cells, centers all elements, and resizes the parent to fit the grid.
 
 ---
 

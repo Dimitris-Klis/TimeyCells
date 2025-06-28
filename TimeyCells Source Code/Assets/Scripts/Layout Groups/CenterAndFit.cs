@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class CenterAndFit : MonoBehaviour
 {
-    public enum AlignmentModes { Horizontal, Vertical}
-    public AlignmentModes AlignmentMode;
-
+    [Header("Self Rect")]
     public RectTransform SelfRect;
+
+    [Space(20)]
+    [Header("Properties")]
+    public CustomLayoutGroup.AlignmentModes AlignmentMode;
     [Space]
     public float Spacing;
     public bool Center = true;
+
+
+
     [ContextMenu("UpdateLayout")]
     public void UpdateLayout()
     {
@@ -23,7 +28,7 @@ public class CenterAndFit : MonoBehaviour
 
             if (index == 0)
             {
-                if (AlignmentMode == AlignmentModes.Horizontal)
+                if (AlignmentMode == CustomLayoutGroup.AlignmentModes.Horizontal)
                 {
                     wantedPos += child.sizeDelta.x / 2;
                 }
@@ -34,7 +39,7 @@ public class CenterAndFit : MonoBehaviour
             }
             else
             {
-                if (AlignmentMode == AlignmentModes.Horizontal)
+                if (AlignmentMode == CustomLayoutGroup.AlignmentModes.Horizontal)
                 {
                     wantedPos += child.sizeDelta.x + (prevChild.sizeDelta.x - child.sizeDelta.x) / 2;
                 }
@@ -44,7 +49,7 @@ public class CenterAndFit : MonoBehaviour
                 }
             }
 
-            if (AlignmentMode == AlignmentModes.Horizontal)
+            if (AlignmentMode == CustomLayoutGroup.AlignmentModes.Horizontal)
             {
                 child.localPosition = Vector2.right * wantedPos;
             }
@@ -53,7 +58,7 @@ public class CenterAndFit : MonoBehaviour
                 child.localPosition = Vector2.up * wantedPos;
             }
             prevChild = child;
-            if (AlignmentMode == AlignmentModes.Horizontal)
+            if (AlignmentMode == CustomLayoutGroup.AlignmentModes.Horizontal)
             {
                 wantedPos += Spacing;
             }
@@ -68,7 +73,7 @@ public class CenterAndFit : MonoBehaviour
         float totalSize = 0;
         foreach (RectTransform child in transform)
         {
-            if (AlignmentMode == AlignmentModes.Horizontal)
+            if (AlignmentMode == CustomLayoutGroup.AlignmentModes.Horizontal)
                 totalSize += child.sizeDelta.x;
             else
                 totalSize += child.sizeDelta.y;
@@ -78,7 +83,7 @@ public class CenterAndFit : MonoBehaviour
         
 
         // Fit to content
-        if (AlignmentMode == AlignmentModes.Horizontal)
+        if (AlignmentMode == CustomLayoutGroup.AlignmentModes.Horizontal)
         {
             SelfRect.sizeDelta = new(totalSize, SelfRect.sizeDelta.y);
         }
@@ -91,7 +96,7 @@ public class CenterAndFit : MonoBehaviour
 
         foreach (RectTransform child in transform)
         {
-            if (AlignmentMode == AlignmentModes.Horizontal)
+            if (AlignmentMode == CustomLayoutGroup.AlignmentModes.Horizontal)
                 child.localPosition -= Vector3.right * totalSize / 2;
             else
                 child.localPosition += Vector3.up * totalSize / 2;
