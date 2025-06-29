@@ -10,30 +10,43 @@ public class DragHandleManager : MonoBehaviour
     {
         instance = this;
     }
+
     public enum SwapAxis {Horizontal, Vertical};
+
+
+    [Header("Basic References")]
     public ScrollZoom ScrollViewManager;
     public DragHandle HorizontalDragPrefab; // The ones that move left or right.
     public DragHandle VerticalDragPrefab; // The ones that move up or down.
-    [Space]
+
+    [Space(20)]
+    [Header("Canvas Groups")]
     public CanvasGroup DaysOfWeekParent;
     public CanvasGroup TimeIndexesParent;
     [Space]
     public CanvasGroup DaysOfWeekDRAGParent;
     public CanvasGroup TimeIndexesDRAGParent;
 
+    [Space(20)]
+    [Header("Parents")]
     public Transform HorizontalParent;
     public Transform VerticalParent;
-    [Space]
+
+    [Space(20)]
+    [Header("Custom Layout Groups")]
     public CustomLayoutGroup HorizontalLayout;
-    [Space]
     public CustomLayoutGroup VerticalLayout;
-    [Space]
+
+    [Space(20)]
+    [Header("Handle Lists")]
     public List<DragHandle> HandlesVertical = new();
     public List<DragHandle> HandlesHorizontal = new();
 
-
-
+    [Space(20)]
+    [Header("Objects")]
     public List<RectTransform> objects;
+
+
 
     public void StartSwap(bool horizontal)
     {
@@ -95,6 +108,7 @@ public class DragHandleManager : MonoBehaviour
             }
         }
     }
+    
     public void EndSwap()
     {
         DaysOfWeekParent.interactable = DaysOfWeekParent.blocksRaycasts = true;
@@ -121,6 +135,9 @@ public class DragHandleManager : MonoBehaviour
         }
         HandlesVertical.Clear();
     }
+
+
+
 
     public void SwapHorizontal(int IndexA, int IndexB)
     {
@@ -158,6 +175,9 @@ public class DragHandleManager : MonoBehaviour
         HandlesVertical[IndexA].OnSwap();
         HandlesVertical[IndexB].OnSwap();
     }
+
+
+
 
     public int GetClosestIndex(Vector3 dragPos, SwapAxis axis)
     {

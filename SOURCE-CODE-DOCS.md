@@ -1,5 +1,51 @@
 # TimeyCells Source Code Documentation
 
+## Table of Contents
+- 01: [Introduction](#introduction)
+
+- 02: [Events, Event Types](#events-event-types)
+  - [Creating Event Types](#creating-event-types)
+  - [Editing Event Types](#editing-event-types)
+  - [Creating Events](#creating-events)
+  - [Editing Events](#editing-events)
+
+- 03: [Editing your timetable](#editing-your-timetable)
+  - [Renaming your timetable](#renaming-your-timetable)
+  - [Adding/Deleting Columns & Multirows](#addingdeleting-columns--multirows)
+  - [Adding/Deleting Rows](#addingdeleting-rows)
+  - [Assigning events to your timetable](#assigning-events-to-your-timetable)
+  - [Swapping Columns](#swapping-columns)
+  - [Swapping Rows](#swapping-rows)
+
+- 04: [Manual Editing](#manual-editing)
+  - [Editing Weekdays](#editing-weekdays)
+  - [Editing Cells](#editing-cells)
+  - [Editing Labels](#editing-labels)
+  - [Temporary Overrides](#temporary-overrides)
+    - [Creating Temporary Weekdays](#creating-temporary-weekdays)
+    - [Creating Temporary Cells](#creating-temporary-cells)
+    - [Deleting Temporary Overrides](#deleting-temporary-overrides)
+
+- 05: [Saving, Loading & Creating Timetables](#saving-loading--creating-timetables)
+  - [Saving your work](#saving-your-work)
+  - [Loading a timetable](#loading-a-timetable)
+  - [Creating a new timetable](#creating-a-new-timetable)
+
+- 06: [Copying & Pasting Data](#copying--pasting-data)
+
+- 07: [Backwards Compatibility](#backwards-compatibility)
+
+- 08: [Sharing a Photo](#sharing-a-photo)
+  - [Sharing photos on Windows](#sharing-photos-on-windows)
+  - [Sharing photos on Android](#sharing-photos-on-android)
+
+- 09: [Settings](#settings)
+  - [Time Format](#time-format)
+  - [Language](#language)
+  - [Themes](#themes)
+
+- 10: [Portable Mode (PC Only)](#portable-mode-pc-only)
+
 ## Overview
 TimeyCells is made up of around 60 scripts, with varying complexity — some are simple and help with animations or UI interactions, while others are full systems responsible for editing the timetable, saving data, copy-pasting, and more. The application was made with the Unity game engine, one of my favorite tools.
 - **Most of the code** lives in `Assets/Scripts`.
@@ -1223,48 +1269,157 @@ Sets English punctuation (colon/dot) and refreshes saved settings and labels.
 #### DragHandle.cs
 
 **Description**<br/>
+A base class for draggable UI elements that support horizontal or vertical swapping within a UI grid. Implements drag functionality and swap logic, to be extended by specific drag behaviors.
 
 **Properties**
-
-**Constructors**
+- `DragHandleManager.SwapAxis SwapAxis` — The axis on which this handle is allowed to move (`Horizontal` or `Vertical`).
+- `Vector3 startPos` — The starting local position of the drag handle (used to reset position on drag end).
+- `int currIndex` — The current index of the handle in the list it's part of (used for determining swap position).
 
 **Methods**
+```cs
+public void OnDrag(PointerEventData eventData)
+```
+Handles the movement of the drag handle during a drag gesture. Determines if a swap should be triggered based on the current and closest index.
+
+<br/>
+
+```cs
+public void OnEndDrag(PointerEventData eventData)
+```
+Resets the drag handle back to its starting position and disables drag tracking.
+
+<br/><br/>
+
+```cs
+public virtual void OnSwapDragged(int IndexA, int IndexB)
+```
+Called when a swap occurs between two indices. Can be overridden to perform custom logic (e.g. updating data).
+
+<br/>
+
+```cs
+public virtual void OnSwap()
+```
+Used to update the visual state or text of the drag handle based on the current index.
 
 ---
 
 #### TimeIndexDrag.cs
 
 **Description**<br/>
+Specialized `DragHandle` for horizontal handles representing time index columns in a grid. Updates the timetable column order and label during a swap.
 
 **Properties**
-
-**Constructors**
+- `TMP_Text IndexText` — The text UI element that displays the current column label.
 
 **Methods**
+```cs
+public override void OnSwapDragged(int IndexA, int IndexB)
+```
+Swaps the corresponding columns in the timetable grid.
+
+<br/>
+
+```cs
+public override void OnSwap()
+```
+Updates the label text of the time index using the current index.
 
 ---
 
 #### WeekDayDrag.cs
 
 **Description**<br/>
+Specialized `DragHandle` for vertical handles representing weekdays in a timetable grid. Handles row swaps and updates the weekday label accordingly.
 
 **Properties**
-
-**Constructors**
+- `TMP_Text WeekDayText` — The text UI element that displays the weekday name.
 
 **Methods**
+```cs
+public override void OnSwapDragged(int IndexA, int IndexB)
+```
+Swaps the corresponding rows in the timetable grid.
+
+<br/>
+
+```cs
+public override void OnSwap()
+```
+Updates the label text to match the weekday name of the current index.
 
 ---
 
 #### DragHandleManager.cs
 
 **Description**<br/>
+Central controller that manages drag-and-drop handle instantiation, swapping logic, UI canvas state toggling, and layout updates for both horizontal (columns) and vertical (rows) axes.
 
 **Properties**
+- `static DragHandleManager instance` — Singleton instance for global access.
+- `enum SwapAxis {Horizontal, Vertical}` — Enum representing drag axis directions.
+- `ScrollZoom ScrollViewManager` — Reference to the scroll view used for tracking drag activity.
+- `DragHandle HorizontalDragPrefab` — Prefab for handles used to drag columns (horizontal).
+- `DragHandle VerticalDragPrefab` — Prefab for handles used to drag rows (vertical).
 
-**Constructors**
+- `CanvasGroup DaysOfWeekParent` — CanvasGroup for displaying the weekday labels.
+- `CanvasGroup TimeIndexesParent` — CanvasGroup for displaying the time index labels.
+
+- `CanvasGroup DaysOfWeekDRAGParent` — CanvasGroup that hosts weekday drag handles.
+- `CanvasGroup TimeIndexesDRAGParent` — CanvasGroup that hosts time index drag handles.
+
+- `Transform HorizontalParent` — Parent transform for horizontal drag handles.
+- `Transform VerticalParent` — Parent transform for vertical drag handles.
+
+- `CustomLayoutGroup HorizontalLayout` — Layout component for horizontal drag handles.
+- `CustomLayoutGroup VerticalLayout` — Layout component for vertical drag handles.
+
+- `List<DragHandle> HandlesVertical` — List of all currently active vertical drag handles.
+- `List<DragHandle> HandlesHorizontal` — List of all currently active horizontal drag handles.
+
+- `List<RectTransform> objects` — Miscellaneous tracked RectTransforms.
 
 **Methods**
+```cs
+private void Awake()
+```
+Initializes the singleton instance.
+
+<br/><br/>
+
+```cs
+public void StartSwap(bool horizontal)
+```
+Initializes the drag handles for either horizontal (columns) or vertical (rows) swapping. Disables interaction with static UI and prepares the layout for drag interaction.
+
+<br/>
+
+```cs
+public void EndSwap()
+```
+Ends the swapping operation. Cleans up drag handles and restores static UI interactivity and visibility.
+
+<br/><br/>
+
+```cs
+public void SwapHorizontal(int IndexA, int IndexB)
+```
+Swaps the positions of two horizontal handles and updates their start positions and indices.
+
+<br/>
+
+```cs
+public void SwapVertical(int IndexA, int IndexB)
+```
+Swaps the positions of two vertical handles and updates their start positions and indices.
+
+<br/><br/>
+
+```cs
+public int GetClosestIndex(Vector3 dragPos, SwapAxis axis)
+```
+Calculates the closest index in the list of drag handles based on the current drag position and axis.
 
 ---
 
@@ -1275,22 +1430,51 @@ Sets English punctuation (colon/dot) and refreshes saved settings and labels.
 **Description**<br/>
 
 **Properties**
-
-**Constructors**
-
-**Methods**
+- `RawImage RawSelf` — 
+- `VideoClip Clip` — 
 
 ---
 
 #### GIFHandler.cs
 
 **Description**<br/>
+Plays up to 3 videos in view at once in the canvas. Used in the help section to display the gifs. Although Unity doesn't support gifs, the mp4 files used were originally gifs, hence the name 'GIFHandler'.
 
 **Properties**
+- `RectTransform viewport` — 
 
-**Constructors**
+- `VideoPlayer[] videoPlayers` — 
+- `List<GIFObject> GIFObjects` — 
+
+- `UnityEvent[] onVideoPrepareEvents` — 
+
+- `Dictionary<GIFObject, VideoPlayer> ActiveGIFs` — 
 
 **Methods**
+```cs
+private void Start()
+```
+
+
+<br/>
+
+```cs
+void Update()
+```
+
+
+<br/><br/>
+
+```cs
+public bool VisibleGIF(RectTransform child)
+```
+
+
+<br/>
+
+```cs
+void AssignVideoToGIF(GIFObject gif)
+```
 
 ---
 
@@ -1299,10 +1483,10 @@ Sets English punctuation (colon/dot) and refreshes saved settings and labels.
 **Description**<br/>
 
 **Properties**
+- `RectTransform selfRect` — 
 
-**Constructors**
-
-**Methods**
+- `Button button` — 
+- `TMP_Text text` — 
 
 ---
 
@@ -1311,10 +1495,34 @@ Sets English punctuation (colon/dot) and refreshes saved settings and labels.
 **Description**<br/>
 
 **Properties**
+- `RectTransform SelfRect` — 
 
-**Constructors**
+- `float Spacing` — 
+- `float PaddingX` — 
+- `bool CenterY` — 
+
+
+- `List<RectTransform> children` — 
 
 **Methods**
+```cs
+public void UpdateLayout()
+```
+
+
+<br/>
+
+```cs
+IEnumerator Wait()
+```
+
+
+<br/>
+
+```cs
+public void DelayedUpdateLayout()
+```
+
 
 ---
 
@@ -1323,10 +1531,61 @@ Sets English punctuation (colon/dot) and refreshes saved settings and labels.
 **Description**<br/>
 
 **Properties**
+- `RectTransform SelfRect` — 
 
-**Constructors**
+- `ContentButton TabPrefab` — 
+- `HelpSection helpSection` — 
+
+
+- `int H1Size` — 
+- `int H2Size` — 
+- `int H3Size` — 
+- `float Spacing` — 
+- `bool CenterChildren` — 
+
+- `List<HeaderShortcut> headers` — 
+- `List<ContentButton> buttons` — 
+
+**Structs**
+- **HelpSection.HeaderShortcut**
+  
+  **Description**<br/>
+  A useful struct.
+
+  **Properties**
+  - `string name` — 
+  - `int level` — 
+  - `RectTransform wantedChild` — 
+
+  **Constructors**
+  - `public HeaderShortcut(string _name, int _level, RectTransform _child)` — 
 
 **Methods**
+```cs
+public void Setup()
+```
+
+
+<br/>
+
+```cs
+public void UpdateLayout()
+```
+
+
+<br/>
+
+```cs
+public void DelayedUpdateLayout()
+```
+
+
+<br/>
+
+```cs
+IEnumerator Wait()
+```
+
 
 ---
 
@@ -1335,17 +1594,103 @@ Sets English punctuation (colon/dot) and refreshes saved settings and labels.
 **Description**<br/>
 
 **Properties**
+- `bool ShouldSetup` — 
+
+
+- `TableOfContents tableOfContents` — 
+
+- `TMP_Text H1Text` — 
+- `TMP_Text H2Text` — 
+- `TMP_Text H3Text` — 
+
+- `TMP_Text NormalText` — 
+
+
+- `Image UIImage`
+- `GIFObject GifImage`
+
+- `HelpLayoutGroup ContentLayoutGroup` — 
+- `ScrollRect scrollRect` — 
+- `GIFHandler GIFHandler` — 
+
+- `GIF[] gifs` — 
+- `IMG[] images` — 
+- `OBJ[] objects` — 
+
+
+- `List<GameObject> SpawnedObjects` — 
+
 
 **Subclasses**
-- **HelpSection.classname**
+- **HelpSection.HelpMedia**
   
   **Description**<br/>
 
   **Properties**
+  - `string name` — 
 
-  **Constructors**
+
+
+- **HelpSection.GIF**
+  
+  **Description**<br/>
+
+  **Properties**
+  - `float PixelsPerUnit` — 
+  - `VideoClip GIFClip` — 
+
+
+
+- **HelpSection.IMG**
+  
+  **Description**<br/>
+
+  **Properties**
+  - `Sprite IMGSprite` — 
+
+
+
+- **HelpSection.OBJ**
+  
+  **Description**<br/>
+
+  **Properties**
+  - `RectTransform UIObject` — 
+
+
 
 **Methods**
+```cs
+GIF GetGIF(string name)
+```
+
+
+<br/>
+
+```cs
+IMG GetIMG(string name)
+```
+
+
+<br/>
+
+```cs
+OBJ GetOBJ(string name)
+```
+
+
+<br/><br/>
+
+```cs
+public void Setup()
+```
+
+
+<br/>
+
+```cs
+public void ScrollToTarget(RectTransform target)
+```
 
 ---
 

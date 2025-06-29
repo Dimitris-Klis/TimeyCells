@@ -7,26 +7,44 @@ using UnityEngine.UI;
 
 public class HelpSection : MonoBehaviour
 {
+    [Header("Debug")]
+    [ReadOnly] public bool ShouldSetup = true;
+    
+    [Space(20)]
+    [Header("References")]
+    [Space(0)]
+
+    [Header("--- Table of Contents")]
     [SerializeField] TableOfContents tableOfContents;
 
+    [Header("--- Main Section Headers")]
     [SerializeField] TMP_Text H1Text;
     [SerializeField] TMP_Text H2Text;
     [SerializeField] TMP_Text H3Text;
-    [SerializeField] TMP_Text NormalText;
     [Space]
+    [SerializeField] TMP_Text NormalText;
+
+    [Space(20)]
+    [Header("--- Preset UI Objects")]
     [SerializeField] Image UIImage;
     [SerializeField] GIFObject GifImage;
-    [Space]
+
+    [Space(20)]
+    [Header("--- UI References")]
+    [SerializeField] HelpLayoutGroup ContentLayoutGroup; // Special layout group for the help section.
+    [SerializeField] ScrollRect scrollRect;
+    [SerializeField] GIFHandler GIFHandler;
+
+    [Space(20)]
+    [Header("Predefined Objects")]
     [SerializeField] GIF[] gifs;
     [SerializeField] IMG[] images;
     [SerializeField] OBJ[] objects;
 
-    [SerializeField] List<GameObject> SpawnedObjects = new();
-    [SerializeField] HelpLayoutGroup ContentLayoutGroup; // This doesn't work! We need to implement a special layout group for the help section!
-    [SerializeField] ScrollRect scrollRect; // Assign your ScrollRect
-    [SerializeField] GIFHandler GIFHandler;
-    [Space]
-    [ReadOnly] public bool ShouldSetup = true;
+    [Space(20)]
+    [Header("Spawned Objects")]
+    List<GameObject> SpawnedObjects = new();
+
 
 
     [System.Serializable]
@@ -41,18 +59,23 @@ public class HelpSection : MonoBehaviour
         public float PixelsPerUnit;
         public VideoClip GIFClip;
     }
+
     [System.Serializable]
     class IMG : HelpMedia
     {
         public Sprite IMGSprite;
     }
+
     [System.Serializable]
     class OBJ : HelpMedia
     {
         public RectTransform UIObject;
     }
 
-    GIF FindGIF(string name)
+
+
+
+    GIF GetGIF(string name)
     {
         for (int i = 0; i < gifs.Length; i++)
         {
@@ -61,7 +84,8 @@ public class HelpSection : MonoBehaviour
         Debug.LogWarning($"Error: No GIF with name: '{name}' exists");
         return null;
     }
-    IMG FindIMG(string name)
+
+    IMG GetIMG(string name)
     {
         for (int i = 0; i < images.Length; i++)
         {
@@ -70,7 +94,8 @@ public class HelpSection : MonoBehaviour
         Debug.LogWarning($"Error: No IMG with name: '{name}' exists");
         return null;
     }
-    OBJ FindOBJ(string name)
+
+    OBJ GetOBJ(string name)
     {
         for (int i = 0; i < objects.Length; i++)
         {
@@ -81,18 +106,7 @@ public class HelpSection : MonoBehaviour
     }
     
 
-    public void ScrollToTarget(RectTransform target)
-    {
-        Canvas.ForceUpdateCanvases(); // Make sure layout is updated
-
-        // Convert the target position to the ScrollRect's content space
-        Vector2 contentPos = scrollRect.content.anchoredPosition;
-        Vector2 targetLocalPos = (Vector2)scrollRect.content.InverseTransformPoint(scrollRect.viewport.position) -
-                                 (Vector2)scrollRect.content.InverseTransformPoint(target.position);
-
-        // Update content position
-        scrollRect.content.anchoredPosition = contentPos + Vector2.up * (targetLocalPos.y- target.sizeDelta.y/2);
-    }
+    
 
     [ContextMenu("Setup Test")]
     public void Setup()
@@ -158,7 +172,7 @@ public class HelpSection : MonoBehaviour
                 }
 
                 Image newimg = Instantiate(UIImage, ContentLayoutGroup.transform);
-                Sprite sp = FindIMG(name).IMGSprite;
+                Sprite sp = GetIMG(name).IMGSprite;
                 newimg.sprite = sp;
                 newimg.rectTransform.sizeDelta = new Vector2(sp.texture.width, sp.texture.height) / (sp.pixelsPerUnit / 100);
                 ContentLayoutGroup.children.Add(newimg.rectTransform);
@@ -175,7 +189,7 @@ public class HelpSection : MonoBehaviour
 
                 // TO DO: INSTEAD OF RAW IMAGE, INSTANTIATE A GIF SCRIPT THAT LOADS THE VIDEO WHEN THE IMAGE IS IN VIEW.
                 GIFObject GifObj = Instantiate(GifImage, ContentLayoutGroup.transform);
-                GIF gif = FindGIF(name);
+                GIF gif = GetGIF(name);
                 GifObj.Clip = gif.GIFClip;
                 GifObj.RawSelf.rectTransform.sizeDelta = new Vector2(gif.GIFClip.width, gif.GIFClip.height) / (gif.PixelsPerUnit / 100);
                 GIFHandler.GIFObjects.Add(GifObj);
@@ -190,7 +204,7 @@ public class HelpSection : MonoBehaviour
                     if (currLine[j] == ']') break;
                     name += currLine[j];
                 }
-                RectTransform r = Instantiate(FindOBJ(name).UIObject, ContentLayoutGroup.transform);
+                RectTransform r = Instantiate(GetOBJ(name).UIObject, ContentLayoutGroup.transform);
                 ContentLayoutGroup.children.Add(r);
                 SpawnedObjects.Add(r.gameObject);
             }
@@ -281,5 +295,18 @@ public class HelpSection : MonoBehaviour
         SaveManager.instance.Stylizer.GetElements();
         SaveManager.instance.Stylizer.ApplyCurrentTheme();
         ShouldSetup = false;
+    }
+
+    public void ScrollToTarget(RectTransform target)
+    {
+        Canvas.ForceUpdateCanvases(); // Make sure layout is updated
+
+        // Convert the target position to the ScrollRect's content space
+        Vector2 contentPos = scrollRect.content.anchoredPosition;
+        Vector2 targetLocalPos = (Vector2)scrollRect.content.InverseTransformPoint(scrollRect.viewport.position) -
+                                 (Vector2)scrollRect.content.InverseTransformPoint(target.position);
+
+        // Update content position
+        scrollRect.content.anchoredPosition = contentPos + Vector2.up * (targetLocalPos.y - target.sizeDelta.y / 2);
     }
 }

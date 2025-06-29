@@ -6,8 +6,11 @@ using UnityEngine.EventSystems;
 public class DragHandle : MonoBehaviour, IDragHandler, IEndDragHandler
 {
     public DragHandleManager.SwapAxis SwapAxis;
+
     [HideInInspector] public Vector3 startPos;
     [HideInInspector] public int currIndex;
+
+
 
     public void OnDrag(PointerEventData eventData)
     {
@@ -36,11 +39,15 @@ public class DragHandle : MonoBehaviour, IDragHandler, IEndDragHandler
         }
     }
 
+
     public void OnEndDrag(PointerEventData eventData)
     {
         DragHandleManager.instance.ScrollViewManager.Dragging = false;
         transform.localPosition = startPos;
     }
+
+
+
 
     // This is used to call any other swapping functions (mainly for swapping the Timetable Grid's rows or columns)
     public virtual void OnSwapDragged(int IndexA, int IndexB)

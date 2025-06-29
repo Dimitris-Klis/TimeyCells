@@ -7,23 +7,34 @@ using UnityEngine;
 [ExecuteAlways]
 public class HelpLayoutGroup : MonoBehaviour
 {
+    [Header("Self Rect")]
     public RectTransform SelfRect;
-    [Space]
+
+    [Space(20)]
+    [Header("Properties")]
     public float Spacing;
     public float PaddingX = 5;
     public bool CenterY = true;
+
+    [Space(20)]
+    [Header("Children List")]
+    // Unity sucks at detecting children, especially when Destroy() is involved. Therefore, the children should be manually assigned, instead.
     public List<RectTransform> children = new();
+
+
 
     public void UpdateLayout()
     {
         StartCoroutine(Wait());
     }
+
     IEnumerator Wait()
     {
         Canvas.ForceUpdateCanvases();
         yield return new WaitForEndOfFrame();
         DelayedUpdateLayout();
     }
+
     public void DelayedUpdateLayout()
     {
         float wantedPos = 0;

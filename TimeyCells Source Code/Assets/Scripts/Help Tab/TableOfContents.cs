@@ -5,16 +5,27 @@ using UnityEngine.UI;
 
 public class TableOfContents : MonoBehaviour
 {
+    [Header("References")]
     public RectTransform SelfRect;
     [Space]
+    public ContentButton TabPrefab;
+    public HelpSection helpSection;
+
+    [Space(20)]
+    [Header("Properties")]
     [SerializeField] int H1Size = 150;
     [SerializeField] int H2Size = 120;
     [SerializeField] int H3Size = 110;
     [Space]
-    public float Spacing;
-    public ContentButton TabPrefab;
-    public HelpSection helpSection;
-    public bool CenterChildren;
+    [SerializeField] float Spacing;
+    [Space]
+    [SerializeField] bool CenterChildren;
+
+    [Space(20)]
+    [Header("Lists")]
+    public List<HeaderShortcut> headers = new List<HeaderShortcut>();
+    public List<ContentButton> buttons = new List<ContentButton>();
+
     public struct HeaderShortcut
     {
         public string name;
@@ -27,8 +38,9 @@ public class TableOfContents : MonoBehaviour
             wantedChild = _child;
         }
     }
-    public List<HeaderShortcut> headers = new List<HeaderShortcut>();
-    public List<ContentButton> buttons = new List<ContentButton>();
+    
+
+
     public void Setup()
     {
         for (int i = 0; i < buttons.Count; i++)
@@ -68,17 +80,16 @@ public class TableOfContents : MonoBehaviour
 
         UpdateLayout();
     }
+
+
+
+
     [ContextMenu("UpdateLayout")]
     public void UpdateLayout()
     {
         StartCoroutine(Wait());
     }
-    IEnumerator Wait()
-    {
-        Canvas.ForceUpdateCanvases();
-        yield return new WaitForEndOfFrame();
-        DelayedUpdateLayout();
-    }
+
     public void DelayedUpdateLayout()
     {
         float wantedPos = 0;
@@ -121,10 +132,18 @@ public class TableOfContents : MonoBehaviour
         SelfRect.sizeDelta = new(SelfRect.sizeDelta.x, Mathf.Abs(totalSize));
 
         if (!CenterChildren) return;
-        
+
         foreach (RectTransform child in transform)
         {
             child.localPosition += Vector3.up * totalSize / 2;
         }
     }
+
+    IEnumerator Wait()
+    {
+        Canvas.ForceUpdateCanvases();
+        yield return new WaitForEndOfFrame();
+        DelayedUpdateLayout();
+    }
+    
 }
