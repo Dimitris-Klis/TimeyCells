@@ -1,53 +1,128 @@
 # TimeyCells Source Code Documentation
 
 ## Table of Contents
-- 01: [Introduction](#introduction)
+- 01: [Overview](#overview)
 
-- 02: [Events, Event Types](#events-event-types)
-  - [Creating Event Types](#creating-event-types)
-  - [Editing Event Types](#editing-event-types)
-  - [Creating Events](#creating-events)
-  - [Editing Events](#editing-events)
+- 02: [Core Concepts](#core-concepts)
+  - [Events & Event Types](#events-event-types)
+  - [Timetable](#timetable)
+  - [Timetable Editing](#timetable-editing)
+  - [Manual Editing](#manual-editing)
+  - [Saving, Loading & Data Management](#saving-loading-data-management)
+  - [Sharing Features](#sharing-features)
+  - [UI & Input Validation](#ui-input-validation)
 
-- 03: [Editing your timetable](#editing-your-timetable)
-  - [Renaming your timetable](#renaming-your-timetable)
-  - [Adding/Deleting Columns & Multirows](#addingdeleting-columns--multirows)
-  - [Adding/Deleting Rows](#addingdeleting-rows)
-  - [Assigning events to your timetable](#assigning-events-to-your-timetable)
-  - [Swapping Columns](#swapping-columns)
-  - [Swapping Rows](#swapping-rows)
+- 03: [Script Breakdown & Unity Integration](#-script-breakdown-unity-intergration)
+  - [Common Patterns Across Scripts](#common-patterns-across-scripts)
+    - [Singletons](#singletons)
+    - [Unity's Attributes](#unity-s-attributes)
 
-- 04: [Manual Editing](#manual-editing)
-  - [Editing Weekdays](#editing-weekdays)
-  - [Editing Cells](#editing-cells)
-  - [Editing Labels](#editing-labels)
-  - [Temporary Overrides](#temporary-overrides)
-    - [Creating Temporary Weekdays](#creating-temporary-weekdays)
-    - [Creating Temporary Cells](#creating-temporary-cells)
-    - [Deleting Temporary Overrides](#deleting-temporary-overrides)
+  - [`Scripts/Events - Event Types`](#scripts-events-event-types)
+    - [EventTypeItem.cs](#eventtypeitem-cs)
+    - [EventItem.cs](#eventitem-cs)
+    - [EventItemOverride.cs](#eventitemoverride-cs)
+    - [EventManager.cs](#eventmanager-cs) -> DOCUMENT PROPERTIES!!!
+    - [EventCreator.cs](#eventcreator-cs) -> DOCUMENT PROPERTIES!!!
+    - [EventTypeCreator.cs](#eventtypecreator-cs) -> DOCUMENT PROPERTIES!!!
 
-- 05: [Saving, Loading & Creating Timetables](#saving-loading--creating-timetables)
-  - [Saving your work](#saving-your-work)
-  - [Loading a timetable](#loading-a-timetable)
-  - [Creating a new timetable](#creating-a-new-timetable)
+  - [`Scripts/Timetable`](#scripts-timetable)
+    - [TimetableCell.cs](#timetablecell-cs)
+    - [CellInfo.cs](#cellinfo-cs)
+    - [TimetableGrid.cs](#timetablegrid-cs)
+    - [ScrollZoom.cs](#scrollzoom-cs)
+    - [FreezeGrid.cs](#freezegrid-cs)
 
-- 06: [Copying & Pasting Data](#copying--pasting-data)
+  - [`Scripts/Time Management`](#scripts-time-management)
+    - [WeekDay.cs](#weekday-cs)
+    - [WeekDayObject.cs](#weekdayobject-cs)
+    - [TimeIndex.cs](#timeindex-cs)
+    - [TimeIndexObject.cs](#timeindexobject-cs)
+    - [DayTimeManager.cs](#daytimemanager-cs)
 
-- 07: [Backwards Compatibility](#backwards-compatibility)
+  - [`Scripts/Drag N Swap`](#scripts-drag-n-swap)
+    - [DragHandle.cs](#draghandle-cs)
+    - [TimeIndexDrag.cs](#timeindexdrag-cs)
+    - [WeekDayDrag.cs](#weekdaydrag-cs)
+    - [DragHandleManager.cs](#draghandlemanager-cs)
 
-- 08: [Sharing a Photo](#sharing-a-photo)
-  - [Sharing photos on Windows](#sharing-photos-on-windows)
-  - [Sharing photos on Android](#sharing-photos-on-android)
+  - [`Scripts/Help Tab`](#scripts-help-tab)
+    - [GIFObject.cs](#gifobject-cs)
+    - [GIFHandler.cs](#gifhandler-cs)
+    - [ContentButton.cs](#contentbutton-cs)
+    - [HelpLayoutGroup.cs](#helplayoutgroup-cs)
+    - [TableOfContents.cs](#tableofcontents-cs)
+    - [HelpSection.cs](#helpsection-cs)
 
-- 09: [Settings](#settings)
-  - [Time Format](#time-format)
-  - [Language](#language)
-  - [Themes](#themes)
+  -[`Scripts/Stylizing`](#scripts-stylizing)
+    - [ColorStylePreset.cs](#colorstylepreset-cs)
+    - [ColorStylizer.cs](#colorstylizer-cs)
+    - [PaletteObject.cs](#paletteobject-cs)
+    - [PaletteDropdown.cs](#palettedropdown-cs)
+    - [CustomPaletteLister.cs](#custompalettelister-cs)
+    - [PaletteCreator.cs](#palettecreator-cs)
 
-- 10: [Portable Mode (PC Only)](#portable-mode-pc-only)
+  -[`Scripts/Editors`](#scripts-editors)
+    - [TimetableEditor.cs](#timetableeditor-cs)
+    - [CellInfoEditor.cs](#cellinfoeditor-cs)
+    - [WeekdayEditor.cs](#weekdayeditor-cs)
+    - [LabelEditor.cs](#labeleditor-cs)
+    - [ColorEditor.cs](#coloreditor-cs)
+
+  -[`Scripts/Localization`](#scripts-localization)
+    - [TMPLocalizer.cs](#tmplocalizer-cs)
+    - [TMPDropdownLocalizer.cs](#tmpdropdownlocalizer-cs)
+    - [LocalizationSystem.cs](#localizationsystem-cs)
+
+  -[`Scripts/Layout Groups`](#scripts-layout-groups)
+    - [CustomLayoutGroup.cs](#customlayoutgroup-cs)
+    - [CenterAndFit.cs](#centerandfit-cs)
+    - [CustomGridLayoutGroup.cs](#customgridlayoutgroup-cs)
+
+  - [`Scripts/Saving`](#scripts-saving)
+    - [TimetableData.cs](#timetabledata-cs)
+    - [S_ProgramData.cs](#s-programdata-cs)
+    - [SettingsData.cs](#settingsdata-cs)
+    - [TimetableButton.cs](#timetablebutton-cs)
+    - [SaveManager.cs](#savemanager-cs)
+
+  - [`Scripts`](#scripts)
+    - [CopyPasteManager.cs](#copypastemanager-cs)
+    - [PhotoManager.cs](#photomanager-cs)
+    - [ConfirmationManager.cs](#confirmationmanager-cs)
+    - [QuitButton.cs](#quitbutton-cs)
+
+  - [`Scripts/Inspector Stuff`](#scripts-inspector-stuff)
+    - [CommentInformationNote.cs](#commentinformationnote-cs)
+    - [ReadOnlyAttribute.cs](#readonlyattribute-cs)
+    - [ReadOnlyDrawer.cs](#readonlydrawer-cs)
+  
+  - [`Scripts/Polish`](#scripts-polish)
+    - [InputFieldFixer.cs](#inputfieldfixer-cs)
+    - [TabHandler.cs](#tabhandler-cs)
+    - [VersionText.cs](#versiontext-cs)
+  
+  - [`Scripts/Polish/Animation Scripts`](#scripts-polish-animation-scripts)
+    - [CustomAnimator.cs](#customanimator-cs)
+    - [HamburgerButton.cs](#hamburgerbutton-cs)
+  
+  - [`TextMesh Pro/Validators`](#textmesh-pro-validators)
+    - [ValidatorBase.cs](#validatorbase-cs)
+    - [HexCodeValidator.cs](#hexcodevalidator-cs)
+    - [TimeValidator.cs](#timevalidator-cs)
+
+  - [`StreamingAssets`](#streamingassets)
+    - [CopyToClipboard.ps1](#copytoclipboard-ps1)
+    
+  - [`Plugins/Android`](#plugins-android)
+    - [FileProviderLib-release.aar](#fileproviderlib-release-aar)
+
+- 04: [Packages Used](#packages-used)
+  - [Unity Features](#unity-features)
+  - [Unity Packages](#unity-packages)
+  - [Libraries](#libraries)
 
 ## Overview
-TimeyCells is made up of around 60 scripts, with varying complexity — some are simple and help with animations or UI interactions, while others are full systems responsible for editing the timetable, saving data, copy-pasting, and more. The application was made with the Unity game engine, one of my favorite tools.
+TimeyCells is made up of 67 scripts, with varying complexity — some are simple and help with animations or UI interactions, while others are full systems responsible for editing the timetable, saving data, copy-pasting, and more. The application was made with the Unity game engine, one of my favorite tools.
 - **Most of the code** lives in `Assets/Scripts`.
 - **Text validation scripts** are in `Assets/TextMesh Pro/Validators` (3 scripts total). These are used with TMP_InputFields and are meant to prevent the user from typing illegal characters.
 - **Extra assets** are in `Assets/StreamingAssets`:
@@ -204,6 +279,7 @@ UI interaction is handled by Unity. I configured which functions are called and 
   Contains a function to exit the app.
 
 ## Script Breakdown & Unity Integration
+
 ### Common Patterns Across Scripts
 Many scripts share similar functions or code, so I’ll explain key patterns here:
 
@@ -347,6 +423,23 @@ Used by CellInfo to store overrides and temporary overrides.
 - Creating and deleting events/event types
 - Updating the UI graphics associated with each event and event type
 
+**Properties**<br/>
+- `static EventManager Instance` — Singleton reference to the EventManager.
+- `CellInfoEditor CellInfoEditor` — Reference to the cell info editor for linking events with cell data.
+- `EventCreator EventCreator` — Reference to the component responsible for event creation/editing UI.
+- `EventItem DefaultNewEvent` — Template used when creating a new event.
+- `EventTypeCreator EventTypeCreator` — Reference to the component responsible for event type creation/editing UI.
+- `EventTypeItem DefaultNewEventType` — Template used when creating a new event type.
+- `List<EventTypeItem> EventTypes` — All available event types.
+- `List<EventItem> Events` — All created events.
+- `TimetableCell CellPrefab` — UI prefab used to visually represent an event or event type.
+- `Transform EventsParent` — Parent transform for event preview UI elements.
+- `Transform EventSelectorsParent` — Parent transform for event selector buttons in the UI.
+- `List<TimetableCell> EventPreviews` — Instantiated cells showing a preview of each event.
+- `List<TimetableCell> EventSelectorPreviews` — Instantiated selector buttons for choosing events.
+- `Transform EventTypesParent` — Parent transform for event type preview cells.
+- `List<TimetableCell> EventTypePreviews` — Instantiated previews of all event types.
+
 **Methods**
 ```cs
 public void  InitializeLists()
@@ -446,6 +539,15 @@ void SetButton(Button b, int id, bool EventType)
 This script allows the user to create and edit events.
 
 **Properties**
+- `int IDToModify` — The ID of the event currently being edited; negative if creating a new event.
+- `TMP_Text TitleText` — The UI text element showing the current overlay's title.
+- `TimetableCell PreviewCell` — The live preview cell used to reflect changes during editing.
+- `TMP_InputField EventNameInput` — Input field for the event’s name.
+- `TMP_InputField Info1Input` — Input field for the first line of additional info.
+- `TMP_InputField Info2Input` — Input field for the second line of additional info.
+- `TMP_Dropdown EventTypeDropdown` — Dropdown menu for selecting the event’s type.
+- `Toggle FavouriteToggle` — Toggle for marking the event as a favorite.
+- `Button DeleteButton` — Button used to delete the event, if it already exists.
 
 **Methods**
 
@@ -511,6 +613,23 @@ Deletes the event. If confirm is false, a confirmation screen will appear to ens
 
 **Description**<br/>
 This script allows the user to create and edit event types.
+
+**Properties**
+- `int IDToModify` — The ID of the event type currently being edited. If negative, a new event type is being created. If zero, the default type is being edited (some fields are locked).
+
+
+- `TMP_Text TitleText` — A UI text element that displays the title of the event type creator overlay, such as "Edit Event Type" or "Create Event Type", depending on the mode.
+
+- `TimetableCell PreviewCell` — A live preview element showing how the event type will look, updating in real time as the user changes the name or colors.
+
+
+- `TMP_InputField EventTypeNameInput` — The input field where users enter or edit the name of the event type.
+
+- `Image ChangeTextColor` — A UI element representing the current text color of the event type. Clicking it opens the color editor to change the text color.
+
+- `Image ChangeBackgroundColor` — A UI element representing the background color of the event type. Clicking it opens the color editor to change the background color.
+
+- `Button DeleteButton` — The button used to delete an existing event type. It is disabled when editing the default event type or creating a new one.
 
 **Methods**
 ```cs
@@ -995,7 +1114,6 @@ Called once per frame. Dynamically updates the frozen row or column's position, 
 Represents a row in the timetable. A single row can be shared across multiple days of the week.
 
 **Properties**
-
 - `uint Days` — A bitmask representing which days the row is active. Values are read in binary (max 127) to allow multiple day combinations.
 
 - `string DayName` — The label/name of the row.
@@ -1044,6 +1162,7 @@ The UI representation of a WeekDay.
 #### TimeIndex.cs
 **Description**<br/>
 Stores configuration for column headers (labels) in the timetable.
+
 **Properties**
 - `bool IsCustomLabel` —  Whether the label uses custom text.
 - `bool CountAsIndex` —  Whether the label should still be considered an index.
@@ -1428,234 +1547,244 @@ Calculates the closest index in the list of drag handles based on the current dr
 #### GIFObject.cs
 
 **Description**<br/>
+A lightweight MonoBehaviour container used to display a video clip (originally a GIF) using a `RawImage`. Serves as the display surface for animated help content.
 
 **Properties**
-- `RawImage RawSelf` — 
-- `VideoClip Clip` — 
+- `RawImage RawSelf` — The UI element used to display the rendered video frame.
+- `VideoClip Clip` — he video clip (in .mp4 format) that will be shown as an animated help "GIF".
 
 ---
 
 #### GIFHandler.cs
 
 **Description**<br/>
-Plays up to 3 videos in view at once in the canvas. Used in the help section to display the gifs. Although Unity doesn't support gifs, the mp4 files used were originally gifs, hence the name 'GIFHandler'.
+Controls playback of help section videos in a performant way. Because Unity does not natively support GIFs, .mp4 clips are used. The system ensures that only videos currently visible in the viewport are played. Up to three simultaneous video players are supported to manage rendering efficiently.
 
 **Properties**
-- `RectTransform viewport` — 
+- `RectTransform viewport` — The visible region of the scrollable UI where the GIFObjects are checked for visibility.
 
-- `VideoPlayer[] videoPlayers` — 
-- `List<GIFObject> GIFObjects` — 
+- `VideoPlayer[] videoPlayers` — Pool of reusable `VideoPlayer` components used to play videos.
+- `List<GIFObject> GIFObjects` — List of all GIF objects that may be shown on screen.
 
-- `UnityEvent[] onVideoPrepareEvents` — 
+- `UnityEvent[] onVideoPrepareEvents` — Internal array of UnityEvents to manage player ready callbacks.
 
-- `Dictionary<GIFObject, VideoPlayer> ActiveGIFs` — 
+- `Dictionary<GIFObject, VideoPlayer> ActiveGIFs` — Tracks currently playing GIFObjects and their associated `VideoPlayer`.
 
 **Methods**
 ```cs
 private void Start()
 ```
-
+Initializes the event listeners for all `VideoPlayer` instances so they can trigger playback once a video is prepared.
 
 <br/>
 
 ```cs
 void Update()
 ```
-
+Called once per frame. Checks which `GIFObjects` are visible in the `viewport`, stops playback and clears resources for out-of-view clips, and assigns videos to those now visible.
 
 <br/><br/>
 
 ```cs
 public bool VisibleGIF(RectTransform child)
 ```
-
+Determines if a given `RectTransform` (child) is currently within the vertical bounds of the `viewport`.
 
 <br/>
 
 ```cs
 void AssignVideoToGIF(GIFObject gif)
 ```
+Assigns an available `VideoPlayer` to the specified `GIFObject`. Prepares and plays the video, and assigns the output to the object's `RawImage`.
 
 ---
 
 #### ContentButton.cs
 
 **Description**<br/>
+A simple component that represents a clickable UI button within the help section's table of contents. Displays a text label and handles user interaction to trigger navigation.
 
 **Properties**
-- `RectTransform selfRect` — 
+- `RectTransform selfRect` — The UI transform used for positioning and sizing the button within the layout.
 
-- `Button button` — 
-- `TMP_Text text` — 
-
----
-
-#### HelpLayoutGroup.cs
-
-**Description**<br/>
-
-**Properties**
-- `RectTransform SelfRect` — 
-
-- `float Spacing` — 
-- `float PaddingX` — 
-- `bool CenterY` — 
-
-
-- `List<RectTransform> children` — 
-
-**Methods**
-```cs
-public void UpdateLayout()
-```
-
-
-<br/>
-
-```cs
-IEnumerator Wait()
-```
-
-
-<br/>
-
-```cs
-public void DelayedUpdateLayout()
-```
-
+- `Button button` — The underlying Unity UI button component that detects and handles user clicks.
+- `TMP_Text text` — The text label displaying the title and format of the header (H1, H2, H3) in the table of contents.
 
 ---
 
 #### TableOfContents.cs
 
 **Description**<br/>
+Dynamically generates a navigable table of contents UI based on provided headers. Each header becomes a button, which scrolls the help section to the corresponding content. Supports different formatting levels and customizable layout settings.
 
 **Properties**
-- `RectTransform SelfRect` — 
+- `RectTransform SelfRect` — The root UI element that contains all the content buttons and defines the overall bounds of the table of contents.
 
-- `ContentButton TabPrefab` — 
-- `HelpSection helpSection` — 
+- `ContentButton TabPrefab` — The prefab used to instantiate each button in the table of contents.
+- `HelpSection helpSection` — The component that manages scrolling to a specific section of the help content when a button is clicked.
 
 
-- `int H1Size` — 
-- `int H2Size` — 
-- `int H3Size` — 
-- `float Spacing` — 
-- `bool CenterChildren` — 
+- `int H1Size` — The text size percentage for first-level headers (e.g., section titles).
+- `int H2Size` — The text size percentage for second-level headers (e.g., subsections).
+- `int H3Size` — The text size percentage for third-level headers (e.g., nested items).
+- `float Spacing` — The vertical spacing between buttons in the layout.
+- `bool CenterChildren` — Whether to vertically center all child buttons within the container.
 
-- `List<HeaderShortcut> headers` — 
-- `List<ContentButton> buttons` — 
+- `List<HeaderShortcut> headers` — The list of headers to include in the table of contents, each paired with a UI target.
+- `List<ContentButton> buttons` — Internally managed list of instantiated content buttons corresponding to the headers.
 
 **Structs**
 - **HelpSection.HeaderShortcut**
   
   **Description**<br/>
-  A useful struct.
+  A lightweight struct that links a header's name, level, and its associated UI element to scroll to.
 
   **Properties**
-  - `string name` — 
-  - `int level` — 
-  - `RectTransform wantedChild` — 
+  - `string name` — The display name of the header.
+  - `int level` — The nesting level (0 = top-level, 1 = sub, 2+ = nested).
+  - `RectTransform wantedChild` — The UI transform to scroll to when the header is clicked.
 
   **Constructors**
-  - `public HeaderShortcut(string _name, int _level, RectTransform _child)` — 
+  - `public HeaderShortcut(string _name, int _level, RectTransform _child)` — Creates a new header shortcut with the given name, level, and associated UI element.
 
 **Methods**
 ```cs
 public void Setup()
 ```
-
+Builds the table of contents by instantiating buttons for each header in `headers`. Applies visual formatting based on header level and assigns click listeners to scroll to the correct section.
 
 <br/>
 
 ```cs
 public void UpdateLayout()
 ```
-
+Triggers a coroutine that recalculates and repositions all buttons in the layout to ensure proper spacing and alignment.
 
 <br/>
 
 ```cs
 public void DelayedUpdateLayout()
 ```
-
+Calculates the vertical positioning of each button in the list and optionally centers them in the container. Also adjusts the container's height to fit the content.
 
 <br/>
 
 ```cs
 IEnumerator Wait()
 ```
+Waits until the end of the current frame to ensure the canvas layout is updated before recalculating the button positions. Prevents layout inconsistencies.
 
+---
+
+#### HelpLayoutGroup.cs
+
+**Description**<br/>
+A custom layout group that vertically arranges UI elements (RectTransforms) with consistent spacing and optional horizontal centering. Designed for dynamic or manually managed children where Unity's built-in layout components fall short.
+
+**Properties**
+- `RectTransform SelfRect` — The main RectTransform representing this layout group.
+
+- `float Spacing` — Vertical space between each child element.
+- `float PaddingX` — Extra horizontal padding applied when child width is smaller than the layout group.
+- `bool CenterY` — If true, vertically centers all children within the group.
+
+
+- `List<RectTransform> children` — A manually managed list of child RectTransforms to layout.
+
+**Methods**
+```cs
+public void UpdateLayout()
+```
+Starts the coroutine that will update the layout on the next frame, after canvas updates.
+
+<br/>
+
+```cs
+IEnumerator Wait()
+```
+Waits until the end of frame to ensure all UI changes are complete, then triggers the actual layout logic.
+
+<br/>
+
+```cs
+public void DelayedUpdateLayout()
+```
+Performs the layout update: positions children vertically with spacing, optionally centers them horizontally and vertically, and resizes the layout group to fit content height.
 
 ---
 
 #### HelpSection.cs
 
 **Description**<br/>
+A modular help/documentation renderer that parses lightweight markdown-like text into styled Unity UI elements. Supports custom headers, text formatting, inline media, and a dynamic table of contents. Acts as the central controller for rendering and managing help content.
 
 **Properties**
-- `bool ShouldSetup` — 
+- `bool ShouldSetup` — Determines if the help section should be re-rendered (usually only true once).
 
 
-- `TableOfContents tableOfContents` — 
+- `TableOfContents tableOfContents` — The reference to the table of contents manager that mirrors the document structure.
 
-- `TMP_Text H1Text` — 
-- `TMP_Text H2Text` — 
-- `TMP_Text H3Text` — 
+- `TMP_Text H1Text` — Preset template for top-level headers (`# Header`).
+- `TMP_Text H2Text` — Preset template for second-level headers (`## Header`).
+- `TMP_Text H3Text` — Preset template for third-level headers (`### Header`).
 
-- `TMP_Text NormalText` — 
-
-
-- `Image UIImage`
-- `GIFObject GifImage`
-
-- `HelpLayoutGroup ContentLayoutGroup` — 
-- `ScrollRect scrollRect` — 
-- `GIFHandler GIFHandler` — 
-
-- `GIF[] gifs` — 
-- `IMG[] images` — 
-- `OBJ[] objects` — 
+- `TMP_Text NormalText` — Preset template for normal body text.
 
 
-- `List<GameObject> SpawnedObjects` — 
+- `Image UIImage` — Template used to instantiate static images.
+- `GIFObject GifImage` — Template used to instantiate animated GIFs.
+
+- `HelpLayoutGroup ContentLayoutGroup` — Custom layout group handling vertical spacing and alignment.
+- `ScrollRect scrollRect` — The main scrollable area for the help content.
+- `GIFHandler GIFHandler` — Manages playing/stopping of visible GIFs.
+
+- `GIF[] gifs` — Predefined collection of named GIF assets.
+- `IMG[] images` — Predefined collection of named image assets.
+- `OBJ[] objects` — Predefined collection of named UI prefab objects.
+
+
+- `List<GameObject> SpawnedObjects` — List of all dynamically created UI elements (for cleanup/resetting).
 
 
 **Subclasses**
 - **HelpSection.HelpMedia**
   
   **Description**<br/>
+  Base class for media objects that can be referenced by name.
 
   **Properties**
-  - `string name` — 
+  - `string name` — The unique identifier for the media element.
 
 
 
 - **HelpSection.GIF**
   
   **Description**<br/>
+  Represents a video-based animated GIF element.
 
   **Properties**
-  - `float PixelsPerUnit` — 
-  - `VideoClip GIFClip` — 
+  - `float PixelsPerUnit` — The scaling factor used to size the GIF based on resolution.
+  - `VideoClip GIFClip` — The video file used as the animated content.
 
 
 
 - **HelpSection.IMG**
   
   **Description**<br/>
+  Represents a static image asset.
 
   **Properties**
-  - `Sprite IMGSprite` — 
+  - `Sprite IMGSprite` — The actual sprite used in the UI.
 
 
 
 - **HelpSection.OBJ**
   
   **Description**<br/>
+  Represents a reusable UI prefab object.
 
   **Properties**
-  - `RectTransform UIObject` — 
+  - `RectTransform UIObject` — The prefab object’s RectTransform to instantiate.
 
 
 
@@ -1663,34 +1792,35 @@ IEnumerator Wait()
 ```cs
 GIF GetGIF(string name)
 ```
-
+Retrieves a `GIF` asset by its name. Logs a warning if the name does not exist.
 
 <br/>
 
 ```cs
 IMG GetIMG(string name)
 ```
-
+Retrieves an `IMG` asset by its name. Logs a warning if the name does not exist.
 
 <br/>
 
 ```cs
 OBJ GetOBJ(string name)
 ```
-
+Retrieves an `OBJ` asset by its name. Logs a warning if the name does not exist.
 
 <br/><br/>
 
 ```cs
 public void Setup()
 ```
-
+Parses and renders the help text using lightweight markdown. Dynamically spawns header and body elements, inserts images, GIFs, and objects, populates the Table of Contents, and applies the current theme.
 
 <br/>
 
 ```cs
 public void ScrollToTarget(RectTransform target)
 ```
+Scrolls the `ScrollRect` to the specified target element, centering it vertically in the viewport.
 
 ---
 
@@ -3645,4 +3775,4 @@ Android AAR library that provides `FileProvider` functionality, enabling secure 
 - Visual Studio Editor
 
 ### Libraries
-- TextMeshPro
+- TextMeshPro — Located in `Assets/TextMesh Pro`. Used to display UI related to text.

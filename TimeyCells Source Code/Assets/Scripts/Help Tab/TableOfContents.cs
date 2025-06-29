@@ -26,11 +26,16 @@ public class TableOfContents : MonoBehaviour
     public List<HeaderShortcut> headers = new List<HeaderShortcut>();
     public List<ContentButton> buttons = new List<ContentButton>();
 
+
+
     public struct HeaderShortcut
     {
         public string name;
         public int level;
         public RectTransform wantedChild;
+
+
+
         public HeaderShortcut(string _name, int _level, RectTransform _child)
         {
             name = _name;
@@ -39,6 +44,7 @@ public class TableOfContents : MonoBehaviour
         }
     }
     
+
 
 
     public void Setup()
@@ -145,5 +151,4 @@ public class TableOfContents : MonoBehaviour
         yield return new WaitForEndOfFrame();
         DelayedUpdateLayout();
     }
-    
 }

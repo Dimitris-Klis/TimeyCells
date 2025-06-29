@@ -362,5 +362,4 @@ public class EventManager : MonoBehaviour
                 EventTypeCreator.OpenCreator(id); 
             });
     }
-    
 }

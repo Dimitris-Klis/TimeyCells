@@ -13,5 +13,4 @@ public class ContentButton : MonoBehaviour
     [Header("UI Components")]
     public Button button;
     public TMP_Text text;
-    
 }

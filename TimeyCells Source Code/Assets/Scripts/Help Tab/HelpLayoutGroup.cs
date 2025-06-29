@@ -62,6 +62,8 @@ public class HelpLayoutGroup : MonoBehaviour
             
         }
 
+
+
         // Centering
 
         float totalSize = 0;
@@ -71,6 +73,8 @@ public class HelpLayoutGroup : MonoBehaviour
         }
         totalSize += Spacing * (transform.childCount - 1);
 
+
+        
         // Fit to content
 
         SelfRect.sizeDelta = new(SelfRect.sizeDelta.x, totalSize);

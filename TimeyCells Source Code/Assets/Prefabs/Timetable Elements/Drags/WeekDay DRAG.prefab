@@ -263,7 +263,7 @@ GameObject:
   - component: {fileID: 7279278000174985232}
   - component: {fileID: 1355503705280219020}
   m_Layer: 5
-  m_Name: WeekDay Object DRAG
+  m_Name: WeekDay DRAG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
