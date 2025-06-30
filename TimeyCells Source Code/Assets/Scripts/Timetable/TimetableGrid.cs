@@ -261,7 +261,7 @@ public class TimetableGrid : MonoBehaviour
         wantedscale.x = Columns * CellSize.x + (Columns - 1) * Spacing.x;
         wantedscale.x += Padding.x;
 
-        wantedscale.y = (Rows+1) * CellSize.y + (Rows-1) * Spacing.y;
+        wantedscale.y = (Rows) * CellSize.y + (Rows-1) * Spacing.y;
         wantedscale.y += Padding.y;
 
         rect.sizeDelta = wantedscale;
