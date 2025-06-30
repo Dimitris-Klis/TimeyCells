@@ -119,22 +119,24 @@ public class ScrollZoom : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
         Table.transform.SetParent(Viewport);
 
-        // Since the height of the table is constant, we add this to scroll quickly to the top or bottom.
-        if (mousepos.y < 10) ScrollHandler.verticalNormalizedPosition = 0;
-        else if (mousepos.y > 200) ScrollHandler.verticalNormalizedPosition = 1;
+        
+        
+        // When scrolling, we want to nudge the content towards the direction we scroll towards.
+        Vector2 contentDimensions = new (Table.rect.width * Table.localScale.x, Table.rect.height * Table.localScale.y);
+        Vector2 viewportDimensions = new(Viewport.rect.width, Viewport.rect.height);
 
-        // When scrolling left/right, we also want to nudge the content towards that direction.
-        float contentWidth = Table.rect.width * Table.localScale.x;
-        float viewportWidth = Viewport.rect.width;
-
-        float normalizedPerPixel = 1f / (contentWidth - viewportWidth);
-        float normalizedNudge = EdgeNudge * normalizedPerPixel;
+        Vector2 normalizedPerPixel = new(1f / (contentDimensions.x - viewportDimensions.x), 1f / (contentDimensions.y - viewportDimensions.y));
+        Vector2 normalizedNudge = EdgeNudge * normalizedPerPixel;
 
 
-        if (mousepos.x < -220) ScrollHandler.horizontalNormalizedPosition -= normalizedNudge;
-        else if (mousepos.x > 220) ScrollHandler.horizontalNormalizedPosition += normalizedNudge;
+        if (mousepos.x < -220) ScrollHandler.horizontalNormalizedPosition -= normalizedNudge.x;
+        else if (mousepos.x > 220) ScrollHandler.horizontalNormalizedPosition += normalizedNudge.x;
+
+        if (mousepos.y < 10) ScrollHandler.verticalNormalizedPosition -= normalizedNudge.y;
+        else if (mousepos.y > 200) ScrollHandler.verticalNormalizedPosition += normalizedNudge.y;
 
         ScrollHandler.horizontalNormalizedPosition = Mathf.Clamp01(ScrollHandler.horizontalNormalizedPosition);
+        ScrollHandler.verticalNormalizedPosition = Mathf.Clamp01(ScrollHandler.verticalNormalizedPosition);
     }
 
     void HandlePinchZoom()

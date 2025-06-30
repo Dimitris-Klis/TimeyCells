@@ -1022,7 +1022,7 @@ Allows the user to zoom and pan their timetable using mouse wheel scrolling on d
 - `float MinScale` — Minimum zoom level.
 - `float MaxScale` — Maximum zoom level.
 - `float ScrollSensitivity` — How quickly zoom changes per scroll or pinch.
-- `float EdgeNudge` — The amount to nudge the horizontal scroll position when zooming near the left or right edges of the viewport.
+- `float EdgeNudge` — The amount to nudge the scroll position when zooming near the edges of the viewport.
 
 
 - `float DragSpeed` — Speed at which the scroll view auto-scrolls when dragging near edges.
@@ -1076,7 +1076,7 @@ Handles zooming the `Table` based on mouse wheel input when the mouse is over th
 - Applies zoom scale clamping between `MinScale` and `MaxScale`.
 - Restores the parent of `Table` back to the `Viewport`.
 - Automatically scrolls vertically to top or bottom if the cursor is near those edges.
-- Nudges horizontal scroll when zooming near left/right edges based on `EdgeNudge`, adapting to the current zoomed content width.
+- Nudges scroll when zooming near edges based on `EdgeNudge`, adapting to the current zoomed content width/height.
 
 <br/>
 

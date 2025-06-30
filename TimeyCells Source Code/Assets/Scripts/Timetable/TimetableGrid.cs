@@ -64,9 +64,6 @@ public class TimetableGrid : MonoBehaviour
     public List<Button> ColumnButtons = new();
     public List<Button> RowButtons = new();
 
-    Vector2 PivotFix = Vector2.up;
-    Vector2 originalPivot;
-
 
     private void Start()
     {
@@ -81,9 +78,6 @@ public class TimetableGrid : MonoBehaviour
     {
         if (rect == null) rect = GetComponent<RectTransform>();
 
-        originalPivot = rect.pivot;
-        rect.pivot = PivotFix;
-
         ClearAllCells();
 
         for (int x = 0; x < Columns; x++)
@@ -93,8 +87,8 @@ public class TimetableGrid : MonoBehaviour
             // ^1 is basically ColumnsList.Count - 1
             UpdateColumnTransform(ColumnsList[^1], ColumnsList.Count - 1);
         }
+
         AddAllOffsets();
-        rect.pivot = originalPivot;
 
         FitToContent();
     }
@@ -281,8 +275,14 @@ public class TimetableGrid : MonoBehaviour
         if (!Center) return Vector3.zero;
         Vector3 offset = Vector3.zero;
 
-        offset.x = Mathf.Abs(rect.sizeDelta.x - (Columns * CellSize.x + (Columns - 1) * Spacing.x)) / 2;
-        offset.y = Mathf.Abs(rect.sizeDelta.y - (Rows * CellSize.y + (Rows - 1) * Spacing.y)) / -2;
+        offset.x -= Columns * CellSize.x;
+        offset.x -= (Columns-1) * Spacing.x;
+        offset.x /= 2;
+
+        offset.y += Rows * CellSize.y;
+        offset.y += (Rows - 1) * Spacing.y;
+        offset.y /= 2;
+
         return offset;
     }
     
@@ -404,9 +404,6 @@ public class TimetableGrid : MonoBehaviour
 
     public void AddColumn(int columnIndex)
     {
-        originalPivot = rect.pivot;
-        rect.pivot = PivotFix;
-
         RemoveAllOffsets();
 
         Columns++;
@@ -423,7 +420,6 @@ public class TimetableGrid : MonoBehaviour
 
         AddAllOffsets();
 
-        rect.pivot = originalPivot;
         if (TimetableEditor.instance.Editing)
             SpawnAddColumnButtons(false);
 
@@ -435,10 +431,6 @@ public class TimetableGrid : MonoBehaviour
 
     public void AddMultirowColumn(int columnIndex)
     {
-        
-        originalPivot = rect.pivot;
-        rect.pivot = PivotFix;
-
         RemoveAllOffsets();
 
         Columns++;
@@ -457,7 +449,6 @@ public class TimetableGrid : MonoBehaviour
 
         AddAllOffsets();
 
-        rect.pivot = originalPivot;
         if (TimetableEditor.instance.Editing)
             SpawnAddColumnButtons(true);
         UpdateAllCells();
@@ -467,10 +458,6 @@ public class TimetableGrid : MonoBehaviour
     
     public void RemoveColumn(int columnIndex)
     {
-        
-        originalPivot = rect.pivot;
-        rect.pivot = PivotFix;
-
         RemoveAllOffsets();
         if (columnIndex < 0 || columnIndex >= ColumnsList.Count)
         {
@@ -501,7 +488,6 @@ public class TimetableGrid : MonoBehaviour
         UpdateAllTransforms(columnIndex);
         AddAllOffsets();
 
-        rect.pivot = originalPivot;
         if (TimetableEditor.instance.Editing)
             SpawnDeleteColumnButtons();
 
@@ -516,7 +502,7 @@ public class TimetableGrid : MonoBehaviour
         Column columnA = ColumnsList[IndexA];
         ColumnsList[IndexA] = ColumnsList[IndexB];
         ColumnsList[IndexB] = columnA;
-        rect.pivot = PivotFix;
+
         RemoveAllOffsets();
         if (!ColumnsList[IndexA].IsMultirow)
             UpdateColumnTransform(ColumnsList[IndexA], IndexA);
@@ -527,7 +513,6 @@ public class TimetableGrid : MonoBehaviour
         else
             UpdateMultirowTransform(IndexB);
         AddAllOffsets();
-        rect.pivot = originalPivot;
 
         // Swapping labels
         DayTimeManager.instance.SwapIndexLabels(IndexA, IndexB);
@@ -545,9 +530,6 @@ public class TimetableGrid : MonoBehaviour
 
     public void AddRow(int rowIndex)
     {
-        originalPivot = rect.pivot;
-        rect.pivot = PivotFix;
-
         RemoveAllOffsets();
 
         Rows++;
@@ -561,7 +543,6 @@ public class TimetableGrid : MonoBehaviour
         UpdateAllTransforms(0);
         AddAllOffsets();
 
-        rect.pivot = originalPivot;
 
         if (TimetableEditor.instance.Editing)
             SpawnAddRowButtons();
@@ -571,9 +552,6 @@ public class TimetableGrid : MonoBehaviour
 
     public void RemoveRow(int rowIndex)
     {
-        originalPivot = rect.pivot;
-        rect.pivot = PivotFix;
-
         RemoveAllOffsets();
         
         Rows--;
@@ -595,8 +573,6 @@ public class TimetableGrid : MonoBehaviour
         UpdateAllTransforms(0);
         AddAllOffsets();
 
-        rect.pivot = originalPivot;
-
         if (TimetableEditor.instance.Editing)
             SpawnDeleteRowButtons();
         UpdateAllCells();
@@ -605,7 +581,6 @@ public class TimetableGrid : MonoBehaviour
     
     public void SwapRows(int IndexA, int IndexB)
     {
-        rect.pivot = PivotFix;
         RemoveAllOffsets();
         for (int i = 0; i < ColumnsList.Count; i++)
         {
@@ -618,7 +593,6 @@ public class TimetableGrid : MonoBehaviour
             UpdateColumnTransform(ColumnsList[i], i);
         }
         AddAllOffsets();
-        rect.pivot = originalPivot;
 
         // Swapping weekdays
         DayTimeManager.instance.SwapWeekDays(IndexA, IndexB);

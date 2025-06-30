@@ -485,6 +485,7 @@ public class SaveManager : MonoBehaviour
         {
             data.EventTypes.list.Add(new(EventManager.EventTypes[i]));
         }
+
         data.Events.list = new(EventManager.Events);
         data.Events.list.RemoveAt(0); // Removing the default event made by the EventManager.
 
@@ -602,6 +603,7 @@ public class SaveManager : MonoBehaviour
 
         TimetableEditor.instance.Setup();
         DayTimeManager.Grid.UpdateAllCells();
+
         DayTimeManager.Highlight.transform.SetAsLastSibling();
         DayTimeManager.UpdateWeekDays();
         DayTimeManager.UpdateTimeIndexes();

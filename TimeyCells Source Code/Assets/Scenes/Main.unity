@@ -13315,7 +13315,7 @@ MonoBehaviour:
   MaxColumns: 40
   Center: 1
   FitContent: 1
-  Padding: {x: 0, y: 0}
+  Padding: {x: 5, y: 5}
   DebugGrid: 0
   TimetableCellPrefab: {fileID: 6856377578852616562, guid: 57ecb6090c6b215469ee06694cd12bd9, type: 3}
   AddColButtonPrefab: {fileID: 8481199784081230204, guid: 04e01c86542c8cb46aed13a243dad02d, type: 3}
@@ -13326,70 +13326,7 @@ MonoBehaviour:
   RemoveRowButtonPrefab: {fileID: 4981558412892410615, guid: 74c9e7a3ad0dc0343b548a5640fee6b8, type: 3}
   RowButtonParent: {fileID: 308165768}
   RowButtonsOffset: {x: -20, y: -0}
-  ColumnsList:
-  - IsMultirow: 0
-    Children:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-  - IsMultirow: 0
-    Children:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-  - IsMultirow: 0
-    Children:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-  - IsMultirow: 0
-    Children:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-  - IsMultirow: 0
-    Children:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-  - IsMultirow: 0
-    Children:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-  - IsMultirow: 0
-    Children:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-  - IsMultirow: 0
-    Children:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-  - IsMultirow: 0
-    Children:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
+  ColumnsList: []
   ColumnButtons: []
   RowButtons: []
 --- !u!1001 &402503606
