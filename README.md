@@ -1,8 +1,6 @@
 # TimeyCells
 ### By Dimitrios Klis (aka. Jimm)
 
-TimeyCells is a new version of my previous app, School Timetable. It was built from the ground up with one goal in mind: Making organization as dynamic and customizable as possible.
-
 # Download
 Grab the latest version of **TimeyCells** here:<br/>
 [![Latest Release](https://img.shields.io/github/v/release/Dimitris-Klis/TimeyCells)](https://github.com/Dimitris-Klis/TimeyCells/releases/latest)
@@ -82,8 +80,7 @@ To edit an event type, simply click the one you want to edit. You can also edit 
 ### Creating Events:
 Events have 5 properties:
 - **Name:** The name of the event.
-- **Info1:** Meant for extra details like the place in which the event will happen, or the name of the person organizing the event.
-- **Info2:** Also meant for extra details.
+- **Info1 & Info2:** Optional fields you can use to store extra information about the event — like the location, instructor name, or any other notes you find useful.
 - **Event Type:** Meant to categorize your event, which helps with figuring out how important the lesson/event is.
 - **Favourite:** A simple toggle to classify an event as something you really enjoy.<br/>
 ![06  Event Creation 15fps](https://github.com/user-attachments/assets/f7e6c000-fd54-4118-a73d-d1ffc7c583f7)
@@ -226,8 +223,7 @@ This button will activate android's share sheet, which will look something like 
 You can set the time to a 24 hour format with this toggle:<br/>
 ![24h Toggle](https://github.com/user-attachments/assets/59c68a20-9a86-44e3-8db7-1e9e9b19713d)
 <br/><br/>
-If you're an English user, you may want your time to look like:<br/>
-`12.00` instead of `12:00`. There's a toggle for that too:<br/>
+Additionally, you can select the punctuation style with the toggle below — either a colon (`12:00`) or a dot (`12.00`) as the time separator.<br/>
 ![English Toggle](https://github.com/user-attachments/assets/566cc935-3f1e-4c51-b225-89391dd291f6)
 <br/><br/>
 ### Language:

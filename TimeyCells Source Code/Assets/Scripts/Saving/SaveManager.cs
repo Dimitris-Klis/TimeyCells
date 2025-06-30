@@ -697,7 +697,7 @@ public class SaveManager : MonoBehaviour
 
         SettingsData settingsData = new SettingsData();
         settingsData.Use24HFormat = DayTimeManager._24hFormat;
-        settingsData.UseEnglishFormat = DayTimeManager.EnglishFormat;
+        settingsData.UseEnglishFormat = DayTimeManager.DotFormat;
 
         settingsData.CurrentTheme = Stylizer.wantedPreset;
         settingsData.SelectedLanguage = LocalizationSystem.SelectedLanguage;
@@ -741,10 +741,10 @@ public class SaveManager : MonoBehaviour
 
 
         DayTimeManager._24hFormat = settingsData.Use24HFormat;
-        DayTimeManager.EnglishFormat = settingsData.UseEnglishFormat;
+        DayTimeManager.DotFormat = settingsData.UseEnglishFormat;
 
         DayTimeManager._24hToggle.isOn = settingsData.Use24HFormat;
-        DayTimeManager.EnglishToggle.isOn = settingsData.UseEnglishFormat;
+        DayTimeManager.PunctuationToggle.isOn = settingsData.UseEnglishFormat;
 
         for (int i = 0; i < Stylizer.ColorStyles.Count; i++)
         {

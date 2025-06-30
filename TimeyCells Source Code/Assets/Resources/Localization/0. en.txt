@@ -280,8 +280,8 @@ Language
 WORDS_24H_FORMAT
 24h Format
 
-WORDS_ENGLISH_FORMAT
-English Format
+WORDS_DOT_FORMAT
+Dot Format
 
 
 
@@ -394,8 +394,7 @@ To edit an event type, simply click the one you want to edit. You can also edit 
 ## Creating Events:
 Events have 5 properties:
 - <indent=5%>**Name:** The name of the event.</indent>
-- <indent=5%>**Info 1:** Meant for extra details, like the place in which the event will happen, or the name of the person organizing the event.</indent>
-- <indent=5%>**Info 2:** Also meant for extra details.</indent>
+- <indent=5%>**Info 1 & Info 2:** Optional fields you can use to store extra information about the event — like the location, instructor name, or any other notes you find useful.</indent>
 - <indent=5%>**Event Type:** Meant to categorize your event, which helps with figuring out how important the lesson/event is.</indent>
 - <indent=5%>**Favourite:** A simple toggle to classify an event as something you really enjoy.</indent>
 !GIF[EventCreate]
@@ -535,9 +534,8 @@ This button will activate android's share sheet, which will look something like 
 ## Time Format:
 You can set the time to a 24 hour format with this toggle:
 !OBJ[24hToggle]
-<br/>If you're an English user, you may want your time to look like:
-` 12.00 ` instead of ` 12:00 `. There's a toggle for that too:
-!OBJ[EnglishToggle]
+<br/>Additionally, you can select the punctuation style with the toggle below — either a colon (`12:00`) or a dot (`12.00`) as the time separator.
+!OBJ[PunctuationToggle]
 <br/>
 ## Language:
 At the moment, there are only 2 supported languages: English and Greek (Ελληνικά), the only languages I know.

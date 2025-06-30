@@ -4,48 +4,48 @@
 - 01: [Overview](#overview)
 
 - 02: [Core Concepts](#core-concepts)
-  - [Events & Event Types](#events-event-types)
+  - [Events & Event Types](#events--event-types)
   - [Timetable](#timetable)
   - [Timetable Editing](#timetable-editing)
   - [Manual Editing](#manual-editing)
-  - [Saving, Loading & Data Management](#saving-loading-data-management)
+  - [Saving, Loading & Data Management](#saving-loading--data-management)
   - [Sharing Features](#sharing-features)
-  - [UI & Input Validation](#ui-input-validation)
+  - [UI & Input Validation](#ui--input-validation)
 
-- 03: [Script Breakdown & Unity Integration](#-script-breakdown-unity-intergration)
+- 03: [Script Breakdown & Unity Integration](#script-breakdown--unity-integration)
   - [Common Patterns Across Scripts](#common-patterns-across-scripts)
     - [Singletons](#singletons)
     - [Unity's Attributes](#unity-s-attributes)
 
-  - [`Scripts/Events - Event Types`](#scripts-events-event-types)
+  - [`Scripts/Events - Event Types`](#scriptsevents-event-types)
     - [EventTypeItem.cs](#eventtypeitem-cs)
     - [EventItem.cs](#eventitem-cs)
     - [EventItemOverride.cs](#eventitemoverride-cs)
-    - [EventManager.cs](#eventmanager-cs) -> DOCUMENT PROPERTIES!!!
-    - [EventCreator.cs](#eventcreator-cs) -> DOCUMENT PROPERTIES!!!
-    - [EventTypeCreator.cs](#eventtypecreator-cs) -> DOCUMENT PROPERTIES!!!
+    - [EventManager.cs](#eventmanager-cs)
+    - [EventCreator.cs](#eventcreator-cs)
+    - [EventTypeCreator.cs](#eventtypecreator-cs)
 
-  - [`Scripts/Timetable`](#scripts-timetable)
+  - [`Scripts/Timetable`](#scriptstimetable)
     - [TimetableCell.cs](#timetablecell-cs)
     - [CellInfo.cs](#cellinfo-cs)
     - [TimetableGrid.cs](#timetablegrid-cs)
     - [ScrollZoom.cs](#scrollzoom-cs)
     - [FreezeGrid.cs](#freezegrid-cs)
 
-  - [`Scripts/Time Management`](#scripts-time-management)
+  - [`Scripts/Time Management`](#scriptstime-management)
     - [WeekDay.cs](#weekday-cs)
     - [WeekDayObject.cs](#weekdayobject-cs)
     - [TimeIndex.cs](#timeindex-cs)
     - [TimeIndexObject.cs](#timeindexobject-cs)
     - [DayTimeManager.cs](#daytimemanager-cs)
 
-  - [`Scripts/Drag N Swap`](#scripts-drag-n-swap)
+  - [`Scripts/Drag N Swap`](#scriptsdrag-n-swap)
     - [DragHandle.cs](#draghandle-cs)
     - [TimeIndexDrag.cs](#timeindexdrag-cs)
     - [WeekDayDrag.cs](#weekdaydrag-cs)
     - [DragHandleManager.cs](#draghandlemanager-cs)
 
-  - [`Scripts/Help Tab`](#scripts-help-tab)
+  - [`Scripts/Help Tab`](#scriptshelp-tab)
     - [GIFObject.cs](#gifobject-cs)
     - [GIFHandler.cs](#gifhandler-cs)
     - [ContentButton.cs](#contentbutton-cs)
@@ -53,7 +53,7 @@
     - [TableOfContents.cs](#tableofcontents-cs)
     - [HelpSection.cs](#helpsection-cs)
 
-  -[`Scripts/Stylizing`](#scripts-stylizing)
+  -[`Scripts/Stylizing`](#scriptsstylizing)
     - [ColorStylePreset.cs](#colorstylepreset-cs)
     - [ColorStylizer.cs](#colorstylizer-cs)
     - [PaletteObject.cs](#paletteobject-cs)
@@ -61,24 +61,24 @@
     - [CustomPaletteLister.cs](#custompalettelister-cs)
     - [PaletteCreator.cs](#palettecreator-cs)
 
-  -[`Scripts/Editors`](#scripts-editors)
+  -[`Scripts/Editors`](#scriptseditors)
     - [TimetableEditor.cs](#timetableeditor-cs)
     - [CellInfoEditor.cs](#cellinfoeditor-cs)
     - [WeekdayEditor.cs](#weekdayeditor-cs)
     - [LabelEditor.cs](#labeleditor-cs)
     - [ColorEditor.cs](#coloreditor-cs)
 
-  -[`Scripts/Localization`](#scripts-localization)
+  -[`Scripts/Localization`](#scriptslocalization)
     - [TMPLocalizer.cs](#tmplocalizer-cs)
     - [TMPDropdownLocalizer.cs](#tmpdropdownlocalizer-cs)
     - [LocalizationSystem.cs](#localizationsystem-cs)
 
-  -[`Scripts/Layout Groups`](#scripts-layout-groups)
+  -[`Scripts/Layout Groups`](#scriptslayout-groups)
     - [CustomLayoutGroup.cs](#customlayoutgroup-cs)
     - [CenterAndFit.cs](#centerandfit-cs)
     - [CustomGridLayoutGroup.cs](#customgridlayoutgroup-cs)
 
-  - [`Scripts/Saving`](#scripts-saving)
+  - [`Scripts/Saving`](#scriptssaving)
     - [TimetableData.cs](#timetabledata-cs)
     - [S_ProgramData.cs](#s-programdata-cs)
     - [SettingsData.cs](#settingsdata-cs)
@@ -91,21 +91,21 @@
     - [ConfirmationManager.cs](#confirmationmanager-cs)
     - [QuitButton.cs](#quitbutton-cs)
 
-  - [`Scripts/Inspector Stuff`](#scripts-inspector-stuff)
+  - [`Scripts/Inspector Stuff`](#scriptsinspector-stuff)
     - [CommentInformationNote.cs](#commentinformationnote-cs)
     - [ReadOnlyAttribute.cs](#readonlyattribute-cs)
     - [ReadOnlyDrawer.cs](#readonlydrawer-cs)
   
-  - [`Scripts/Polish`](#scripts-polish)
+  - [`Scripts/Polish`](#scriptspolish)
     - [InputFieldFixer.cs](#inputfieldfixer-cs)
     - [TabHandler.cs](#tabhandler-cs)
     - [VersionText.cs](#versiontext-cs)
   
-  - [`Scripts/Polish/Animation Scripts`](#scripts-polish-animation-scripts)
+  - [`Scripts/Polish/Animation Scripts`](#scriptspolishanimation-scripts)
     - [CustomAnimator.cs](#customanimator-cs)
     - [HamburgerButton.cs](#hamburgerbutton-cs)
   
-  - [`TextMesh Pro/Validators`](#textmesh-pro-validators)
+  - [`TextMesh Pro/Validators`](#textmesh-provalidators)
     - [ValidatorBase.cs](#validatorbase-cs)
     - [HexCodeValidator.cs](#hexcodevalidator-cs)
     - [TimeValidator.cs](#timevalidator-cs)
@@ -113,10 +113,51 @@
   - [`StreamingAssets`](#streamingassets)
     - [CopyToClipboard.ps1](#copytoclipboard-ps1)
     
-  - [`Plugins/Android`](#plugins-android)
+  - [`Plugins/Android`](#pluginsandroid)
     - [FileProviderLib-release.aar](#fileproviderlib-release-aar)
 
-- 04: [Packages Used](#packages-used)
+- 04: [Prefabs Used](#prefabs-used)
+  - [`Prefabs/UI Elements`](#prefabsui-elements)
+    - [Button](#button)
+    - [Slider](#slider)
+    - [TMP Dropdown](#tmp-dropdown)
+    - [TMP InputField](#tmp-inputfield)
+    - [Toggle](#toggle)
+
+  - [`Prefabs`](#prefabs)
+    - [Content (Button Variant)](#content-button-variant)
+    - [Confirmation (Button Variant)](#confirmation-button-variant)
+    - [Day (Toggle Variant)](#day-toggle-variant)
+    - [Palette Object](#palette-object)
+    - [Color Editor](#color-editor)
+
+  - [`Prefabs/Timetable Elements`](#prefabstimetable-elements)
+    - [Timetable Cell](#timetable-cell)
+    - [Cell Info (Timetable Cell Variant)](#cell-info-timetable-cell-variant)
+    - [WeekDay Object](#weekday-object)
+    - [TimeIndex Object](#timeindex-object)
+
+  - [`Prefabs/Timetable Elements/Drags`](#prefabstimetable-elementsdrags)
+    - [WeekDay DRAG](#weekday-drag)
+    - [TimeIndex DRAG](#timeindex-drag)
+
+  - [`Prefabs/Saving`](#prefabssaving)
+    - [Load Timetable (Button Variant)](#load-timetable-button-variant)
+
+  - [`Prefabs/Column Buttons`](#prefabscolumn-buttons)
+    - [Add Col (Button Variant)](#add-col-button-variant)
+    - [Remove Col (Button Variant)](#remove-col-button-variant)
+
+  - [`Prefabs/Row Buttons`](#prefabsrow-buttons)
+    - [Add Row (Button Variant)](#add-row-button-variant)
+    - [Remove Row (Button Variant)](#remove-row-button-variant)
+
+  - [`Prefabs/PhotoPrefabs`](#prefabsphotoprefabs)
+    - [CornerPiece](#cornerpiece)
+    - [PhotoTimePrefab](#phototimeprefab)
+    - [PhotoTimetable Cell](#phototimetablecell)
+
+- 05: [Packages Used](#packages-used)
   - [Unity Features](#unity-features)
   - [Unity Packages](#unity-packages)
   - [Libraries](#libraries)
@@ -1193,10 +1234,10 @@ Handles everything related to displaying and calculating time for a weekly timet
 - public TimetableGrid Grid — The grid displaying all timetable cells.
 
 - public bool _24hFormat — Whether time is shown in 24-hour format.
-- public bool EnglishFormat — Whether time punctuation uses English style (`.` instead of `:`).
+- public bool DotFormat — Whether to use dot punctuation (`12.00`) instead of colon (`12:00`) for time display.
 
 - public Toggle _24hToggle — UI toggle to switch 24h display on or off.
-- public Toggle EnglishToggle — UI toggle to switch English-style punctuation on or off.
+- public Toggle PunctuationToggle — UI toggle that controls dot vs colon punctuation style.
 
 - public GameObject Highlight — The object used to highlight the currently active cell.
 - public RectTransform HighlightRect — RectTransform for resizing the highlight.
@@ -1377,9 +1418,9 @@ Sets the 24-hour format preference and refreshes saved settings and labels.
 <br/>
 
 ```cs
-public void SetEnglish(bool english)
+public void SetPunctuation(bool dotFormat)
 ```
-Sets English punctuation (colon/dot) and refreshes saved settings and labels.
+Sets the time punctuation style. If `dotFormat` is true, times will use a dot separator (`12.00`); otherwise, a colon will be used (`12:00`). This also refreshes saved settings and updates labels accordingly.
 
 ---
 
@@ -3745,6 +3786,181 @@ PowerShell script used on Windows to copy a generated timetable image to the cli
 Android AAR library that provides `FileProvider` functionality, enabling secure file sharing via the Android share sheet. Used by `PhotoManager.cs` when invoking the system share UI for timetable screenshots.
 
 ---
+
+## Prefabs Used
+Prefabs are reusable GameObjects in Unity — kind of like blueprints. In TimeyCells, prefabs are used for buttons, timetable elements, labels, and layout components. They help keep the UI consistent and make it easier to instantiate elements at runtime without rebuilding them manually.
+
+Each prefab listed here is used somewhere in the app — either in the main UI, editors, or features like photo sharing.
+
+### `Prefabs/UI Elements`
+Contains interactable UI Elements which have been configured specifically for the project. Use these, instead of Unity's defaults.
+
+#### Button
+A button prefab that's used instead of Unity's default button.
+
+**Notable Components**
+- `Button` — Handles user interaction with the prefab.
+- `TMP_Text` — Displays the button's text.
+- `Image` — The graphics of the button.
+
+
+#### Slider
+A slider prefab that's used instead of Unity's default slider.
+
+**Notable Components**
+- `Slider` — Handles user interaction with the prefab.
+- `Image` — Attached to multiple children. The graphics of the slider.
+
+
+#### TMP Dropdown
+A TextMesh Pro dropdown prefab that's used instead of Unity's default TMP_Dropdown.
+
+**Notable Components**
+- `TMP_Dropdown` — Handles user interaction with the prefab.
+- `Image` — Attached to multiple children. The graphics of the dropdown.
+- `TMP_Text` — Used in multiple children. Displays the currently selected item in the dropdown.
+- `ScrollRect` — handled by `TMP_Dropdown`.
+- `Scrollbar` — handled by `TMP_Dropdown`. Appears automatically when many items are available in the dropdown.
+- `Toggle` — Used in the dropdown items to handle item selection.
+
+
+#### TMP InputField
+A TextMesh Pro input field prefab that's used instead of Unity's default TMP_InputField.
+
+**Notable Components**
+- `TMP_InputField` — Handles user interaction with the prefab.
+- `Image` — The background of the input field.
+- `TMP_Text` — Used in multiple children. Displays the input field's text.
+- `InputFieldFixer` - Custom script that acts as a bridge between the input field and the text. This script fixes an issue, where a character that's not supposed to be seen is displayed in the input field. Also, this script makes the TMP_InputField's character limit functional for custom validators.
+
+**Toggle**
+A toggle prefab that's used instead of Unity's default toggle.
+
+**Notable Components**
+- `Toggle` — Handles user interaction with the prefab.
+- `Image` — Attached to multiple children. The graphics of the toggle.
+- `TMP_Text` — A label for the toggle.
+
+### `Prefabs`
+Apart from containing folders, the root also contains a couple prefabs that are mostly managed by scripts.
+
+
+#### Content (Button Variant)
+A variant of `Prefabs/UI Elements/Button`. Assigned to `TabPrefab` of 
+`TableOfContents.cs`.
+
+#### Confirmation (Button Variant)
+A variant of `Prefabs/UI Elements/Button`. Assigned to `ButtonPrefab` of `ConfirmationManager.cs`.
+
+#### Day (Toggle Variant)
+A variant of `Prefabs/UI Elements/Toggle`. Used in **Cell Info Editor** and **Weekday Editor** Overlays.
+
+#### Palette Object
+Used by `PaletteDropdown.cs` to allow the user to select a theme of their choice for the app.
+
+**Notable Components**
+- `Toggle` — Handles user interaction with the prefab.
+- `PaletteObject` — Communicates with `PaletteDropdown.cs`. Called by `Toggle`.
+
+#### Color Editor
+Prefab managing color selection logic. By turning this into a prefab, we can use it in other projects.
+
+### `Prefabs/Timetable Elements`
+The prefabs related to the timetable.
+
+#### Timetable Cell
+Used by a variety of scripts and editors to display information relevant to the timetable.
+
+**Notable Components**
+- `TimetableCell` — Contains references to many UI Elements of the prefab.
+- `Button` — Handles user interaction with the prefab.
+
+#### Cell Info (Timetable Cell Variant)
+A variant of `Prefabs/Timetable Elements/Timetable Cell`. Mainly used by `TimetableGrid.cs`. Stores information about the timetable cell.
+
+**Notable Components**
+- `CellInfo` — Stores information about the timetable cell.
+
+
+#### WeekDay Object
+Assigned to `WeekDayPrefab` of 
+`DayTimeManager.cs`.
+
+**Notable Components**
+- `WeekDayObject` — Contains references to the UI Elements of the prefab.
+- `Button` — Handles user interaction with the prefab.
+
+#### TimeIndex Object
+Assigned to `TimeIndexPrefab` of 
+`DayTimeManager.cs`.
+
+**Notable Components**
+- `TimeIndexObject` — Contains references to the UI Elements of the prefab.
+- `Button` — Handles user interaction with the prefab.
+
+
+
+### `Prefabs/Timetable Elements/Drags`
+The prefabs here allow the user to swap columns and rows of the timetable.
+
+#### WeekDay DRAG
+Assigned to `VerticalDragPrefab` of 
+`DragHandleManager.cs`.
+
+**Notable Components**
+- `WeekDayObject` — Contains references to the UI Elements of the prefab.
+- `Button` — Handles user interaction with the prefab.
+
+#### TimeIndex DRAG
+Assigned to `HorizontalDragPrefab` of 
+`DragHandleManager.cs`.
+
+**Notable Components**
+- `TimeIndexObject` — Contains references to the UI Elements of the prefab.
+- `Button` — Handles user interaction with the prefab.
+
+### `Prefabs/Saving`
+
+#### Load Timetable (Button Variant)
+A variant of `Prefabs/UI Elements/Button`. Assigned to `TimetableButtonPrefab` of 
+`SaveManager.cs`.
+
+**Notable Components**
+- `TimetableButton` — Contains references to the UI Elements of the prefab.
+
+### `Prefabs/Column Buttons`
+The buttons which add/remove columns from the timetable.
+
+#### Add Col (Button Variant)
+A variant of `Prefabs/UI Elements/Button`. Assigned to `AddColButtonPrefab` of 
+`TimetableGrid.cs`.
+
+#### Remove Col (Button Variant)
+A variant of `Prefabs/UI Elements/Button`. Assigned to `RemoveColButtonPrefab` of
+`TimetableGrid.cs`.
+
+### `Prefabs/Row Buttons`
+The buttons which add/remove rows from the timetable.
+
+#### Add Row (Button Variant)
+A variant of `Prefabs/UI Elements/Button`. Assigned to `AddRowButtonPrefab` of 
+`TimetableGrid.cs`.
+
+#### Remove Row (Button Variant)
+A variant of `Prefabs/UI Elements/Button`. Assigned to `RemoveRowButtonPrefab` of
+`TimetableGrid.cs`.
+
+### `Prefabs/PhotoPrefabs`
+#### CornerPiece
+A simple image component, meant for the edge of the timetable preview in the photo overlay. Assigned to `CornerPiecePrefab` of `PhotoManager.cs`.
+
+#### PhotoTimePrefab
+A simple label that can either represent a `WeekDay` or a `TimeIndex`. 
+Assigned to `PhotoTimePrefab_` of `PhotoManager.cs`.
+
+#### PhotoTimetable Cell
+Very similar to the `Cell Info` prefab.
+Assigned to `CellPrefab` of `PhotoManager.cs`.
 
 ## Packages Used
 

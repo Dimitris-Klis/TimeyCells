@@ -1719,12 +1719,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LanguageDropdown: {fileID: 1758877734}
+  helpSection: {fileID: 817519095}
+  SelectedLanguage: 0
   DebugDictionary: 0
   DebugObjects: 0
-  SelectedLanguage: 0
-  languageNames: []
-  textAssets: []
-  helpSection: {fileID: 817519095}
 --- !u!1001 &69426611
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11746,9 +11744,9 @@ MonoBehaviour:
   ConfirmationOverlay: {fileID: 1687454737}
   TMP_Title: {fileID: 1978635205}
   TMP_Desc: {fileID: 415824254}
-  ButtonPrefab: {fileID: 5787766714924171177, guid: c48807e4da3f4a6458484e64a2f5d5b8, type: 3}
   DescriptionTextSizeFitter: {fileID: 415824256}
   DescriptionParent: {fileID: 962769110}
+  ButtonPrefab: {fileID: 5787766714924171177, guid: c48807e4da3f4a6458484e64a2f5d5b8, type: 3}
   ButtonsParent: {fileID: 99783453}
   Buttons: []
 --- !u!1001 &356940143
@@ -15152,12 +15150,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SelfRect: {fileID: 432457048}
+  TabPrefab: {fileID: 1753260172148506486, guid: c2c4661ce5598c9429376e0cffcdf083, type: 3}
+  helpSection: {fileID: 817519095}
   H1Size: 150
   H2Size: 120
   H3Size: 110
   Spacing: 0
-  TabPrefab: {fileID: 1753260172148506486, guid: c2c4661ce5598c9429376e0cffcdf083, type: 3}
-  helpSection: {fileID: 817519095}
   CenterChildren: 0
   buttons: []
 --- !u!1001 &432822908
@@ -16614,8 +16612,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dedc84237a11154baece5bd0d98dd3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AlignmentMode: 0
   SelfRect: {fileID: 473961128}
+  AlignmentMode: 0
   AffectCellSizeX: 0
   CellSizeX: 0
   AffectCellSizeY: 0
@@ -22552,7 +22550,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69fe4cea37e77a04299b633283e25e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SaveManager: {fileID: 885549226}
   CellInfoEditor: {fileID: 1417765176}
   EventCreator: {fileID: 97706845}
   EventTypeCreator: {fileID: 568116785}
@@ -26750,9 +26747,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Grid: {fileID: 397490482}
   _24hFormat: 0
-  EnglishFormat: 0
+  DotFormat: 0
   _24hToggle: {fileID: 1402889821}
-  EnglishToggle: {fileID: 1145847310}
+  PunctuationToggle: {fileID: 1145847310}
   Highlight: {fileID: 1165173795}
   HighlightRect: {fileID: 1165173796}
   TimeLeftText: {fileID: 1964385369}
@@ -29020,6 +29017,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9921b02178b45d5498573c17647650b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShouldSetup: 1
   tableOfContents: {fileID: 432457052}
   H1Text: {fileID: 1409762281}
   H2Text: {fileID: 1757929230}
@@ -29027,6 +29025,9 @@ MonoBehaviour:
   NormalText: {fileID: 1836598306}
   UIImage: {fileID: 293285666}
   GifImage: {fileID: 115256054}
+  ContentLayoutGroup: {fileID: 488270461}
+  scrollRect: {fileID: 407198420}
+  GIFHandler: {fileID: 817519096}
   gifs:
   - name: BurgerEvents
     PixelsPerUnit: 200
@@ -29123,13 +29124,8 @@ MonoBehaviour:
     UIObject: {fileID: 1959738467}
   - name: 24hToggle
     UIObject: {fileID: 578357936}
-  - name: EnglishToggle
+  - name: PunctuationToggle
     UIObject: {fileID: 1646279422}
-  SpawnedObjects: []
-  ContentLayoutGroup: {fileID: 488270461}
-  scrollRect: {fileID: 407198420}
-  GIFHandler: {fileID: 817519096}
-  ShouldSetup: 1
 --- !u!114 &817519096
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30598,31 +30594,9 @@ MonoBehaviour:
   EventManager: {fileID: 1803681743}
   Stylizer: {fileID: 1871095415}
   LocalizationSystem: {fileID: 69366018}
-  OpenOverlay: {fileID: 1193963766}
+  OpenTimetableOverlay: {fileID: 1193963766}
   TimetableButtonPrefab: {fileID: 8740254744621882083, guid: 8b3ce7d080eedf24592cfd94eb2d213b, type: 3}
   ButtonsParent: {fileID: 603240609}
-  debug_olddata:
-    Cells: []
-    _7hDays: 0000000000
-    BreakLengths_7h: 000000000000000000000000
-    BreakLengths_8h: 000000000000000000000000
-    StartTime: 070000001e000000
-    EndTime: 0d00000023000000
-    _7hDuration: 45
-    _8hDuration: 40
-    FileName: 
-  debug_newdata:
-    TimetableName: 
-    EventTypes:
-      list: []
-    Events:
-      list: []
-    Columns:
-      list: []
-    Weekdays:
-      list: []
-    Labels:
-      list: []
   UnsavedIndicator: {fileID: 3050863435407968806}
 --- !u!1001 &886653207
 PrefabInstance:
@@ -34281,8 +34255,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7c2939b6ef7cca42a71827f728062fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AlignmentMode: 1
   SelfRect: {fileID: 962769106}
+  AlignmentMode: 1
   Spacing: 0
   Center: 1
 --- !u!114 &964408362 stripped
@@ -39398,7 +39372,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2348199983006541221, guid: 43831fad7e4d3264aa5188f19a25a450, type: 3}
       propertyPath: m_text
-      value: English Format
+      value: Dot Format
       objectReference: {fileID: 0}
     - target: {fileID: 2348199983006541221, guid: 43831fad7e4d3264aa5188f19a25a450, type: 3}
       propertyPath: m_fontSize
@@ -39406,11 +39380,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2348199983006541221, guid: 43831fad7e4d3264aa5188f19a25a450, type: 3}
       propertyPath: m_fontSizeMax
-      value: 18
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 2348199983006541221, guid: 43831fad7e4d3264aa5188f19a25a450, type: 3}
       propertyPath: m_fontSizeMin
-      value: 10
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 2348199983006541221, guid: 43831fad7e4d3264aa5188f19a25a450, type: 3}
       propertyPath: m_fontSizeBase
@@ -39442,7 +39416,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2683748908868301800, guid: 43831fad7e4d3264aa5188f19a25a450, type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetEnglish
+      value: SetPunctuation
       objectReference: {fileID: 0}
     - target: {fileID: 2683748908868301800, guid: 43831fad7e4d3264aa5188f19a25a450, type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -42990,7 +42964,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TMP_Text: {fileID: 1239771852}
-  key: WORDS_ENGLISH_FORMAT
+  key: WORDS_DOT_FORMAT
   extraText: 
 --- !u!114 &1241448797 stripped
 MonoBehaviour:
@@ -45453,7 +45427,6 @@ MonoBehaviour:
   - {fileID: 1257669735}
   - {fileID: 1261503035}
   - {fileID: 1707376867}
-  WeekdayIndex: 0
   TabHandler: {fileID: 1328001926}
   Create: {fileID: 1333523798}
   CreateButton: {fileID: 77179553}
@@ -54441,13 +54414,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c29ffc9e032bfd94c90144b65c256a12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SelfRect: {fileID: 1632008324}
   Rows: 0
   Columns: 0
   Spacing: {x: 5, y: 5}
   Size: {x: 200, y: 100}
-  MultirowIndexes: 06000000
   HeaderSize: {x: 100, y: 100}
-  SelfRect: {fileID: 1632008324}
+  MultirowIndexes: 06000000
 --- !u!1 &1634186317
 GameObject:
   m_ObjectHideFlags: 0
@@ -54880,7 +54853,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5717804755364906985, guid: 43831fad7e4d3264aa5188f19a25a450, type: 3}
       propertyPath: m_Name
-      value: English Toggle
+      value: Punctuation Toggle
       objectReference: {fileID: 0}
     - target: {fileID: 7696974567132930588, guid: 43831fad7e4d3264aa5188f19a25a450, type: 3}
       propertyPath: m_Pivot.x
@@ -55011,7 +54984,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TMP_Text: {fileID: 1646279424}
-  key: WORDS_ENGLISH_FORMAT
+  key: WORDS_DOT_FORMAT
   extraText: 
 --- !u!1001 &1651133803
 PrefabInstance:
@@ -64574,8 +64547,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dedc84237a11154baece5bd0d98dd3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AlignmentMode: 1
   SelfRect: {fileID: 1949190183}
+  AlignmentMode: 1
   AffectCellSizeX: 1
   CellSizeX: 50
   AffectCellSizeY: 1

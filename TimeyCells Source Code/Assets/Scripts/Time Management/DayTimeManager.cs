@@ -20,11 +20,11 @@ public class DayTimeManager : MonoBehaviour
     [Space(20)]
     [Header("Properties")]
     public bool _24hFormat;
-    public bool EnglishFormat;
+    public bool DotFormat;
 
     [Header("Property Fields")]
     public Toggle _24hToggle;
-    public Toggle EnglishToggle;
+    public Toggle PunctuationToggle;
 
     [Space(20)]
     [Header("Displaying Time")]
@@ -393,7 +393,7 @@ public class DayTimeManager : MonoBehaviour
     public string FormatTime(TimeSpan t)
     {
         string tstring = "";
-        string punctuation = EnglishFormat ? "." : ":";
+        string punctuation = DotFormat ? "." : ":";
         if (_24hFormat)
         {
             tstring = $"{t.Hours}{punctuation}{t.Minutes}";
@@ -453,9 +453,9 @@ public class DayTimeManager : MonoBehaviour
         UpdateTimeIndexes();
     }
 
-    public void SetEnglish(bool english)
+    public void SetPunctuation(bool dotFormat)
     {
-        EnglishFormat = english;
+        DotFormat = dotFormat;
         SaveManager.instance.SaveSettings();
         UpdateTimeIndexes();
     }
