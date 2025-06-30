@@ -1013,21 +1013,16 @@ Allows the user to zoom and pan their timetable using mouse wheel scrolling on d
 
 
 **Properties**
-- `Camera MainCam` — The main camera. Used to calculate mouse position.
-
-- `RectTransform ScrollView` — The scroll view container for detecting mouse position.
+- `ScrollRect ScrollHandler` — The ScrollRect controlling scrolling behavior.
+- `RectTransform Viewport` — The viewport RectTransform that masks and displays a portion of the scroll content.
 - `RectTransform Table` — The timetable UI element to scale (zoom).
+- `RectTransform TempParent` — A temporary parent used during zooming to scale `Table` around the cursor position without disrupting layout.
 
 
 - `float MinScale` — Minimum zoom level.
 - `float MaxScale` — Maximum zoom level.
 - `float ScrollSensitivity` — How quickly zoom changes per scroll or pinch.
-- `bool mouseOver` — Tracks if the mouse is currently over the scroll view.
-
-
-- `ScrollRect ScrollHandler` — The ScrollRect controlling scrolling behavior.
-- `RectTransform Viewport` — The viewport RectTransform used for drag position calculations.
-
+- `float EdgeNudge` — The amount to nudge the horizontal scroll position when zooming near the left or right edges of the viewport.
 
 
 - `float DragSpeed` — Speed at which the scroll view auto-scrolls when dragging near edges.
@@ -1036,6 +1031,7 @@ Allows the user to zoom and pan their timetable using mouse wheel scrolling on d
 - `Dragging` — Whether the user is currently dragging.
 - `DragHorizontal` — Whether dragging is horizontal (`true`) or vertical (`false`).
 
+- `bool mouseOver` — Tracks if the mouse is currently over the scroll view.
 
 **Methods**
 ```cs
@@ -1060,12 +1056,27 @@ If `Dragging` is true, checks mouse position relative to the viewport edges and 
 - If `DragHorizontal` is true, scrolls left or right horizontally.
 - Otherwise, scrolls up or down vertically.
 
+<br/>
+
+```cs
+Rect RectTransformToScreenSpace(RectTransform transform)
+```
+Utility method that returns the screen-space `Rect` of a `RectTransform`, useful for detecting mouse proximity to viewport edges.
+
 <br/><br/>
 
 ```cs
 void HandleScrollZoom()
 ```
-If the mouse is over the ScrollView, zooms the `Table` content in or out based on mouse wheel input.
+Handles zooming the `Table` based on mouse wheel input when the mouse is over the `ScrollView`.
+
+- Converts the mouse position to local coordinates relative to the `Viewport`.
+- Sets `TempParent`'s local position to the mouse position for pivoting zoom around the cursor.
+- Temporarily parents `Table` to `TempParent` to scale around the cursor.
+- Applies zoom scale clamping between `MinScale` and `MaxScale`.
+- Restores the parent of `Table` back to the `Viewport`.
+- Automatically scrolls vertically to top or bottom if the cursor is near those edges.
+- Nudges horizontal scroll when zooming near left/right edges based on `EdgeNudge`, adapting to the current zoomed content width.
 
 <br/>
 
@@ -1092,7 +1103,6 @@ Called once per frame by Unity. Handles zooming and dragging behavior based on t
   - On mobile, runs HandlePinchZoom()
   - On desktop, runs HandleScrollZoom()
 - Finally, calls ClampZoom() to limit zoom levels.
-
 ---
 
 #### FreezeGrid.cs

@@ -6,30 +6,28 @@ using UnityEngine.UI;
 
 public class ScrollZoom : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [Header("Main Camera")]
-    public Camera MainCam;
+    [Header("References")]
+    [SerializeField] ScrollRect ScrollHandler;
+    [SerializeField] RectTransform Viewport;
+    [SerializeField] RectTransform Table;
+    [SerializeField] RectTransform TempParent;
 
     [Space(20)]
-    [Header("Zoom References")]
-    public RectTransform ScrollView;
-    public RectTransform Table;
-
-    [Header("Properties")]
-    public float MinScale = 1, MaxScale = 3;
-    public float ScrollSensitivity = .25f;
-    bool mouseOver;
+    [Header("Zoom Properties")]
+    [SerializeField] float MinScale = 1, MaxScale = 3;
+    [SerializeField] float ScrollSensitivity = .25f;
+    [SerializeField] float EdgeNudge = 20;
 
     [Space(20)]
-    [Header("Drag References")] // When we're swapping columns/rows.
-    public ScrollRect ScrollHandler;
-    public RectTransform Viewport;
-    [Space]
-    public float DragSpeed = 20;
+    [Header("Drag Properties")] // When we're swapping columns/rows.
+    [SerializeField] float DragSpeed = 8;
 
+    [Space(20)]
     [Header("     Drag Toggles")]
     [ReadOnly] public bool Dragging;
     [ReadOnly] public bool DragHorizontal;
-    
+
+    bool mouseOver;
 
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -48,31 +46,48 @@ public class ScrollZoom : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         if (!Dragging) return;
 
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(Viewport, Input.mousePosition, MainCam, out Vector2 mousepos);
-        
+        Vector2 mousePos = Input.mousePosition;
+        Rect rect = RectTransformToScreenSpace(Viewport);
+
         if (DragHorizontal)
         {
-            if (mousepos.x > Viewport.rect.width / 2)
+            if (mousePos.x > rect.xMax)
             {
                 ScrollHandler.normalizedPosition += DragSpeed * Time.deltaTime * Vector2.right;
             }
-            else if (mousepos.x < -Viewport.rect.width / 2)
+            else if (mousePos.x < rect.xMin)
             {
                 ScrollHandler.normalizedPosition -= DragSpeed * Time.deltaTime * Vector2.right;
             }
-            ScrollHandler.horizontalNormalizedPosition = Mathf.Clamp(ScrollHandler.horizontalNormalizedPosition, 0, 1);
+            ScrollHandler.horizontalNormalizedPosition = Mathf.Clamp01(ScrollHandler.horizontalNormalizedPosition);
             return;
         }
 
-        if (mousepos.y - Viewport.rect.height / 2 > Viewport.rect.height / 2)
+        if (mousePos.y > rect.yMax)
         {
             ScrollHandler.normalizedPosition += DragSpeed * Time.deltaTime * Vector2.up;
         }
-        else if (mousepos.y - Viewport.rect.height / 2 < -Viewport.rect.height / 2)
+        else if (mousePos.y < rect.yMin)
         {
             ScrollHandler.normalizedPosition -= DragSpeed * Time.deltaTime * Vector2.up;
         }
-        ScrollHandler.verticalNormalizedPosition = Mathf.Clamp(ScrollHandler.verticalNormalizedPosition, 0, 1);
+        ScrollHandler.verticalNormalizedPosition = Mathf.Clamp01(ScrollHandler.verticalNormalizedPosition);
+    }
+
+    Rect RectTransformToScreenSpace(RectTransform transform)
+    {
+        Vector3[] corners = new Vector3[4];
+        transform.GetWorldCorners(corners);
+
+        // Bottom-left corner in screen space
+        float x = corners[0].x;
+        float y = corners[0].y;
+
+        // Top-right corner
+        float width = corners[2].x - x;
+        float height = corners[2].y - y;
+
+        return new Rect(x, y, width, height);
     }
 
 
@@ -81,26 +96,45 @@ public class ScrollZoom : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     void HandleScrollZoom()
     {
         if (!mouseOver) return;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(ScrollView, Input.mousePosition, MainCam, out Vector2 mousepos);
+        float scrollDeltaY = Input.mouseScrollDelta.y;
+        if (Mathf.Approximately(scrollDeltaY, 0)) return;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(Viewport, Input.mousePosition, null, out Vector2 mousepos);
 
-        if (Input.mouseScrollDelta.y > 0)
+        TempParent.localPosition = mousepos;
+
+        // Giving Table a temporary parent to allow for zooming towards the cursor.
+        Table.transform.SetParent(TempParent);
+
+        TempParent.localScale += Mathf.Sign(scrollDeltaY) * Vector3.one * ScrollSensitivity;
+
+        if (TempParent.localScale.x > MaxScale)
         {
-            Table.localScale += Vector3.one * ScrollSensitivity;
-            if (Table.localScale.x > MaxScale)
-            {
-                Table.localScale = Vector3.one * MaxScale;
-            }
-            else
-            {
-                Table.localPosition -= (Vector3)mousepos;
-            }
+            TempParent.localScale = Vector3.one * MaxScale;
         }
-        else if (Input.mouseScrollDelta.y < 0)
+
+        if (TempParent.localScale.x < MinScale)
         {
-            Table.localScale -= Vector3.one * ScrollSensitivity;
-            if (Table.localScale.x < MinScale)
-                Table.localScale = Vector3.one * MinScale;
+            TempParent.localScale = Vector3.one * MinScale;
         }
+
+        Table.transform.SetParent(Viewport);
+
+        // Since the height of the table is constant, we add this to scroll quickly to the top or bottom.
+        if (mousepos.y < 10) ScrollHandler.verticalNormalizedPosition = 0;
+        else if (mousepos.y > 200) ScrollHandler.verticalNormalizedPosition = 1;
+
+        // When scrolling left/right, we also want to nudge the content towards that direction.
+        float contentWidth = Table.rect.width * Table.localScale.x;
+        float viewportWidth = Viewport.rect.width;
+
+        float normalizedPerPixel = 1f / (contentWidth - viewportWidth);
+        float normalizedNudge = EdgeNudge * normalizedPerPixel;
+
+
+        if (mousepos.x < -220) ScrollHandler.horizontalNormalizedPosition -= normalizedNudge;
+        else if (mousepos.x > 220) ScrollHandler.horizontalNormalizedPosition += normalizedNudge;
+
+        ScrollHandler.horizontalNormalizedPosition = Mathf.Clamp01(ScrollHandler.horizontalNormalizedPosition);
     }
 
     void HandlePinchZoom()

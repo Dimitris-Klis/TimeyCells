@@ -100,8 +100,15 @@ public class TimetableEditor : MonoBehaviour
     public void BeginEditMode()
     {
         Editing = true;
+
+
         TimetableNameText.gameObject.SetActive(!Editing);
         TimetableNameInput.gameObject.SetActive(Editing);
+
+        TimetableNameInput.onValueChanged.Invoke(TimetableNameInput.text); // Forcing the input field to update its text.
+
+
+
         EventManager.Instance.UpdateEventSelectorButtons();
 
         BindCellsForQuickAssign();
