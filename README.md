@@ -224,7 +224,7 @@ You can set the time to a 24 hour format with this toggle:<br/>
 ![24h Toggle](https://github.com/user-attachments/assets/59c68a20-9a86-44e3-8db7-1e9e9b19713d)
 <br/><br/>
 Additionally, you can select the punctuation style with the toggle below — either a colon (`12:00`) or a dot (`12.00`) as the time separator.<br/>
-![English Toggle](https://github.com/user-attachments/assets/566cc935-3f1e-4c51-b225-89391dd291f6)
+![Dot Format Toggle](https://github.com/user-attachments/assets/302bb989-bcdf-4056-bd52-1af02bc9111f)
 <br/><br/>
 ### Language:
 At the moment, there are only 2 supported languages: English and Greek (Ελληνικά), the only languages I know.
