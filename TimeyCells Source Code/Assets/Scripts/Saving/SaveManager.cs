@@ -617,6 +617,8 @@ public class SaveManager : MonoBehaviour
         EventManager.UpdateEventTypePreviews(true);
 
         OpenTimetableOverlay.gameObject.SetActive(false);
+
+        SaveSettings();
     }
 
     public void DeleteTimetable(string timetable, bool confirm)
