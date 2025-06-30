@@ -66,6 +66,9 @@ public class ConfirmationManager : MonoBehaviour
             b.onClick.AddListener(delegate { ConfirmationOverlay.SetActive(false); });
         }
 
+        SaveManager.instance.Stylizer.GetElements();
+        SaveManager.instance.Stylizer.Setup();
+
         StartCoroutine(PrepareLayout());
     }
 

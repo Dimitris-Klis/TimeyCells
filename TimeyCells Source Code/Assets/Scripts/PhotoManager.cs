@@ -57,7 +57,7 @@ public class PhotoManager : MonoBehaviour
         #endif
     }
 
-    void SetupCells()
+    public void SetupCells()
     {
         for (int i = 0; i < PhotoTimes.Count; i++)
         {

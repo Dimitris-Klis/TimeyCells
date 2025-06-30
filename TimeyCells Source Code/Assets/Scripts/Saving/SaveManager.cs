@@ -119,6 +119,9 @@ public class SaveManager : MonoBehaviour
             b.DeleteButton.onClick.AddListener(delegate { DeleteTimetable(f, false); });
             Buttons.Add(b);
         }
+
+        Stylizer.GetElements();
+        Stylizer.Setup();
     }
 
 

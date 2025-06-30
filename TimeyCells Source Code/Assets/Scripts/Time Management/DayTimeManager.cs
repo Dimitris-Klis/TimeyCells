@@ -153,6 +153,9 @@ public class DayTimeManager : MonoBehaviour
                 WeekdayEditor.OpenWeekday(weekdayToOpen);
             });
         }
+
+        SaveManager.instance.Stylizer.GetElements();
+        SaveManager.instance.Stylizer.Setup();
     }
 
     public void AddNewWeekday(int index)
@@ -353,7 +356,6 @@ public class DayTimeManager : MonoBehaviour
             ti.button.onClick.AddListener(delegate { labelEditor.gameObject.SetActive(true); labelEditor.ActivateEditor(LabelIndex); });
 
 
-            //ti.TimeParent.SetActive(rowIndex >= 0);
             if (rowIndex < 0 || IsCellEmpty(i, rowIndex))
             {
                 ti.TimeText.text = "";
@@ -383,8 +385,10 @@ public class DayTimeManager : MonoBehaviour
             ti.IndexText.text = ColumnIndex.ToString();
             ColumnIndex++;
 
-            //w.selfButton.onClick.AddListener(WeekDayCreator.OpenCreator)
         }
+
+        SaveManager.instance.Stylizer.GetElements();
+        SaveManager.instance.Stylizer.Setup();
     }
     
 

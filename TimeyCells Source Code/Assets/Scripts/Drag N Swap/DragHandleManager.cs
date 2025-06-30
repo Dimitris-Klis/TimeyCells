@@ -107,6 +107,9 @@ public class DragHandleManager : MonoBehaviour
                 HandlesVertical[i].startPos = HandlesVertical[i].transform.localPosition;
             }
         }
+
+        SaveManager.instance.Stylizer.GetElements();
+        SaveManager.instance.Stylizer.Setup();
     }
     
     public void EndSwap()

@@ -134,6 +134,15 @@ public class TimetableEditor : MonoBehaviour
         {
             EventSelectorOverlay.SetActive(false);
         });
+
+        for (int i = 0; i < DayTimeManager.instance.WeekDayPreviews.Count; i++)
+        {
+            DayTimeManager.instance.WeekDayPreviews[i].selfButton.interactable = false;
+        }
+        for (int i = 0; i < DayTimeManager.instance.TimeIndexPreviews.Count; i++)
+        {
+            DayTimeManager.instance.TimeIndexPreviews[i].button.interactable = false;
+        }
     }
 
     public void EndEditMode()
@@ -167,6 +176,16 @@ public class TimetableEditor : MonoBehaviour
         {
             EventSelectorOverlay.SetActive(false);
         });
+
+        for (int i = 0; i < DayTimeManager.instance.WeekDayPreviews.Count; i++)
+        {
+            DayTimeManager.instance.WeekDayPreviews[i].selfButton.interactable = true;
+        }
+
+        for (int i = 0; i < DayTimeManager.instance.TimeIndexPreviews.Count; i++)
+        {
+            DayTimeManager.instance.TimeIndexPreviews[i].button.interactable = true;
+        }
     }
 
 
@@ -182,15 +201,6 @@ public class TimetableEditor : MonoBehaviour
             EditorButtons[i].SetActive(false);
         }
         TableDoneButton.gameObject.SetActive(true);
-
-        for (int i = 0; i < DayTimeManager.instance.WeekDayPreviews.Count; i++)
-        {
-            DayTimeManager.instance.WeekDayPreviews[i].selfButton.interactable = false;
-        }
-        for (int i = 0; i < DayTimeManager.instance.TimeIndexPreviews.Count; i++)
-        {
-            DayTimeManager.instance.TimeIndexPreviews[i].button.interactable = false;
-        }
     }
 
     // Ends editing for both columns and rows.
@@ -211,16 +221,6 @@ public class TimetableEditor : MonoBehaviour
 
         // Button functionality for new columns
         BindCellsForQuickAssign();
-
-        for (int i = 0; i < DayTimeManager.instance.WeekDayPreviews.Count; i++)
-        {
-            DayTimeManager.instance.WeekDayPreviews[i].selfButton.interactable = true;
-        }
-
-        for (int i = 0; i < DayTimeManager.instance.TimeIndexPreviews.Count; i++)
-        {
-            DayTimeManager.instance.TimeIndexPreviews[i].button.interactable = true;
-        }
 
         dayTimeManager.Highlight.transform.SetAsLastSibling();
         DragHandleManager.instance.EndSwap();
